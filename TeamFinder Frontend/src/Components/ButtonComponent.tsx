@@ -10,7 +10,7 @@ export default function ButtonComponent({ buttonText }: ButtonProps) {
       variant="filled"
       color="primary" 
       size="xl"
-      className="bg-indigo-500 hover:bg-indigo-600 w-full md:w-auto" 
+      className="bg-indigo-500 hover:bg-indigo-600 w-full md:w-auto shadow-md" 
     >
       {buttonText}
     </Button>

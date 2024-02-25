@@ -6,7 +6,11 @@ interface ButtonProps {
 
 export default function ButtonComponentWhite({ buttonText }: ButtonProps) {
   return (
-    <Button variant="outline" size="xl" className="hover:bg-indigo-50 w-full md:w-auto" >
+    <Button
+      variant="outline"
+      size="xl"
+      className="hover:bg-indigo-50 w-full md:w-auto shadow-md"
+    >
       {buttonText}
     </Button>
   );
