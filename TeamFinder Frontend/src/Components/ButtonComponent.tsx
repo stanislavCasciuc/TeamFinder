@@ -8,9 +8,9 @@ export default function ButtonComponent({ buttonText }: ButtonProps) {
   return (
     <Button
       variant="filled"
-      color="primary" 
+      color="primary"
       size="xl"
-      className="bg-indigo-500 hover:bg-indigo-600 w-full md:w-auto shadow-md" 
+      className="bg-indigo-500 hover:bg-indigo-600 w-full md:w-auto shadow-md"
     >
       {buttonText}
     </Button>

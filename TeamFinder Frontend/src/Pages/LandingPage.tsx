@@ -1,4 +1,4 @@
-import { Flex, Title } from "@mantine/core";
+import { Flex, Title, Image } from "@mantine/core";
 import ButtonComponent from "../Components/ButtonComponent";
 import ResponsiveHeader from "../Components/ResponsiveHeader";
 import ButtonComponentWhite from "../Components/ButtonComponentWhite";
@@ -9,20 +9,20 @@ export default function LandingPage() {
   return (
     <>
       <header className="p-2 hover:shadow-sm">
-        <Flex className="p-4" gap="sm">
-          <img src={LogoSVG} alt="Team Finder Logo" className="w-9" />
+        <Flex className="p-2" gap="sm">
+          <img src={LogoSVG} alt="Team Finder Logo" className="w-8" />
 
-          <Title order={2} className="font-light text-2xl">
+          <Title order={2} className="font-light text-xl">
             TeamFinder
           </Title>
         </Flex>
       </header>
 
-      <Flex wrap="wrap" className="px-20 pt-8">
-        <Flex maw="700" direction="column" className="mt-32 mb-20">
+      <Flex wrap="wrap" className="px-20 md:gap-x-28">
+        <Flex maw="500" direction="column" className="mt-28 mb-20">
           <ResponsiveHeader children="Building a team has never been so easy" />
 
-          <Title order={2} className="font-normal text-2xl mt-8 mb-8">
+          <Title order={2} className="font-light text-2xl mt-8 mb-8">
             Enhance your project outcomes, boost productivity, and create a
             collaborative environment that propels your company towards
             unprecedented success with TeamFinder.
@@ -34,7 +34,7 @@ export default function LandingPage() {
           </Flex>
         </Flex>
 
-        <img
+        <Image
           className="drop-shadow-2xl"
           src={sourceImage}
           alt="Descriptive Image of People searching and Finding"
