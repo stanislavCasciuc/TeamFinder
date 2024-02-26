@@ -1,12 +1,13 @@
 import { Button } from "@mantine/core";
-
 interface ButtonProps {
   buttonText: string;
+  HandleButton: () => void;
 }
 
-export default function ButtonComponent({ buttonText }: ButtonProps) {
+export default function ButtonComponent({ buttonText,HandleButton }: ButtonProps) {
   return (
     <Button
+      onClick={HandleButton}
       variant="filled"
       color="primary"
       size="xl"

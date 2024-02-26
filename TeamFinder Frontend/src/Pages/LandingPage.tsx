@@ -4,8 +4,16 @@ import ResponsiveHeader from "../Components/ResponsiveHeader";
 import ButtonComponentWhite from "../Components/ButtonComponentWhite";
 import sourceImage from "../assets/source.png";
 import LogoSVG from "../assets/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const HandlebuttonRegister = () => {
+    navigate("/register");
+  };
+  const HandlebuttonLogin = () => { 
+    navigate("/login");
+  }
   return (
     <>
       <header className="p-2 hover:shadow-sm">
@@ -29,8 +37,8 @@ export default function LandingPage() {
           </Title>
 
           <Flex justify="start" gap="12" wrap="wrap">
-            <ButtonComponent buttonText="Join Us" />
-            <ButtonComponentWhite buttonText="Log In" />
+            <ButtonComponent buttonText="Join Us" HandleButton={HandlebuttonRegister} />
+            <ButtonComponentWhite buttonText="Log In" HandleButton={HandlebuttonLogin} />
           </Flex>
         </Flex>
 
