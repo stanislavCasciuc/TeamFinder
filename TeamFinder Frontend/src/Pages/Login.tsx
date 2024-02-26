@@ -5,11 +5,10 @@ import ButtonComponent from "../Components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
-    const navigate = useNavigate();
-    const HandleButtonLogged = () => {
-        
-        navigate("/");
-    };
+  const navigate = useNavigate();
+  const HandleButtonLogged = () => {
+    navigate("/");
+  };
 
   const icon = (
     <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -39,37 +38,32 @@ export default function LoginPage() {
               label="Username"
               placeholder="Username"
             ></TextInput>
+          </Flex>
 
-            <TextInput
-              size="lg"
-              label="Email Address"
-              placeholder="Email Address"
-            ></TextInput>
-        </Flex>
 
           <Flex miw="300" direction="column">
-
             <PasswordInput
               size="lg"
               label="Password"
               placeholder="Password"
               leftSection={icon}
             ></PasswordInput>
-
-            <PasswordInput
-              size="lg"
-              label="Confirm Password"
-              placeholder="Confirm Password"
-              leftSection={icon}
-            ></PasswordInput>
           </Flex>
 
           <Flex mt="30" align="center" gap="20">
-            <ButtonComponent buttonText="Log in" HandleButton={HandleButtonLogged} />
+            <ButtonComponent
+              buttonText="Log in"
+              HandleButton={HandleButtonLogged}
+            />
           </Flex>
           <Flex m="10" gap="sm">
             Don't have an account?
-            <a href="/register" className="font-bold text-indigo-500 hover:text-cyan-900">Register</a>
+            <a
+              href="/register"
+              className="font-normal text-indigo-500 hover:text-cyan-900"
+            >
+              Register
+            </a>
           </Flex>
         </div>
       </Flex>

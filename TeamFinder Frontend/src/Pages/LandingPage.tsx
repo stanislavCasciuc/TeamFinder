@@ -1,4 +1,4 @@
-import { Flex, Title, Image } from "@mantine/core";
+import { Flex, Title, Image} from "@mantine/core";
 import ButtonComponent from "../Components/ButtonComponent";
 import ResponsiveHeader from "../Components/ResponsiveHeader";
 import ButtonComponentWhite from "../Components/ButtonComponentWhite";
@@ -11,9 +11,9 @@ export default function LandingPage() {
   const HandlebuttonRegister = () => {
     navigate("/register");
   };
-  const HandlebuttonLogin = () => { 
+  const HandlebuttonLogin = () => {
     navigate("/login");
-  }
+  };
   return (
     <>
       <header className="p-2 hover:shadow-sm">
@@ -37,17 +37,43 @@ export default function LandingPage() {
           </Title>
 
           <Flex justify="start" gap="12" wrap="wrap">
-            <ButtonComponent buttonText="Join Us" HandleButton={HandlebuttonRegister} />
-            <ButtonComponentWhite buttonText="Log In" HandleButton={HandlebuttonLogin} />
+            <ButtonComponent
+              buttonText="Join Us"
+              HandleButton={HandlebuttonRegister}
+            />
+            <ButtonComponentWhite
+              buttonText="Log In"
+              HandleButton={HandlebuttonLogin}
+            />
           </Flex>
         </Flex>
 
         <Image
-          className="drop-shadow-2xl"
+          className="drop-shadow-2xl mb-16 md:mb-0 xl:mb-0 xl:w-6/12"
           src={sourceImage}
           alt="Descriptive Image of People searching and Finding"
+          fit="contain"
         />
       </Flex>
+      <footer className="bg-white text-black font-light py-4 border-t mt-24">
+        <Flex justify="center" gap="20">
+          <a href="#" className="hover:text-gray-400">
+            About
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Contact
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Terms of Service
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Privacy Policy
+          </a>
+        </Flex>
+        <p className="text-center mt-4">
+          © 2024 TeamFinder. All rights reserved.
+        </p>
+      </footer>
     </>
   );
 }
