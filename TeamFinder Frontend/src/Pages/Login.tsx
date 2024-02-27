@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 
-const LOGIN_URL = "/api/login";
+const LOGIN_URL = "/users/login/";
 
 const icon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -36,9 +36,10 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
+      console.log("user", user, password);
       const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ userName: user, password }),
+        "/token",
+        JSON.stringify({grant_type: null,  username: user,  password: password, scope: null, client_id : null, client_secret: null}),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

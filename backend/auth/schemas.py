@@ -8,10 +8,11 @@ class RegisterUser(BaseModel):
     email: str
     password: str
     role: Optional [str] = None
-    organization_name: str
-    organization_address: str
+    organization_name: Optional[str] = None
+    organization_address: Optional[str] = None
     organization_admin: Optional[bool] = False
     departament_id: Optional[int] = None
+
 
 class ResponseUser(BaseModel):
     id: int
@@ -20,6 +21,7 @@ class ResponseUser(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role : str
 
 class TokenData(BaseModel):
     name: Optional[str]=None

@@ -8,7 +8,7 @@ from backend.storage.model import get_db, Organization, User
 router = APIRouter()
 
 
-@router.post('/register/')
+@router.post('/users/register/')
 async def create_user(user: RegisterUser, db: Session = Depends(get_db)):
         if user.organization_admin:
             user.role = "organization_admin"
