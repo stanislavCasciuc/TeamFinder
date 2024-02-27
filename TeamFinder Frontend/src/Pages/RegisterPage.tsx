@@ -4,7 +4,7 @@ import LogoSVG from "../assets/logo.svg";
 import ButtonComponent from "../Components/ButtonComponent";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import { useRef, useEffect } from "react";
 
 const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
@@ -13,7 +13,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
 
 
-const REGISTER_URL = "/api/user";
+const REGISTER_URL = "/users/register/";
 
 export default function RegisterPage() {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -91,7 +91,7 @@ export default function RegisterPage() {
     }
     try {
       const result = await axios.post(
-        REGISTER_URL,
+           REGISTER_URL,
         JSON.stringify({ name: user, email: email, password: password , organization_address: address , organization_name: Organization_name, organization_admin: true}),
         {
           headers: { "Content-Type": "application/json" },

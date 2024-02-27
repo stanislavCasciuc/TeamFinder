@@ -13,6 +13,7 @@ class RegisterUser(BaseModel):
     organization_admin: Optional[bool] = False
     departament_id: Optional[int] = None
 
+
 class ResponseUser(BaseModel):
     id: int
     organization_id: int
@@ -20,6 +21,7 @@ class ResponseUser(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role : str
 
 class TokenData(BaseModel):
     name: Optional[str]=None
