@@ -8,8 +8,8 @@ class RegisterUser(BaseModel):
     email: str
     password: str
     role: Optional [str] = None
-    organization_name: str
-    organization_address: str
+    organization_name: Optional[str] = None
+    organization_address: Optional[str] = None
     organization_admin: Optional[bool] = False
     departament_id: Optional[int] = None
 

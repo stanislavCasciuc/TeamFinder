@@ -36,9 +36,10 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
+      console.log("user", user, password);
       const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ username: user,  password: password }),
+        "/token",
+        JSON.stringify({grant_type: null,  username: user,  password: password, scope: null, client_id : null, client_secret: null}),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
