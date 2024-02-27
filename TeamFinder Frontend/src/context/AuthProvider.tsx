@@ -8,7 +8,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 interface Auth {
-    roles: string[];
+    role: string;
     accessToken: string;
   }
 

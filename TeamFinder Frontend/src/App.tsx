@@ -24,11 +24,13 @@ export default function App() {
             element={<RegisterEmployee />}
           />
           <Route path="/Login" element={<LoginPage />} />
-          <Route path="/HomePage/:accessToken" element={<HomePage />} />
+                    <Route path="/HomePage/:accessToken" element={<HomePage />} />
+          
           
           {/* Protected Routes */}
-          <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
-          
+          <Route element={<RequireAuth allowedRoles={["Admin","Departament_Manager","Project_Manager"]} />}>
+
+
           </Route>
 
           {/* catch All */}

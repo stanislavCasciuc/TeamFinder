@@ -46,8 +46,8 @@ export default function LoginPage() {
       );
       if (response.status === 200) {
         const accessToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-        setAuth({ accessToken, roles });
+        const role = response?.data?.role;
+        setAuth({ accessToken, role });
         navigate("/HomePage/" + accessToken);
         setUser("");
         setPassword("");
