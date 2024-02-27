@@ -8,10 +8,11 @@ p.errormsg {
   padding: 0;
 }
 p {
-  background-color: #667eea2a;
+  background-color: #667eea1a;
   border-radius: 2px;
   padding: 3px;
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 500;
 }
 
 p.offscreen {

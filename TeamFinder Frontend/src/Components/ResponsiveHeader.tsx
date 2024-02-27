@@ -6,7 +6,7 @@ interface ResponsiveHeaderProps {
 
 const ResponsiveHeader = ({ children }: ResponsiveHeaderProps) => {
   return (
-    <Text className="text-5xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold">
+    <Text className="text-5xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold bg-white">
       {children}
     </Text>
   );

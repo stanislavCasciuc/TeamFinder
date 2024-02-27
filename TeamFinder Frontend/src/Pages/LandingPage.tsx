@@ -70,7 +70,7 @@ export default function LandingPage() {
             Privacy Policy
           </a>
         </Flex>
-        <p className="text-center mt-4">
+        <p className="text-center mt-4 bg-white">
           © 2024 TeamFinder. All rights reserved.
         </p>
       </footer>

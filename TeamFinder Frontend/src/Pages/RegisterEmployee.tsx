@@ -12,7 +12,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGISTER_URL = "/api/user";
 
-export default function RegisterPage() {
+export default function RegisterPageEmployee() {
   const usernameRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLInputElement>(null);
 

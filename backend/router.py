@@ -25,6 +25,7 @@ async def read_root():
 def get_all_users(db:  Session = Depends(get_db)):
     users = db.query(User).all()
     return users
+
 @router.post('/create_admin/')
 async def create_user(user: OrganizationUser, db: Session = Depends(get_db)):
     try:

@@ -4,22 +4,37 @@ import "./App.css";
 import LandingPage from "./Pages/LandingPage";
 import RegisterPage from "./Pages/RegisterPage";
 import RegisterEmployee from "./Pages/RegisterEmployee";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import RequireAuth from "./Components/RequireAuth";
 import LoginPage from "./Pages/Login";
+import Layout from "./Components/Layout";
+import HomePage from "./Pages/HomePage";
+import Missing from "./Pages/Missing";
+
 export default function App() {
   return (
-    <Router>
-      <MantineProvider>
-        <Routes>
+    <MantineProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* Not protected Routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/Register" element={<RegisterPage />} />
           <Route
-            path="/register/:Organization_name/employee"
+            path="/Register/:Organization_name/Employee"
             element={<RegisterEmployee />}
           />
-        </Routes>
-      </MantineProvider>
-    </Router>
+          <Route path="/Login" element={<LoginPage />} />
+          <Route path="/HomePage/:accessToken" element={<HomePage />} />
+          
+          {/* Protected Routes */}
+          <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
+          
+          </Route>
+
+          {/* catch All */}
+          <Route path="*" element={<Missing />} />
+        </Route>
+      </Routes>
+    </MantineProvider>
   );
 }
