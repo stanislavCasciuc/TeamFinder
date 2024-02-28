@@ -95,7 +95,7 @@ export default function RegisterPage() {
         JSON.stringify({ name: user, email: email, password: password , organization_address: address , organization_name: Organization_name, organization_admin: true}),
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true
+         
         }
       );
       console.log("Registration successful:", result.data);

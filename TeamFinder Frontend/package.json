@@ -30,6 +30,8 @@
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
@@ -37,6 +39,8 @@
     "recharts": "^2.12.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jwt-decode": "^3.1.0",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@types/react-query": "^1.2.9",

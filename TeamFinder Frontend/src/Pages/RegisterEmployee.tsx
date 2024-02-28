@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "../api/axios";
 import { useRef, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -33,6 +34,10 @@ export default function RegisterPageEmployee() {
   const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
+
+  const {auth} =useAuth();
+
+
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -71,10 +76,9 @@ export default function RegisterPageEmployee() {
     try {
       const result = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ name: user, email: email, password: password, organization_id: 1}),
+        JSON.stringify({ name: user, email: email, password: password, organization_id:1}),
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true
         }
       );
       console.log("Registration successful:", result.data);

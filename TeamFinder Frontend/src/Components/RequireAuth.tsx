@@ -8,14 +8,11 @@ interface RequireAuthProps {
 const RequireAuth = ({allowedRoles}:RequireAuthProps) => {
   const {auth }= useAuth();
   const location = useLocation();
-
-  return(
-    auth?.roles?.find((role: string) => allowedRoles?.includes(role))
-    ? <Outlet />
-    : <Navigate to="/Login" state={{ from: location }} replace />
- 
- 
-    );
-}
+  return auth?.role && allowedRoles?.includes(auth?.role) ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/Login" state={{ from: location }} replace />
+  );
+};  
 
 export default RequireAuth;

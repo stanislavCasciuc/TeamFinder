@@ -5,9 +5,10 @@ import ButtonComponent from "../Components/ButtonComponent";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import axios from "../api/axios";
 
-const LOGIN_URL = "/users/login/";
+
+import { jwtDecode } from 'jwt-decode';
+
 
 const icon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -36,28 +37,46 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
-      console.log("user", user, password);
-      const response = await axios.post(
-        "/token",
-        JSON.stringify({grant_type: null,  username: user,  password: password, scope: null, client_id : null, client_secret: null}),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        const accessToken = response?.data?.accessToken;
-        const role = response?.data?.role;
-        setAuth({ accessToken, role });
+      const response = await fetch('http://192.168.100.40:8000/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username:user,
+          password:password,
+          grant_type: 'password',
+          scope: 'offline_access',
+        }).toString(), // Make sure to call toString() on URLSearchParams
+      });
+  
+     
+
+      if (response.ok) {
+        const data = await response.json(); // Parse the response body as JSON
+        const accessToken = data.access_token; 
+        
+        const decoded = jwtDecode(accessToken) as { role: string, organization_id: number };
+        const role: string = decoded.role;
+        const organization_id: number = decoded.organization_id;   
+        
+        setAuth({ accessToken, role , organization_id});
         navigate("/HomePage/" + accessToken);
         setUser("");
         setPassword("");
+      } else {
+        // Handle non-2xx response (error)
+        console.log("Error:", response.statusText);
+        setErrorMsg("Invalid username or password");
+        errRef.current?.focus();
       }
     } catch (error) {
-      setErrorMsg("Invalid username or password");
+      console.error("Error:", error);
+      setErrorMsg("An error occurred");
       errRef.current?.focus();
     }
   };
+  
 
   return (
     <>

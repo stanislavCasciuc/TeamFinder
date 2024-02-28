@@ -1,13 +1,14 @@
 import LogoSVG from "../assets/logo.svg";
 import MenuSVG from "../assets/hamburger-menu-svgrepo-com.svg";
-import { Flex, Title } from "@mantine/core";
+import { Container, Flex, Title } from "@mantine/core";
 import { Link } from "react-router-dom";
 import Sidebar from "../Components/SideBar";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
-
+  const { auth } = useAuth();
   return (
     <>
       <div className="h-svh">
@@ -16,7 +17,7 @@ const HomePage = () => {
             <img
               src={MenuSVG}
               alt="Hamburger Menu"
-              className="w-12 mr-10 ml-2 hover:bg-gray-100 rounded-3xl cursor-pointer p-2"
+              className="md:hover:bg-white md:hover:cursor-default  w-12 mr-10 ml-2 hover:bg-gray-100 rounded-3xl cursor-pointer p-2"
               onClick={() => {
                 setSidebar(!sidebar);
               }}
@@ -31,18 +32,20 @@ const HomePage = () => {
           </Flex>
         </header>
         <Flex h="90%">
-          {sidebar && <Sidebar />}
-          <div
-            className="hidden md:block w-1/5 border-r py-2 pr-4 text-left  "
+          {sidebar && <Sidebar setSidebar={setSidebar} />}
+          <Container
+            className={
+              "hidden md:block border-r w-1/5 py-2 pr-4 pl-0 text-left  "
+            }
             dir="rtl"
           >
             <Flex direction="column">
-              <Link
+             {auth?.role!=="employee" && <Link
                 to="/"
                 className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
               >
                 Projects
-              </Link>
+              </Link>}
               <Link
                 to="/"
                 className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
@@ -50,7 +53,7 @@ const HomePage = () => {
                 Departments
               </Link>
             </Flex>
-          </div>
+          </Container>
           <Flex
             className="w-4/5"
             onClick={() => {
