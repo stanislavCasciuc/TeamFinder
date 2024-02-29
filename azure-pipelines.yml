@@ -26,10 +26,7 @@ steps:
     azureSubscription: 'quantumtrio-service-connection'
     appType: 'webApp'
     appName: 'quantumtrio-service-connection'
-    deployToSlotOrASE: true
-    slotName: 'production'
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'auto'
 
 - script: |
     python -m pip install --upgrade pip
