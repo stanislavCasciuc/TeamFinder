@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from backend.departament import departament
 from backend.skills import skills
 from backend.storage import model
 from backend.auth import auth
@@ -21,9 +22,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-app.include_router(auth.router)
+app.include_router(auth.router, tags=["auth"])
 app.include_router(register.router)
 app.include_router(skills.router)
+app.include_router(departament.router)
 
 
 if __name__ == '__main__':

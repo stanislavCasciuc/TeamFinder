@@ -7,16 +7,10 @@ class RegisterUser(BaseModel):
     name: str
     email: str
     password: str
-    role: Optional [str] = None
+    role: str
     organization_name: Optional[str] = None
     organization_address: Optional[str] = None
-    organization_admin: Optional[bool] = False
     departament_id: Optional[int] = None
-
-
-class ResponseUser(BaseModel):
-    id: int
-    organization_id: int
 
 class Token(BaseModel):
     access_token: str
@@ -27,6 +21,12 @@ class TokenData(BaseModel):
     organization_id: Optional[int]=None
     id: int
 
+class ResponseUser(BaseModel):
+    id: int
+    organization_id: int
+
+class ResponseAllUsers(BaseModel):
+    all_users: List[ResponseUser]
 
 
 
