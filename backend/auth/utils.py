@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 
-from backend.storage.model import User, get_db
+from backend.storage.model import User, get_db, UserMainRoles
 
 SECRET_KEY = "c588be47a9b0a8ac4f95d6c74c37f42659b1c85a7f85bf139c0ef131f6e19e1e"
 ALGORITHM = "HS256"
@@ -63,9 +63,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-
-    if not current_user.role == "admin":
+async def get_my_user(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    current_user.role = db.query(UserMainRoles).filter(UserMainRoles.user_id == current_user.id).first().role_name
+    if not current_user.role:
         raise HTTPException(status_code=400, detail="Inactive user")
-    print(current_user.name)
     return current_user
+
+async def get_all_users(current_user,db: Session = Depends(get_db)):
+
+    if not current_user.role == "organization_admin":
+        raise HTTPException(status_code=401, detail="User dont have permission to list all")
+    all_users= db.query(User).all()
+    print([{"id": user.id, "organization_id": user.organization_id} for user in all_users])
+    return [{"id": user.id, "organization_id": user.organization_id} for user in all_users]
