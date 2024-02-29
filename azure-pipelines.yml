@@ -1,7 +1,4 @@
 # Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
 - main
@@ -22,9 +19,17 @@ strategy:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    azureSubscription: 'quantumtrio-service-connection'
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'quantumtrio-service-connection'
+    appType: 'webApp'
+    appName: 'quantumtrio-service-connection'
+    deployToSlotOrASE: true
+    slotName: 'production'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'
 
 - script: |
     python -m pip install --upgrade pip
