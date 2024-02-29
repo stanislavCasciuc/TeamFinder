@@ -76,7 +76,7 @@ export default function RegisterPageEmployee() {
     try {
       const result = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ name: user, email: email, password: password, organization_id:1}),
+        JSON.stringify({ name: user, email: email, password: password, organization_id:auth?.organization_id , role:"employee"}),
         {
           headers: { "Content-Type": "application/json" },
         }

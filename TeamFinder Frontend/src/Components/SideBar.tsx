@@ -1,33 +1,24 @@
-import { Flex } from "@mantine/core";
-import { Link } from "react-router-dom";
+import HomePageButtons from "./HomePageButtons";
 import { useClickOutside } from "@mantine/hooks";
 
 interface SidebarProps {
-  setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  setSidebar: (value: boolean) => void;
+  setSection: (value: string) => void;
 }
 
-const Sidebar = ({ setSidebar }: SidebarProps) => {
+
+const Sidebar = ({ setSidebar,setSection }:SidebarProps) => {
   const clickOutsideRef = useClickOutside(() => setSidebar(false));
+
   return (
-    <Flex
-      direction="column"
-      dir="rtl"
-      className=" md:hidden text-left bg-white shadow-xl absolute top-0 h-full w-2/5 max-w-80 border-r py-2 pr-4"
-      ref={clickOutsideRef}
-    >
-      <Link
-        to="/"
-        className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
+    <>
+      <div
+        ref={clickOutsideRef}
+        className=" md:hidden text-left bg-white shadow-xl absolute top-0 h-full w-2/5 max-w-80 border-r py-2 pr-4"
       >
-        Projects
-      </Link>
-      <Link
-        to="/"
-        className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
-      >
-        Departments
-      </Link>
-    </Flex>
+        <HomePageButtons setSection={setSection} setSidebar={setSidebar}/>
+      </div>
+    </>
   );
 };
 

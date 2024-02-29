@@ -1,14 +1,16 @@
 import LogoSVG from "../assets/logo.svg";
 import MenuSVG from "../assets/hamburger-menu-svgrepo-com.svg";
-import { Container, Flex, Title } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Flex, Title } from "@mantine/core";
+import HomePageButtons from "../Components/HomePageButtons";
 import Sidebar from "../Components/SideBar";
 import { useState } from "react";
-import useAuth from "../hooks/useAuth";
+import Profile from "../Components/Profile";
+
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
-  const { auth } = useAuth();
+  const [section, setSection] = useState("Profile");
+
   return (
     <>
       <div className="h-svh">
@@ -32,34 +34,25 @@ const HomePage = () => {
           </Flex>
         </header>
         <Flex h="90%">
-          {sidebar && <Sidebar setSidebar={setSidebar} />}
-          <Container
+          {sidebar && (
+            <Sidebar setSidebar={setSidebar} setSection={setSection} />
+          )}
+          <div
             className={
-              "hidden md:block border-r w-1/5 py-2 pr-4 pl-0 text-left  "
+              "hidden md:block border-r w-1/5 py-2 pr-4 pl-0 text-left "
             }
-            dir="rtl"
           >
-            <Flex direction="column">
-             {auth?.role!=="employee" && <Link
-                to="/"
-                className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
-              >
-                Projects
-              </Link>}
-              <Link
-                to="/"
-                className="font-medium text-base p-2 text-slate-600 hover:bg-slate-200 rounded-s-xl   "
-              >
-                Departments
-              </Link>
-            </Flex>
-          </Container>
+            <HomePageButtons setSection={setSection} setSidebar={setSidebar} />
+          </div>
+
           <Flex
             className="w-4/5"
             onClick={() => {
               setSidebar(false);
             }}
-          ></Flex>
+          >
+            {section === "Profile" && <Profile/>}
+          </Flex>
         </Flex>
       </div>
     </>

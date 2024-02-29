@@ -56,11 +56,13 @@ export default function LoginPage() {
         const data = await response.json(); // Parse the response body as JSON
         const accessToken = data.access_token; 
         
-        const decoded = jwtDecode(accessToken) as { role: string, organization_id: number };
+        const decoded = jwtDecode(accessToken) as { role: string, organization_id: number ,name:string,organization_name:string };
         const role: string = decoded.role;
         const organization_id: number = decoded.organization_id;   
-        
-        setAuth({ accessToken, role , organization_id});
+        const name:string = decoded.name;
+        const organization_name = decoded.organization_name;
+
+        setAuth({ accessToken, role , organization_id,name, organization_name});
         navigate("/HomePage/" + accessToken);
         setUser("");
         setPassword("");
