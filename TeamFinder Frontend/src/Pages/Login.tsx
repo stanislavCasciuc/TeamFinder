@@ -6,9 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-
-import { jwtDecode } from 'jwt-decode';
-
+import { jwtDecode } from "jwt-decode";
 
 const icon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -37,32 +35,33 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
-      const response = await fetch('http://192.168.100.40:8000/token', {
-        method: 'POST',
+      const response = await fetch("http://192.168.0.150:8000/token", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          username:user,
-          password:password,
-          grant_type: 'password',
-          scope: 'offline_access',
+          username: user,
+          password: password,
+          grant_type: "password",
+          scope: "offline_access",
         }).toString(), // Make sure to call toString() on URLSearchParams
       });
-  
-     
 
       if (response.ok) {
         const data = await response.json(); // Parse the response body as JSON
-        const accessToken = data.access_token; 
-        
-        const decoded = jwtDecode(accessToken) as { role: string, organization_id: number ,name:string,organization_name:string };
-        const role: string = decoded.role;
-        const organization_id: number = decoded.organization_id;   
-        const name:string = decoded.name;
-        const organization_name = decoded.organization_name;
+        const accessToken = data.access_token;
 
-        setAuth({ accessToken, role , organization_id,name, organization_name});
+        const decoded = jwtDecode(accessToken) as {
+          role: string;
+          organization_id: number;
+          id: number;
+        };
+        const role: string = decoded.role;
+        const organization_id: number = decoded.organization_id;
+        const id: number = decoded.id;
+
+        setAuth({ accessToken, role, organization_id, id });
         navigate("/HomePage/" + accessToken);
         setUser("");
         setPassword("");
@@ -78,7 +77,6 @@ export default function LoginPage() {
       errRef.current?.focus();
     }
   };
-  
 
   return (
     <>

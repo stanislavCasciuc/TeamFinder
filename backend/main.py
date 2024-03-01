@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from backend.departament import departament
-from backend.skills import skills
-from backend.storage import model
-from backend.auth import auth
-from backend.auth import register
-from backend.storage.config import engine
+from departament import departament
+from skills import skills
+from storage import model
+from auth import auth
+from auth import register
+from storage.config import engine
 
 model.Base.metadata.create_all(bind=engine)
 

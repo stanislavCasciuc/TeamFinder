@@ -5,7 +5,7 @@ import HomePageButtons from "../Components/HomePageButtons";
 import Sidebar from "../Components/SideBar";
 import { useState } from "react";
 import Profile from "../Components/Profile";
-
+import Users from "../Components/Users";
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -46,12 +46,13 @@ const HomePage = () => {
           </div>
 
           <Flex
-            className="w-4/5"
+            className="md:w-4/5  md:h-full  h-fit bg-slate-50"
             onClick={() => {
               setSidebar(false);
             }}
           >
-            {section === "Profile" && <Profile/>}
+            {section === "Profile" && <Profile />}
+            {section === "Users" && <Users/>}
           </Flex>
         </Flex>
       </div>
