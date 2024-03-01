@@ -7,8 +7,10 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.base import instance_dict
 
-from backend.auth.schemas import UserData
-from backend.storage.model import User, get_db, UserMainRoles, Organization
+
+
+from storage.model import User, get_db, UserMainRoles
+
 
 SECRET_KEY = "c588be47a9b0a8ac4f95d6c74c37f42659b1c85a7f85bf139c0ef131f6e19e1e"
 ALGORITHM = "HS256"

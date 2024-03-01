@@ -92,7 +92,7 @@ export default function RegisterPage() {
     try {
       const result = await axios.post(
            REGISTER_URL,
-        JSON.stringify({ name: user, email: email, password: password , organization_address: address , organization_name: Organization_name, organization_admin: true}),
+        JSON.stringify({ name: user, email: email, password: password , organization_address: address , organization_name: Organization_name, role:"organization_admin"}),
         {
           headers: { "Content-Type": "application/json" },
          

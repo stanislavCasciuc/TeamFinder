@@ -11,6 +11,7 @@ import Layout from "./Components/Layout";
 import HomePage from "./Pages/HomePage";
 import Missing from "./Pages/Missing";
 
+
 export default function App() {
   return (
     <MantineProvider>
@@ -25,6 +26,8 @@ export default function App() {
           />
           <Route path="/Login" element={<LoginPage />} />
 
+          <Route path="/HomePage/:accessToken" element={<HomePage />} />
+
           {/* Protected Routes */}
           <Route
             element={
@@ -37,9 +40,7 @@ export default function App() {
                 ]}
               />
             }
-          >
-            <Route path="/HomePage/:accessToken" element={<HomePage />} />
-          </Route>
+          ></Route>
 
           {/* catch All */}
           <Route path="*" element={<Missing />} />
