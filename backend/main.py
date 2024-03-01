@@ -23,9 +23,9 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, tags=["auth"])
-app.include_router(register.router)
-app.include_router(skills.router)
-app.include_router(departament.router)
+app.include_router(register.router, tags=["register"])
+app.include_router(skills.router, tags=["skills"])
+app.include_router(departament.router, tags=["departament"])
 
 
 if __name__ == '__main__':

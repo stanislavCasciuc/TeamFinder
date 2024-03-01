@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text
 
-from storage.config import Base, SessionLocal
+from backend.storage.config import Base, SessionLocal
 
 
 class Organization(Base):
@@ -25,7 +25,7 @@ class Departament(Base):
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
     name = Column(String)
-    departament_admin = Column(Integer, ForeignKey('users.id'))
+    departament_manager = Column(Integer, ForeignKey('users.id'))
 
 class Role(Base):
     __tablename__ = 'roles'

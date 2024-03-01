@@ -6,11 +6,9 @@ from sqlalchemy.orm import Session
 
 from fastapi.security import OAuth2PasswordRequestForm
 
-
-from backend.auth.schemas import Token, UserData, ResponseAllUsers
+from backend.auth.schemas import UserData, Token
 from backend.auth.utils import authenticate_user, create_access_token, get_my_user, get_all_users
-from backend.storage.model import get_db, UserMainRoles
-
+from backend.storage.model import UserMainRoles, get_db
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

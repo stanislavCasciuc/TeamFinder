@@ -64,7 +64,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
     return user
 
-
 async def get_my_user(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     current_user.role = db.query(UserMainRoles).filter(UserMainRoles.user_id == current_user.id).first().role_name
     if not current_user.role:
@@ -72,7 +71,9 @@ async def get_my_user(current_user: User = Depends(get_current_user), db: Sessio
     organization = db.query(Organization).filter(Organization.id == current_user.organization_id).first()
     current_user.organization_name = organization.name
     current_user.organization_address = organization.address
-    del current_user.hashed_password
+
+    if current_user.hashed_password:
+        del current_user.hashed_password
 
     return current_user
 

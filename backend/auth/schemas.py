@@ -26,6 +26,7 @@ class UserData(BaseModel):
     role: str
     organization_name: str
     organization_address: str
+    hashed_password: Optional[str] = None
     departament_id: Optional[int] = None
 
 
