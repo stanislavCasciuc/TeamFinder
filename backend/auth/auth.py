@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
 
-from auth.schemas import Token, TokenData, ResponseAllUsers
-from auth.utils import authenticate_user, create_access_token, get_my_user, get_all_users
-from storage.model import get_db, UserMainRoles
+from backend.auth.schemas import Token, UserData, ResponseAllUsers
+from backend.auth.utils import authenticate_user, create_access_token, get_my_user, get_all_users
+from backend.storage.model import get_db, UserMainRoles
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -36,6 +36,5 @@ async def read_users_me(current_user: UserData = Depends(get_my_user)):
 @router.get("/users/all", response_model = List[UserData] )
 async def read_users_all(current_user: UserData = Depends(get_my_user), db: Session = Depends(get_db)):
     all_users = await get_all_users(current_user, db)
-
     return all_users
 

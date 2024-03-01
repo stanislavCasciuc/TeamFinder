@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 
-from auth.schemas import RegisterUser, ResponseUser
-from auth.utils import get_password_hash
-from storage.model import get_db, Organization, User, UserMainRoles
+from backend.auth.schemas import RegisterUser
+from backend.auth.utils import get_password_hash
+from backend.storage.model import get_db, Organization, User, UserMainRoles
 
 
 router = APIRouter()
@@ -38,5 +38,4 @@ async def create_user(user: RegisterUser, db: Session = Depends(get_db)):
         user_main_role = UserMainRoles(user_id = db_user.id, role_name = user.role)
         db.add(user_main_role)
         db.commit()
-        response_user = ResponseUser(id=db_user.id, organization_id=db_user.organization_id)
-        return response_user
+        return
