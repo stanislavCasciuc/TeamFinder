@@ -3,6 +3,8 @@
 trigger:
   - main
 
+pool:
+  vmImage: 'ubuntu-latest'
 
 variables:
   python.version: '3.12'
