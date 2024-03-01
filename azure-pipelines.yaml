@@ -38,6 +38,6 @@ steps:
       azureSubscription: 'quantumtrio-service-connection'
       appType: 'webAppLinux'
       appName: "atc-2024-quantumtrio-be-linux-web-app"
-      runtimeStack: 'PYTHON|3.11'
+      runtimeStack: 'PYTHON|3.12'
       package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       startUpCommand: 'python -m uvicorn main:app --host 0.0.0.0'
