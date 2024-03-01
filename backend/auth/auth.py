@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from fastapi.security import OAuth2PasswordRequestForm
 
-from auth.schemas import Token, TokenData, ResponseAllUsers
+from auth.schemas import Token, UserData
 from auth.utils import authenticate_user, create_access_token, get_my_user, get_all_users
 from storage.model import get_db, UserMainRoles
 
