@@ -40,4 +40,4 @@ steps:
       appName: "atc-2024-quantumtrio-be-linux-web-app"
       runtimeStack: 'PYTHON|3.11'
       package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      startUpCommand: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000 main:app'
+      startUpCommand: 'python -m uvicorn main:app --host 0.0.0.0'
