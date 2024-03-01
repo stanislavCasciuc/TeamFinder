@@ -42,3 +42,4 @@ steps:
       appName: "atc-2024-quantumtrio-be-linux-web-app"
       runtimeStack: 'PYTHON|3.11'
       package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      startUpCommand: 'uvicorn --bind=0.0.0.0 --port=8000 main:app'
