@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -26,15 +27,12 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer" }
 
-@router.get("/users/login", response_model = TokenData)
-async def read_users_me(current_user: TokenData = Depends(get_my_user)):
+@router.get("/users/me", response_model = UserData)
+async def read_users_me(current_user: UserData = Depends(get_my_user)):
     return current_user
 
-
-
-@router.get("/users/all", response_model = ResponseAllUsers )
-async def read_users_all(current_user: TokenData = Depends(get_my_user), db: Session = Depends(get_db)):
+@router.get("/users/all", response_model = List[UserData] )
+async def read_users_all(current_user: UserData = Depends(get_my_user), db: Session = Depends(get_db)):
     all_users = await get_all_users(current_user, db)
-    response = ResponseAllUsers(all_users = all_users)
-    return response
+    return all_users
 

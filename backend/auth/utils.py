@@ -5,9 +5,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.base import instance_dict
 
 
-from storage.model import User, get_db, UserMainRoles
+
+from storage.model import User, get_db, UserMainRoles, Organization
 
 SECRET_KEY = "c588be47a9b0a8ac4f95d6c74c37f42659b1c85a7f85bf139c0ef131f6e19e1e"
 ALGORITHM = "HS256"
@@ -67,12 +69,22 @@ async def get_my_user(current_user: User = Depends(get_current_user), db: Sessio
     current_user.role = db.query(UserMainRoles).filter(UserMainRoles.user_id == current_user.id).first().role_name
     if not current_user.role:
         raise HTTPException(status_code=400, detail="Inactive user")
+    organization = db.query(Organization).filter(Organization.id == current_user.organization_id).first()
+    current_user.organization_name = organization.name
+    current_user.organization_address = organization.address
+    del current_user.hashed_password
+
     return current_user
 
 async def get_all_users(current_user,db: Session = Depends(get_db)):
-
     if not current_user.role == "organization_admin":
         raise HTTPException(status_code=401, detail="User dont have permission to list all")
     all_users= db.query(User).all()
-    print([{"id": user.id, "organization_id": user.organization_id} for user in all_users])
-    return [{"id": user.id, "organization_id": user.organization_id} for user in all_users]
+    for user in all_users:
+        user.role = db.query(UserMainRoles).filter(UserMainRoles.user_id == user.id).first().role_name
+        organization = db.query(Organization).filter(Organization.id == user.organization_id).first()
+        user.organization_name = organization.name
+        user.organization_address = organization.address
+        if user.hashed_password:
+            del user.hashed_password
+    return all_users

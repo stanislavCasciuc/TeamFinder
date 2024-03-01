@@ -11,6 +11,7 @@ interface Auth {
     accessToken: string;
     role: string | undefined;
     organization_id: number | undefined;
+    id: number | undefined;
   }
 
 interface AuthProviderProps {
