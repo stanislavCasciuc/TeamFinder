@@ -16,17 +16,22 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-class TokenData(BaseModel):
-    name: Optional[str]=None
-    organization_id: Optional[int]=None
-    id: int
 
-class ResponseUser(BaseModel):
-    id: int
+
+class UserData(BaseModel):
     organization_id: int
+    id: int
+    name: str
+    email: str
+    role: str
+    organization_name: str
+    organization_address: str
+    departament_id: Optional[int] = None
+
+
 
 class ResponseAllUsers(BaseModel):
-    all_users: List[ResponseUser]
+    all_users: List[UserData]
 
 
 
