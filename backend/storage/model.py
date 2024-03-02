@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY
 
 from backend.storage.config import Base, SessionLocal
 
@@ -9,6 +9,11 @@ class Organization(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     address = Column(String)
+
+
+
+
+
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = {'extend_existing': True}
@@ -18,6 +23,7 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     hashed_password = Column(String)
+    roles = Column(ARRAY(String))
 
 class Departament(Base):
     __tablename__ = 'departaments'
@@ -25,7 +31,7 @@ class Departament(Base):
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
     name = Column(String)
-    departament_manager = Column(Integer, ForeignKey('users.id'))
+    departament_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
 
 class Role(Base):
     __tablename__ = 'roles'
@@ -39,6 +45,7 @@ class Project(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
+    project_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
     name = Column(String)
     description = Column(Text)
     start_date = Column(DateTime)
@@ -80,14 +87,12 @@ class ProjectTechnologies(Base):
     project_id = Column(Integer, ForeignKey('projects.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
 
-class UserMainRoles(Base):
-    __tablename__ = 'user_main_roles'
+class Departament_skills(Base):
+    __tablename__ = 'departament_skills'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
-    role_name= Column(String)
-    user_id = Column(Integer, ForeignKey('users.id'))
-
-
+    departament_id = Column(Integer, ForeignKey('departaments.id'))
+    skill_id = Column(Integer, ForeignKey('skills.id'))
 
 
 def get_db():

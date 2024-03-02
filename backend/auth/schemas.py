@@ -18,21 +18,11 @@ class Token(BaseModel):
 
 
 
-class UserData(BaseModel):
-    organization_id: int
-    id: int
-    name: str
-    email: str
-    role: str
-    organization_name: str
-    organization_address: str
-    hashed_password: Optional[str] = None
-    departament_id: Optional[int] = None
 
 
 
-class ResponseAllUsers(BaseModel):
-    all_users: List[UserData]
+
+
 
 
 
