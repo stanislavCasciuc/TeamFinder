@@ -2,10 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 
+
 from backend.auth.utils import get_current_user
 from backend.departament.schemas import DepartamentData, DepartamentResponse, UserData
 
 from backend.storage.model import get_db, Departament,  User
+
 
 router = APIRouter()
 

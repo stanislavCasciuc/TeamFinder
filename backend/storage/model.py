@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY
 
-from backend.storage.config import Base, SessionLocal
+from storage.config import Base, SessionLocal
 
 
 class Organization(Base):

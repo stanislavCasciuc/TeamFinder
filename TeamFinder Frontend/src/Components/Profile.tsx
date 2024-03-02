@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 
+
 const ProfilePage = () => {
   const [data, setData] = useState({
     name: "",
@@ -39,7 +40,7 @@ const ProfilePage = () => {
   return (
     <>
       <div className="m-0 md:px-24 md:py-12  text-slate-900  px-12 py-6 w-full">
-        <Title order={1} className="text-5xl ">
+        <Title order={1} className="text-3xl border-b-2 pb-6">
           Profile
         </Title>
         <Flex className="flex flex-row  items-center flex-wrap gap-8  md:justify-between md:pt-12">
@@ -48,22 +49,37 @@ const ProfilePage = () => {
               <span className="text-4xl font-bold">{initials}</span>
             </div>
             <div>
-              <Title order={2} className="text-3xl mb-8 ">
-                {name}
+              <Title order={2} className="text-4xl mb-8 ">
+                {name.toUpperCase()}
               </Title>
               <Flex direction="column" gap="md">
                 <span className="text-md">
-                  Organization: {data.organization_name}
+                  <span className="font-semibold text-lg"> Organization: </span>
+                  {data.organization_name}
                 </span>
                 <span className="text-md">
-                  Address: {data.organization_address}
+                  <span className="font-semibold text-lg">
+                    Organization-Address:{" "}
+                  </span>
+                  {data.organization_address}
                 </span>
 
-                <span className="text-md">Role: {data.role} </span>
+                <span className="text-md">
+                  <span className="font-semibold text-lg"> Roles: </span>{" "}
+                  {data.role}{" "}
+                </span>
 
-                <span className="text-md">Email: {data.email} </span>
+                <span className="text-md">
+                  <span className="font-semibold text-lg">Email: </span>
+                  {data.email}{" "}
+                </span>
 
-                <span className="text-md">Department: </span>
+                <span className="text-md">
+                  <span className="font-semibold text-lg">
+                    {" "}
+                    Current-Department:{" "}
+                  </span>{" "}
+                </span>
               </Flex>
             </div>
           </Flex>
