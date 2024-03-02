@@ -6,10 +6,10 @@ import Sidebar from "../Components/SideBar";
 import { useState } from "react";
 import Profile from "../Components/Profile";
 import Users from "../Components/Users";
+import { Routes, Route } from "react-router-dom";
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
-  const [section, setSection] = useState("Profile");
 
   return (
     <>
@@ -34,25 +34,25 @@ const HomePage = () => {
           </Flex>
         </header>
         <Flex h="90%">
-          {sidebar && (
-            <Sidebar setSidebar={setSidebar} setSection={setSection} />
-          )}
+          {sidebar && <Sidebar setSidebar={setSidebar} />}
           <div
             className={
               "hidden md:block border-r w-1/5 py-2 pr-4 pl-0 text-left "
             }
           >
-            <HomePageButtons setSection={setSection} setSidebar={setSidebar} />
+            <HomePageButtons setSidebar={setSidebar} />
           </div>
 
           <Flex
-            className="md:w-4/5  md:h-full  h-fit bg-slate-50"
+            className="md:w-4/5 w-full h-full  bg-slate-50"
             onClick={() => {
               setSidebar(false);
             }}
           >
-            {section === "Profile" && <Profile />}
-            {section === "Users" && <Users/>}
+            <Routes>
+              <Route path="/Profile" element={<Profile />} />
+              <Route path="/Users" element={<Users />} />
+            </Routes>
           </Flex>
         </Flex>
       </div>

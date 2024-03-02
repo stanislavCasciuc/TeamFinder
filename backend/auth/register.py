@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+
 from auth.schemas import RegisterUser
 from auth.utils import get_password_hash
 from storage.model import get_db, Organization, User, UserMainRoles
