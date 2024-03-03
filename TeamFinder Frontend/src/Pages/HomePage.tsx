@@ -13,8 +13,8 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="h-svh">
-        <header className="border-b">
+      <Flex direction="column" className="h-screen">
+        <header className="border-b ">
           <Flex className="p-2 items-center" gap="sm">
             <img
               src={MenuSVG}
@@ -33,7 +33,7 @@ const HomePage = () => {
             </Title>
           </Flex>
         </header>
-        <Flex h="90%">
+        <Flex className="h-full">
           {sidebar && <Sidebar setSidebar={setSidebar} />}
           <div
             className={
@@ -55,7 +55,7 @@ const HomePage = () => {
             </Routes>
           </Flex>
         </Flex>
-      </div>
+      </Flex>
     </>
   );
 };

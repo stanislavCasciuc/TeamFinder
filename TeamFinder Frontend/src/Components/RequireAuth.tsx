@@ -1,18 +1,24 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import React from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 interface RequireAuthProps {
-    allowedRoles?: string[];
-    }
+  allowedRoles: string[];
+}
 
-const RequireAuth = ({allowedRoles}:RequireAuthProps) => {
-  const {auth }= useAuth();
+const RequireAuth: React.FC<RequireAuthProps> = ({ allowedRoles }) => {
+  const { auth } = useAuth();
   const location = useLocation();
-  return auth?.role && allowedRoles?.includes(auth?.role) ? (
+
+  const isAuthorized =
+    auth?.roles && auth.roles.map((role:string) => allowedRoles.includes(role));
+
+    console.log(isAuthorized);
+  return isAuthorized ? (
     <Outlet />
   ) : (
-    <Navigate to="/Login" state={{ from: location }} replace />
+    <Navigate to="/login" state={{ from: location }} replace />
   );
-};  
+};
 
 export default RequireAuth;

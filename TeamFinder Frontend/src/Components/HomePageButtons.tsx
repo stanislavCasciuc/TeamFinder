@@ -1,4 +1,4 @@
-import { Flex} from "@mantine/core";
+import { Flex } from "@mantine/core";
 import useAuth from "../hooks/useAuth";
 import { IconUserCircle, IconUsersGroup } from "@tabler/icons-react";
 import LinkComponent from "./LinkComponent";
@@ -9,26 +9,22 @@ interface HomePageButtonsProps {
 
 const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
   const { auth } = useAuth();
-  const accessToken = auth?.accessToken;
-  const role = auth?.role;
+  const roles = auth?.roles;
   return (
     <Flex direction="column">
       <LinkComponent
         icon={<IconUserCircle size={28} />}
-        accessToken={accessToken}
         value="Profile"
         setSidebar={setSidebar}
       />
 
-      {/* {
-      role === "organization_admin" && ( */}
+      {roles?.includes("Organization Admin") && (
         <LinkComponent
           icon={<IconUsersGroup size={28} />}
-          accessToken={accessToken}
           value="Users"
           setSidebar={setSidebar}
         />
-      {/* )} */}
+      )}
     </Flex>
   );
 };

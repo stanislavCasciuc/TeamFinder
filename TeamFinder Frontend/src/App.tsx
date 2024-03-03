@@ -26,24 +26,25 @@ export default function App() {
             element={<RegisterEmployee />}
           />
           <Route path="/Login" element={<LoginPage />} />
-          <Route path="/Homepage/*" element={<HomePage />}>
-            <Route path="Profile" element={<Profile />} />
-            <Route path="Users" element={<Users />} />
-          </Route>
 
           {/* Protected Routes */}
           <Route
             element={
               <RequireAuth
                 allowedRoles={[
-                  "organization_admin",
-                  "departament_Manager",
-                  "project_Manager",
-                  "employee",
+                  "Organization Admin",
+                  "Departament Manager",
+                  "Project Manager",
+                  "Employee",
                 ]}
               />
             }
-          ></Route>
+          >
+            <Route path="/Homepage/*" element={<HomePage />}>
+              <Route path="Profile" element={<Profile />} />
+              <Route path="Users" element={<Users />} />
+            </Route>
+          </Route>
 
           {/* catch All */}
           <Route path="*" element={<Missing />} />
