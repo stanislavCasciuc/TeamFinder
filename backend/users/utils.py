@@ -3,17 +3,18 @@ from sqlalchemy.orm import Session
 
 from backend.functions.functions import  get_current_user, get_department_name_by_id
 from backend.storage.model import get_db, User, Organization
+from backend.storage.variables import Organization_Admin
 from backend.users.shemas import AllUsers, ExtendedUserData
 
 
 async def get_all_users(current_user, db: Session = Depends(get_db)):
-    if "organization_admin" not in current_user.roles:
+    if Organization_Admin not in current_user.roles:
         raise HTTPException(status_code=401, detail="User dont have permission to list all")
     all_users = db.query(User).filter(User.organization_id == current_user.organization_id).all()
     response_users = []
     for user in all_users:
         user.departament_name = get_department_name_by_id(user.departament_id, db)
-        user = AllUsers(id=user.id, name=user.name, roles=user.roles)
+        user = AllUsers(id=user.id, name=user.name, roles=user.roles, departament_name = user.departament_name)
         response_users.append(user)
     return response_users
 

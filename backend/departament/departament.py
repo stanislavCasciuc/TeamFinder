@@ -7,26 +7,29 @@ from backend.auth.utils import get_current_user
 from backend.departament.schemas import DepartamentData, DepartamentResponse, UserData
 
 from backend.storage.model import get_db, Departament,  User
-
+from backend.storage.variables import Organization_Admin, Department_Manager
 
 router = APIRouter()
 
 @router.post('/departament/create/', response_model = DepartamentResponse)
-async def create_departament(departament_data: DepartamentData = Depends(), user_data: UserData= Depends(get_current_user)  , db: Session = Depends(get_db)):
-    user_data.roles = db.query(UserMainRoles).filter(UserMainRoles.user_id == user_data.id).first().role_name
-    if "organization_admin" not in user_data.roles:
+async def create_departament(departament_data: DepartamentData = Depends(), current_user: UserData = Depends(get_current_user)  , db: Session = Depends(get_db)):
+
+    if Organization_Admin not in current_user.roles:
         raise HTTPException(status_code=403, detail="You are not allowed to create departament")
 
     db_departament_manger_user = db.query(User).filter(User.id == departament_data.departament_manager).first()
+    if Department_Manager not in db_departament_manger_user.roles:
+        raise HTTPException(status_code=403, detail="User is not a department manager")
 
-    if db_departament_manger_user.organization_id != user_data.organization_id:
+
+    if db_departament_manger_user.organization_id != current_user.organization_id:
         raise HTTPException(status_code=403, detail="User is not part of the organization")
 
 
     db_departament = Departament(
         name=departament_data.departament_name,
-        organization_id=user_data.organization_id,
-        departament_manager=departament_data.departament_manager
+        organization_id=current_user.organization_id,
+        departament_manager_id=departament_data.departament_manager
     )
 
     db.add(db_departament)
@@ -36,12 +39,9 @@ async def create_departament(departament_data: DepartamentData = Depends(), user
     if not db_departament.id:
         return HTTPException(status_code=500, detail="Error creating departament")
 
-    db_user_role = UserMainRoles(user_id=departament_data.departament_manager, role_name="departament_manager")
-    db.add(db_user_role)
-    db.commit()
 
 
-    setattr(db_departament_manger_user, 'departament_id', db_departament.id)
+    db_departament_manger_user.departament_id = db_departament.id
     db.commit()
     response = DepartamentResponse(id=db_departament.id, organization_id=db_departament.organization_id, name=db_departament.name)
     return response

@@ -27,7 +27,7 @@ app.include_router(auth.router, tags=["auth"])
 
 app.include_router(register.router, tags=["register"])
 # app.include_router(skills.router, tags=["skills"])
-# app.include_router(departament.router, tags=["departament"])
+app.include_router(departament.router, tags=["departament"])
 app.include_router(users.router, tags=["users"])
 
 if __name__ == '__main__':

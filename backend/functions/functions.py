@@ -31,7 +31,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 
 def get_department_name_by_id(departament_id, db):
-    departament=db.query(Departament).filter(Departament.id == departament_id).first()
+    departament = db.query(Departament).filter(Departament.id == departament_id).first()
     if not departament:
         return None
     return departament.name
