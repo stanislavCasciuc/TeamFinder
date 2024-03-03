@@ -3,13 +3,12 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 
-
 const ProfilePage = () => {
   const [data, setData] = useState({
     name: "",
     organization_name: "",
     organization_address: "",
-    role: "",
+    roles: [""],
     email: "",
   });
   const { auth } = useAuth();
@@ -66,7 +65,9 @@ const ProfilePage = () => {
 
                 <span className="text-md">
                   <span className="font-semibold text-lg"> Roles: </span>{" "}
-                  {data.role}{" "}
+                  {data.roles.map((role: string) => (
+                    <span key={role}>{role}</span>
+                  ))}{" "}
                 </span>
 
                 <span className="text-md">

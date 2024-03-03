@@ -53,16 +53,18 @@ export default function LoginPage() {
         const accessToken = data.access_token;
 
         const decoded = jwtDecode(accessToken) as {
-          role: string;
+          roles: string[];
           organization_id: number;
           id: number;
         };
-        const role: string = decoded.role;
+        const roles: string[] = decoded.roles;
         const organization_id: number = decoded.organization_id;
         const id: number = decoded.id;
 
-        setAuth({ accessToken, role, organization_id, id });
-        navigate("/HomePage/" + accessToken);
+        setAuth({ accessToken, roles, organization_id, id });
+        navigate("/HomePage/Profile");
+
+
         setUser("");
         setPassword("");
       } else {
