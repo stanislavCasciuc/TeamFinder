@@ -4,14 +4,13 @@ from sqlalchemy.orm import Session
 
 
 
-from backend.auth.utils import get_current_user
-from backend.departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, \
-    AssignDepartment
-from backend.departament.utils import get_department_manager_name
-from backend.functions.functions import get_department_name_by_id
+from auth.utils import get_current_user
+from departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, AssignDepartment
+from departament.utils import get_department_manager_name
+from functions.functions import get_department_name_by_id
 
-from backend.storage.model import get_db, Departament,  User
-from backend.storage.variables import Organization_Admin, Department_Manager
+from storage.model import get_db, Departament,  User
+from storage.variables import Organization_Admin, Department_Manager
 
 router = APIRouter()
 

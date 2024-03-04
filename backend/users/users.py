@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.functions.functions import get_current_user
-from backend.storage.model import get_db, User
-from backend.storage.variables import ROLES, Organization_Admin, Employee, Department_Manager
-from backend.users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames
-from backend.users.utils import get_my_user, get_all_users
+from functions.functions import get_current_user
+from storage.model import get_db, User
+from storage.variables import ROLES, Organization_Admin, Employee, Department_Manager
+from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames
+from users.utils import get_my_user, get_all_users
 
 router= APIRouter()
 

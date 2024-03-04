@@ -1,4 +1,4 @@
-from backend.storage.model import Departament, User
+from storage.model import Departament, User
 
 
 def get_departament_by_manager(db, manager_id):
