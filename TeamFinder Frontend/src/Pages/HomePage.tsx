@@ -1,6 +1,6 @@
 import LogoSVG from "../assets/logo.svg";
 import MenuSVG from "../assets/hamburger-menu-svgrepo-com.svg";
-import { Flex, Title } from "@mantine/core";
+import {Flex, Title } from "@mantine/core";
 import HomePageButtons from "../Components/HomePageButtons";
 import Sidebar from "../Components/SideBar";
 import { useState } from "react";
@@ -8,12 +8,13 @@ import Profile from "../Components/Profile";
 import Users from "../Components/Users";
 import { Routes, Route } from "react-router-dom";
 
+
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
 
   return (
     <>
-      <Flex direction="column" className="h-screen">
+      <Flex direction="column" className="h-screen" >
         <header className="border-b ">
           <Flex className="p-2 items-center" gap="sm">
             <img
@@ -33,7 +34,7 @@ const HomePage = () => {
             </Title>
           </Flex>
         </header>
-        <Flex className="h-full">
+        <Flex className="flex-grow">
           {sidebar && <Sidebar setSidebar={setSidebar} />}
           <div
             className={

@@ -35,7 +35,7 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
-      const response = await fetch("http://localhost:8000/token", {
+      const response = await fetch("http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/token", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
