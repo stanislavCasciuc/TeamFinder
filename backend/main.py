@@ -26,7 +26,7 @@ app.add_middleware(
 app.include_router(auth.router, tags=["auth"])
 
 app.include_router(register.router, tags=["register"], prefix="/api")
-# app.include_router(skills.router, tags=["skills"])
+app.include_router(skills.router, tags=["skills"])
 app.include_router(departament.router, tags=["departament"], prefix="/api")
 app.include_router(users.router, tags=["users"], prefix="/api")
 
