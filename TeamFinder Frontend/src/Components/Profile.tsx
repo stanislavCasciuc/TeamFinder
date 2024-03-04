@@ -10,6 +10,7 @@ const ProfilePage = () => {
     organization_address: "",
     roles: [""],
     email: "",
+    departament_name: "",
   });
   const { auth } = useAuth();
 
@@ -64,10 +65,12 @@ const ProfilePage = () => {
                 </span>
 
                 <span className="text-md">
-                  <span className="font-semibold text-lg"> Roles: </span>{" "}
+                  <span className="font-semibold text-lg "> Roles: </span>{" "}
                   {data.roles.map((role: string) => (
-                    <span key={role}>{role}</span>
-                  ))}{" "}
+                    <span className="border-2 rounded-xl p-2" key={role}>
+                      {role}
+                    </span>
+                  ))}
                 </span>
 
                 <span className="text-md">
@@ -77,9 +80,11 @@ const ProfilePage = () => {
 
                 <span className="text-md">
                   <span className="font-semibold text-lg">
-                    {" "}
-                    Current-Department:{" "}
+                    Current-Department:
                   </span>{" "}
+                  {data.departament_name
+                    ? data.departament_name
+                    : "Not Assigned Yet"}
                 </span>
               </Flex>
             </div>

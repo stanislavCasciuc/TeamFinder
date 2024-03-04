@@ -13,7 +13,6 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ allowedRoles }) => {
   const isAuthorized =
     auth?.roles && auth.roles.map((role:string) => allowedRoles.includes(role));
 
-    console.log(isAuthorized);
   return isAuthorized ? (
     <Outlet />
   ) : (
