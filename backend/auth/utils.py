@@ -7,9 +7,9 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 
-from backend.functions.functions import get_user, get_current_user
+from functions.functions import get_user, get_current_user
 
-from backend.storage.variables import SECRET_KEY, ALGORITHM
+from storage.variables import SECRET_KEY, ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

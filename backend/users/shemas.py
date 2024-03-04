@@ -30,3 +30,7 @@ class AllUsers(BaseModel):
 class UserRoles(BaseModel):
     user_id: int
     roles: List[str]
+
+class UserNames(BaseModel):
+    user_id: int
+    username: str

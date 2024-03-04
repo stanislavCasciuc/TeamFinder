@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.functions.functions import get_current_user
-from backend.storage.model import get_db, User
-from backend.storage.variables import ROLES, Organization_Admin, Employee
-from backend.users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles
-from backend.users.utils import get_my_user, get_all_users
+from functions.functions import get_current_user
+from storage.model import get_db, User
+from storage.variables import ROLES, Organization_Admin, Employee, Department_Manager
+from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames
+from users.utils import get_my_user, get_all_users
 
 router= APIRouter()
 
@@ -45,4 +45,18 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
 
     return db_user
 
+
+
+
+
+@router.get("/users/departaments", response_model = List[UserNames])
+async def get_users_without_departament(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if Department_Manager not in current_user.roles:
+        raise HTTPException(status_code=403, detail="You are not department manager")
+    all_users = db.query(User).filter(User.organization_id == current_user.organization_id).all()
+    users_without_departament = []
+    for user in all_users:
+        if not user.departament_id:
+            users_without_departament.append(UserNames(username=user.name, user_id=user.id))
+    return users_without_departament
 

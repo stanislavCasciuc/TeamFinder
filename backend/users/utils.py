@@ -1,10 +1,10 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.functions.functions import  get_current_user, get_department_name_by_id
-from backend.storage.model import get_db, User, Organization
-from backend.storage.variables import Organization_Admin
-from backend.users.shemas import AllUsers, ExtendedUserData
+from functions.functions import  get_current_user, get_department_name_by_id
+from storage.model import get_db, User, Organization
+from storage.variables import Organization_Admin
+from users.shemas import AllUsers, ExtendedUserData
 
 
 async def get_all_users(current_user, db: Session = Depends(get_db)):

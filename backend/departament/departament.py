@@ -1,17 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import parse_obj_as
 from sqlalchemy.orm import Session
 
 
 
-from backend.auth.utils import get_current_user
-from backend.departament.schemas import DepartamentData, DepartamentResponse, UserData
+from auth.utils import get_current_user
+from departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, AssignDepartment
+from departament.utils import get_department_manager_name
+from functions.functions import get_department_name_by_id
 
-from backend.storage.model import get_db, Departament,  User
-from backend.storage.variables import Organization_Admin, Department_Manager
+from storage.model import get_db, Departament,  User
+from storage.variables import Organization_Admin, Department_Manager
 
 router = APIRouter()
 
-@router.post('/departament/create/', response_model = DepartamentResponse)
+@router.post('/department/create/', response_model = DepartamentResponse)
 async def create_departament(departament_data: DepartamentData = Depends(), current_user: UserData = Depends(get_current_user)  , db: Session = Depends(get_db)):
 
     if Organization_Admin not in current_user.roles:
@@ -39,49 +42,68 @@ async def create_departament(departament_data: DepartamentData = Depends(), curr
     if not db_departament.id:
         return HTTPException(status_code=500, detail="Error creating departament")
 
-
-
     db_departament_manger_user.departament_id = db_departament.id
     db.commit()
-    response = DepartamentResponse(id=db_departament.id, organization_id=db_departament.organization_id, name=db_departament.name)
+
+    departament_manager_name = get_department_manager_name(departament_data.departament_manager, db)
+    response = DepartamentResponse(id=db_departament.id, departament_manager_name=departament_manager_name, name=db_departament.name)
     return response
 
-@router.get('/departament/all/', response_model = list[DepartamentResponse])
-async def get_all_departaments(user_data: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    user_data.roles = get_user_roles(db, user_data.id)
-    if "organization_admin" not in user_data.roles:
+
+
+
+
+@router.get('/department/all/', response_model = list[DepartamentResponse])
+async def get_all_departaments(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    if Organization_Admin not in current_user.roles:
         raise HTTPException(status_code=403, detail="You are not allowed to list all departaments")
-    all_departaments = db.query(Departament).filter(Departament.organization_id == user_data.organization_id).all()
+    all_departaments = db.query(Departament).filter(Departament.organization_id == current_user.organization_id).all()
     response = []
+
     for departament in all_departaments:
-        response.append(DepartamentResponse(id=departament.id, organization_id=departament.organization_id, name=departament.name))
+        departament_manager_name= get_department_manager_name(departament.departament_manager_id, db)
+        response.append(DepartamentResponse(id=departament.id,  name=departament.name, departament_manager_name=departament_manager_name))
     return response
 
-@router.get('/departament/', response_model = DepartamentResponse)
-async def get_departament(user_data: UserData= Depends(get_current_user), db: Session = Depends(get_db)):
-    user_data.roles = get_user_roles(db, user_data.id)
-    if not user_data.roles:
-        raise HTTPException(status_code=403, detail="You are not allowed to list all departaments")
-    departament = db.query(Departament).filter(Departament.id == user_data.departament_id).first()
+@router.get('/department/my', response_model = MyDepartament)
+async def get_departament(current_user: UserData= Depends(get_current_user), db: Session = Depends(get_db)):
+    if Department_Manager not in current_user.roles:
+        raise HTTPException(status_code=403, detail="You are not departament manager")
+    departament = db.query(Departament).filter(Departament.departament_manager_id == current_user.id).first()
     if not departament:
         raise HTTPException(status_code=404, detail="Departament not found")
-    response = DepartamentResponse(id=departament.id, organization_id=departament.organization_id, name=departament.name)
+
+    db_departament_users= db.query(User).filter(User.departament_id == departament.id).all()
+    departament_users = []
+    for user in db_departament_users:
+        departament_user = UserData(user_id=user.id, username=user.name, roles=user.roles)
+        departament_users.append(departament_user)
+    response = MyDepartament(department_id=departament.id, department_name=departament.name,  department_users=departament_users)
     return response
 
 
-# @router.post('/departament/assign/', response_model = DepartamentResponse)
-# async def assign_departament(user_data: UserData= Depends(get_current_user), db: Session = Depends(get_db)):
-#     user_data.roles = get_user_roles(db, user_data.id)
-#     if not user_data.roles:
-#         raise HTTPException(status_code=401, detail="Unauthorized")
-#
-#     departament = db.query(Departament).filter(Departament.id == user_data.departament_id).first()
-#     if departament:
-#         db.delete(departament)
-#         db.commit()
-#     user = db.query(UserMainRoles).filter(UserMainRoles.user_id == user_data.id).first()
-#     user.role_name = "departament_manager"
-#     user.departament_id = departament.id
-#     db.commit()
-#     response = DepartamentResponse(id=departament.id, organization_id=departament.organization_id, name=departament.name)
-#     return response
+@router.post('/departament/assign/', response_model = UserDataResponse)
+async def assign_departament(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db), assign_user_id: AssignDepartment = Depends()):
+    if Department_Manager not in current_user.roles:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    department = db.query(Departament).filter(Departament.departament_manager_id == current_user.id).first()
+    if not department:
+        raise HTTPException(status_code=403, detail="You are not a departament manager")
+
+    user = db.query(User).filter(User.id == assign_user_id.user_id).first()
+
+    if Department_Manager in user.roles:
+        raise HTTPException(status_code=403, detail="You can't assign a department manager to a department")
+
+    if user.departament_id:
+        raise HTTPException(status_code=403, detail="User is already part of a department")
+
+    if user.organization_id != department.organization_id:
+        raise HTTPException(status_code=403, detail="User is not part of the organization")
+
+    user.departament_id = department.id
+    db.commit()
+    response = UserDataResponse(user_id=user.departament_id,  username=user.name)
+    return response
