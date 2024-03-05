@@ -35,21 +35,24 @@ export default function LoginPage() {
 
   const HandleButtonLogged = async () => {
     try {
-      const response = await fetch("http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          username: user,
-          password: password,
-          grant_type: "password",
-          scope: "offline_access",
-        }).toString(), // Make sure to call toString() on URLSearchParams
-      });
+      const response = await fetch(
+        "http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            username: user,
+            password: password,
+            grant_type: "password",
+            scope: "offline_access",
+          }).toString(),
+        }
+      );
 
       if (response.ok) {
-        const data = await response.json(); // Parse the response body as JSON
+        const data = await response.json();
         const accessToken = data.access_token;
 
         const decoded = jwtDecode(accessToken) as {
@@ -64,18 +67,14 @@ export default function LoginPage() {
         setAuth({ accessToken, roles, organization_id, id });
         navigate("/HomePage/Profile");
 
-
         setUser("");
         setPassword("");
       } else {
-        // Handle non-2xx response (error)
-        console.log("Error:", response.statusText);
         setErrorMsg("Invalid username or password");
         errRef.current?.focus();
       }
     } catch (error) {
-      console.error("Error:", error);
-      setErrorMsg("An error occurred");
+      setErrorMsg("An error to the server occurred");
       errRef.current?.focus();
     }
   };
@@ -110,8 +109,8 @@ export default function LoginPage() {
           <Flex miw="300" direction="column">
             <TextInput
               size="md"
-              label="Username"
-              placeholder="Username"
+              label="Email"
+              placeholder="Email"
               ref={usernameRef}
               autoComplete="off"
               onChange={(e) => setUser(e.currentTarget.value)}

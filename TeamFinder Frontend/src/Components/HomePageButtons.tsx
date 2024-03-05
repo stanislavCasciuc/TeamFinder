@@ -1,6 +1,10 @@
 import { Flex } from "@mantine/core";
 import useAuth from "../hooks/useAuth";
-import { IconUserCircle, IconUsersGroup ,IconBuildingWarehouse} from "@tabler/icons-react";
+import {
+  IconUserCircle,
+  IconUsersGroup,
+  IconBuildingWarehouse,
+} from "@tabler/icons-react";
 import LinkComponent from "./LinkComponent";
 
 interface HomePageButtonsProps {
@@ -17,19 +21,20 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
         value="Profile"
         setSidebar={setSidebar}
       />
+      <br />
 
       {/* {roles?.includes("Organization Admin") && (<> */}
-        <LinkComponent
-          icon={<IconUsersGroup size={28} />}
-          value="Users"
-          setSidebar={setSidebar}
-        />
+      <LinkComponent
+        icon={<IconUsersGroup size={28} />}
+        value="Users"
+        setSidebar={setSidebar}
+      />
 
-        <LinkComponent 
+      <LinkComponent
         icon={<IconBuildingWarehouse size={28} />}
         value="Departments"
         setSidebar={setSidebar}
-        />
+      />
 
       {/* </>)} */}
     </Flex>

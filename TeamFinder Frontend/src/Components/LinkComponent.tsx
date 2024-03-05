@@ -16,11 +16,12 @@ const LinkComponent = ({ icon, value, setSidebar }: LinkComponentProps) => {
     setIsActive(location.pathname === `/HomePage/${value}`);
   }, [location.pathname, value]);
 
-  const linkClassName = `font-medium text-lg text-slate-600 hover:bg-indigo-100 rounded-r-xl p-2 ${isActive ? "bg-indigo-50" : ""}`;
-  
+  const linkClassName = `font-medium text-md text-slate-600 hover:bg-indigo-100 rounded-r-xl p-2 ${
+    isActive ? "bg-indigo-50" : ""
+  }`;
+
   return (
     <Link
-   
       to={`/HomePage/${value}`}
       className={linkClassName}
       onClick={() => {
