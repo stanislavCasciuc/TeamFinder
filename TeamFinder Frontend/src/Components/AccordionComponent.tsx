@@ -1,4 +1,4 @@
-import { Accordion, Flex, Button } from "@mantine/core";
+import { Accordion, Flex, Button, LoadingOverlay } from "@mantine/core";
 import FocusTrapComponent from "./FocusTrapComponent";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
@@ -30,7 +30,11 @@ export default function AccordionComponent({
 
   let allRoles: string[] = [];
 
-  const { data: responseData, error,isLoading } = useSWR(
+  const {
+    data: responseData,
+    error,
+    isLoading,
+  } = useSWR(
     "/users/all",
     (url) => {
       console.log("Fetching data from:", url);
@@ -48,11 +52,10 @@ export default function AccordionComponent({
   const data = responseData || [];
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingOverlay visible={true} />;
   }
   if (error) {
-    console.error(error);
-    return <p>Error loading data</p>;
+    return <span className="errmsg">Error getting the list of users</span>;
   }
 
   const UserRoles = data.find((user: UserData) => user.id === selectedUserId)
@@ -118,9 +121,10 @@ export default function AccordionComponent({
                             mutate("/users/all");
                           })
                           .catch(() => {
-                            alert("You can't delete the Organization Admin role");
+                            alert(
+                              "You can't delete the Organization Admin role"
+                            );
                           });
-
                       }}
                       className="  bg-red-400 rounded-xl hover:bg-red-500  focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
@@ -131,7 +135,7 @@ export default function AccordionComponent({
               </>
             ))}
 
-            {selectedUserId !== 0 && allRoles.length<4 && (
+            {selectedUserId !== 0 && allRoles.length < 4 && (
               <FocusTrapComponent
                 allRoles={allRoles}
                 selectedUserId={selectedUserId}

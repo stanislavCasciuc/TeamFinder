@@ -1,17 +1,9 @@
-import { Title, Flex } from "@mantine/core";
+import { Title, Flex, LoadingOverlay } from "@mantine/core";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const ProfilePage = () => {
-  const [data, setData] = useState({
-    name: "",
-    organization_name: "",
-    organization_address: "",
-    roles: [""],
-    email: "",
-    departament_name: "",
-  });
   const { auth } = useAuth();
 
   const accesToken = auth?.accessToken;
@@ -20,19 +12,17 @@ const ProfilePage = () => {
     Authorization: `Bearer ${accesToken}`,
     "Content-Type": "application/json",
   };
-  useEffect(() => {
-    axios
-      .get("/users/me", { headers })
-      .then((response) => {
-        setData(response.data);
+  const {
+    data: userData,
+    error,
+    isLoading,
+  } = useSWR("/users/me", (url) =>
+    axios.get(url, { headers }).then((response) => response.data)
+  );
 
-        console.log(response.data);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error(error);
-      });
-  }, [accesToken]);
+  const data = userData || {};
+  if (isLoading) return <LoadingOverlay visible={true} />;
+  if (error) return <span className="errmsg">Error loading your data</span>;
 
   const name: string = data.name;
   const initials: string = name.substring(0, 1).toUpperCase();

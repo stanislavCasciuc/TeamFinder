@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, List, Button, TextInput } from "@mantine/core";
+import { Modal, List, Button, TextInput,LoadingOverlay } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import useSWR from "swr";
 import axios from "../api/axios";
@@ -8,6 +8,7 @@ import { mutate } from "swr";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+
 
 interface UserData {
   name: string;
@@ -49,11 +50,11 @@ const CreateDepartmentCard = () => {
   const data = responseData || [];
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return  <LoadingOverlay visible={true} />;
   }
   if (error) {
-    console.error(error);
-    return <p>Error loading data</p>;
+
+ 
   }
 
   const filteredUsers: UserData[] = data.filter((user: UserData) =>

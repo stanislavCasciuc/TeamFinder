@@ -89,6 +89,31 @@ export default function RegisterPage() {
       setErrorMsg("Passwords do not match");
       return;
     }
+    if (
+      email === "" ||
+      user === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      setErrorMsg("Please fill in all fields");
+      return;
+    }
+    if (!validEmail) {
+      setErrorMsg("Please fill the Email field correctly");
+      return;
+    }
+    if (!validName) {
+      setErrorMsg("Please fill the Username field correctly");
+      return;
+    }
+    if(!validAddress){
+      setErrorMsg("Please fill the Address field correctly");
+      return;
+    }
+    if(!validOrganization_name){
+      setErrorMsg("Please fill the Organization Name field correctly");
+      return;
+    }
     try {
       const result = await axios.post(
            REGISTER_URL,
@@ -101,7 +126,7 @@ export default function RegisterPage() {
       console.log("Registration successful:", result.data);
       navigate("/login");
     } catch (error) {
-      console.error("Registration error:", error);
+      
     }
   };
 
@@ -119,13 +144,13 @@ export default function RegisterPage() {
         w="100%"
       >
         <div className="md:border border-gray-200 md:px-12 rounded-xl mt-8">
-          <p
+          <span
             ref={errRef}
             className={errorMsg ? "errmsg" : "offscreen"}
             aria-live="assertive"
           >
             {errorMsg}
-          </p>
+          </span>
           <Flex className="p-2 mt-6" gap="sm">
             <img src={LogoSVG} alt="Team Finder Logo" className="w-8" />
 
@@ -265,22 +290,12 @@ export default function RegisterPage() {
             </p>
           </Flex>
           <Flex mt="30" align="center" gap="20">
-            {!validName ||
-            !validEmail ||
-            !validPassword ||
-            !validConfirmPassword ? (
-              <ButtonComponent
-                buttonText="Register"
-                HandleButton={() =>
-                  setErrorMsg("Please fill in all fields correctly")
-                }
-              />
-            ) : (
+          
               <ButtonComponent
                 buttonText="Register"
                 HandleButton={() =>  HandleButtonRegistered()}
               />
-            )}
+        
           </Flex>
 
           <Flex m="16" gap="sm">

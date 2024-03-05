@@ -2,7 +2,7 @@ import { Flex, Title } from "@mantine/core";
 import { useParams } from "react-router-dom";
 
 const SingleDepartmentPage = () => {
-  // Use the useParams hook to access parameters from the URL
+ 
   const { department_name, department_id } = useParams();
 
   return (

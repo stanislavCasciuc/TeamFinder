@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import CreateDepartmentCard from "./CreateDepartmentCard";
 import { useNavigate } from "react-router-dom";
+import { LoadingOverlay } from "@mantine/core";
 
 interface DepartmentData {
   id: number;
@@ -35,11 +36,11 @@ const DepartmentsComponent = () => {
   const data = responseData || [];
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingOverlay visible={true} />
   }
   if (error) {
-    console.error(error);
-    return <p>Error loading data</p>;
+   
+    return <span className="errmsg">Error getting the departments</span>;
   }
 
   const departments = data.map((department: DepartmentData) => {
