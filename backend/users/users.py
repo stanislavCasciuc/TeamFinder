@@ -1,6 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import parse_obj_as
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from functions.functions import get_current_user
@@ -49,16 +51,15 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
 
 
 
-@router.get("/users/department_managers", response_model = List[UserNames])
+@router.get("/users/without/department", response_model = List[UserNames])
 async def get_users_without_departament(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if Department_Manager not in current_user.roles:
         raise HTTPException(status_code=403, detail="You are not department manager")
-    all_users = db.query(User).filter(User.organization_id == current_user.organization_id).all()
-    users_without_departament = []
-    for user in all_users:
-        if not user.departament_id:
-            users_without_departament.append(UserNames(username=user.name, user_id=user.id))
-    return users_without_departament
+    all_users = db.query(User).filter(and_(User.organization_id == current_user.organization_id, User.departament_id.is_(None))).all()
+    users_without_departament = [{"username": user.name, "user_id": user.id} for user in all_users]
+
+    response = parse_obj_as(List[UserNames], users_without_departament)
+    return response
 
 
 

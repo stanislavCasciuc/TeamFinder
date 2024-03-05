@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from auth.utils import get_current_user
 from departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, \
-    AssignDepartment, UserNames
+    AssignDepartment
 from departament.utils import get_department_manager_name
 from functions.functions import get_department_name_by_id
 
