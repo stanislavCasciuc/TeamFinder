@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from users import users
-from departament import departament
+from departament import department
 from skills import skills
 from storage import model
 from auth import auth
@@ -27,7 +27,7 @@ app.include_router(auth.router, tags=["auth"])
 
 app.include_router(register.router, tags=["register"], prefix="/api")
 app.include_router(skills.router, tags=["skills"])
-app.include_router(departament.router, tags=["departament"], prefix="/api")
+app.include_router(department.router, tags=["department"], prefix="/api")
 app.include_router(users.router, tags=["users"], prefix="/api")
 
 if __name__ == '__main__':

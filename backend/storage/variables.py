@@ -3,7 +3,7 @@ ALGORITHM = "HS256"
 
 ROLES = ["Employee", "Department Manager", "Organization Admin", "Project Manager"]
 
-Department_Manager= "Department Manager"
-Organization_Admin= "Organization Admin"
-Project_Manager= "Project Manager"
-Employee= "Employee"
+DEPARTMENT_MANAGER= "Department Manager"
+ORGANIZATION_ADMIN= "Organization Admin"
+PROJECT_MANAGER= "Project Manager"
+EMPLOYEE= "Employee"
