@@ -3,8 +3,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from storage.variables import SECRET_KEY, ALGORITHM
-from storage.model import get_db, User, Departament
+from storage.variables import SECRET_KEY, ALGORITHM, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE
+from storage.model import get_db, User, Department
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -30,8 +30,19 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     return user
 
 
-def get_department_name_by_id(departament_id, db):
-    departament = db.query(Departament).filter(Departament.id == departament_id).first()
-    if not departament:
+def get_department_name_by_id(department_id, db: Session=Depends(get_db)):
+    department = db.query(Department).filter(Department.id == department_id).first()
+    if not department:
         return None
-    return departament.name
+    return department.name
+
+def get_user_roles(user_id, db: Session=Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    user_roles = [EMPLOYEE]
+    if user.is_organization_admin:
+        user_roles.append(ORGANIZATION_ADMIN)
+    if user.is_department_manager:
+        user_roles.append(DEPARTMENT_MANAGER)
+    if user.is_project_manager:
+        user_roles.append(PROJECT_MANAGER)
+    return user_roles
