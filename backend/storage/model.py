@@ -16,7 +16,7 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
-    departament_id = Column(Integer, ForeignKey('departments.id'))
+    department_id = Column(Integer, ForeignKey('departments.id'))
     name = Column(String)
     email = Column(String, unique=True)
     hashed_password = Column(String)
