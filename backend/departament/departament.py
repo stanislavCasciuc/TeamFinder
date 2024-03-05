@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import parse_obj_as
 from sqlalchemy.orm import Session
@@ -5,7 +7,8 @@ from sqlalchemy.orm import Session
 
 
 from auth.utils import get_current_user
-from departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, AssignDepartment
+from departament.schemas import DepartamentData, DepartamentResponse, UserData, MyDepartament, UserDataResponse, \
+    AssignDepartment
 from departament.utils import get_department_manager_name
 from functions.functions import get_department_name_by_id
 
@@ -106,4 +109,15 @@ async def assign_departament(current_user: UserData = Depends(get_current_user),
     user.departament_id = department.id
     db.commit()
     response = UserDataResponse(user_id=user.departament_id,  username=user.name)
+    return response
+
+@router.get('/department/users/{department_id}', response_model = List[UserDataResponse])
+async def get_departament_users(department_id: int,current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if Organization_Admin not in current_user.roles:
+        raise HTTPException(status_code=403, detail="You are not a organization admin")
+
+    db_users = db.query(User).filter(User.departament_id == department_id).all()
+
+    user_dicts = [{"username": user.name, "user_id": user.id} for user in db_users]
+    response = parse_obj_as(List[UserDataResponse], user_dicts)
     return response

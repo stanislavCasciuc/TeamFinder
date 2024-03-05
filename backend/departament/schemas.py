@@ -15,6 +15,7 @@ class UserData(BaseModel):
     name: str
     id: int
     roles: list[str]
+    departament_id: Optional[int] = None
 
 class UserDataResponse(BaseModel):
     user_id: int
@@ -27,6 +28,7 @@ class MyDepartament(BaseModel):
 
 class AssignDepartment(BaseModel):
     user_id: int
+
 
 
 
