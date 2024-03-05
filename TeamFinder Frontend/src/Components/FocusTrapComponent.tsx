@@ -97,7 +97,7 @@ const FocusTrapComponent = ({
                 setSecondOpen(false);
                 axios
                   .put(
-                    `http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/users/update?user_id=${selectedUserId}`,
+                    `http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/users/roles/update?user_id=${selectedUserId}`,
                     allRoles,
 
                     {

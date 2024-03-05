@@ -30,7 +30,7 @@ export default function AccordionComponent({
 
   let allRoles: string[] = [];
 
-  const { data: responseData, error } = useSWR(
+  const { data: responseData, error,isLoading } = useSWR(
     "/users/all",
     (url) => {
       console.log("Fetching data from:", url);
@@ -47,6 +47,9 @@ export default function AccordionComponent({
 
   const data = responseData || [];
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
   if (error) {
     console.error(error);
     return <p>Error loading data</p>;
