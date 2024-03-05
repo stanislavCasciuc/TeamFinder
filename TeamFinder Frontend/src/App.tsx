@@ -10,8 +10,6 @@ import LoginPage from "./Pages/Login";
 import Layout from "./Components/Layout";
 import HomePage from "./Pages/HomePage";
 import Missing from "./Pages/Missing";
-import Profile from "./Components/Profile";
-import Users from "./Components/Users";
 
 
 export default function App() {
@@ -27,7 +25,7 @@ export default function App() {
             element={<RegisterEmployee />}
           />
           <Route path="/Login" element={<LoginPage />} />
-
+  <Route path="/Homepage/*" element={<HomePage />} />
           {/* Protected Routes */}
           <Route
             element={
@@ -41,10 +39,7 @@ export default function App() {
               />
             }
           >
-            <Route path="/Homepage/*" element={<HomePage />}>
-              <Route path="Profile" element={<Profile />} />
-              <Route path="Users" element={<Users />} />
-            </Route>
+          
           </Route>
 
           {/* catch All */}
