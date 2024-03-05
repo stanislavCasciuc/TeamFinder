@@ -1,7 +1,6 @@
 # Python package
 
-pool:
-  vmImage: 'ubuntu-latest'
+pool: 'default'
 
 variables:
   python.version: '3.12'
