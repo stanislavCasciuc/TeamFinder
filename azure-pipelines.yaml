@@ -13,9 +13,9 @@ steps:
       versionSpec: '$(python.version)'
 
   - script: |
-      python -m pip install --upgrade pip
-      pip install setup
-      pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
+      python3.12 -m pip install --upgrade pip
+      pip3.12 install setup
+      pip3.12 install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
     workingDirectory: $(projectRoot)
     displayName: "Install requirements"
   
