@@ -49,7 +49,7 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
 
 
 
-@router.get("/users/departaments", response_model = List[UserNames])
+@router.get("/users/department_managers", response_model = List[UserNames])
 async def get_users_without_departament(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if Department_Manager not in current_user.roles:
         raise HTTPException(status_code=403, detail="You are not department manager")
@@ -59,4 +59,6 @@ async def get_users_without_departament(current_user: UserData = Depends(get_cur
         if not user.departament_id:
             users_without_departament.append(UserNames(username=user.name, user_id=user.id))
     return users_without_departament
+
+
 
