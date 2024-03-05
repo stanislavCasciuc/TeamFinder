@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from auth.utils import get_current_user
 from departament.schemas import DepartmentResponse, DepartmentData, UserData, MyDepartment, UserDataResponse, \
-    AssignDepartment
+    AssignDepartment, UserDataExtended
 
 from departament.utils import get_department_manager_name
 from functions.functions import get_user_roles
@@ -24,8 +24,8 @@ router = APIRouter()
 @router.post('/department/create/', response_model = DepartmentResponse)
 async def create_departament(department_data: DepartmentData = Depends(), current_user: UserData = Depends(get_current_user)  , db: Session = Depends(get_db)):
 
-    if not current_user.is_department_manager:
-        raise HTTPException(status_code=403, detail="You are not allowed to create department")
+    if not current_user.is_organization_admin:
+        raise HTTPException(status_code=403, detail="You are not allowed to create department, only organization admin can create departments")
 
     department_manager_user = db.query(User).filter(User.id == department_data.department_manager).first()
     if not department_manager_user.is_department_manager:
@@ -37,9 +37,9 @@ async def create_departament(department_data: DepartmentData = Depends(), curren
 
 
     department = Department(
-        name=department_data.departament_name,
+        name=department_data.department_name,
         organization_id=current_user.organization_id,
-        department_manager_id=department_data.departament_manager
+        department_manager_id=department_data.department_manager
     )
 
     db.add(department)
@@ -53,7 +53,7 @@ async def create_departament(department_data: DepartmentData = Depends(), curren
     db.commit()
 
 
-    response = DepartmentResponse(department_id=department.id, departament_manager_name=department_manager_user.name, name=db_departament.name)
+    response = DepartmentResponse(department_id=department.id, department_manager_name=department_manager_user.name, name=department.name)
     return response
 
 
@@ -64,13 +64,13 @@ async def create_departament(department_data: DepartmentData = Depends(), curren
 async def get_all_departaments(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
 
     if not current_user.is_organization_admin:
-        raise HTTPException(status_code=403, detail="You are not allowed to list all departaments")
-    all_departaments = db.query(Department).filter(Department.organization_id == current_user.organization_id).all()
+        raise HTTPException(status_code=403, detail="You are not allowed to list all departments")
+    all_departments = db.query(Department).filter(Department.organization_id == current_user.organization_id).all()
     response = []
 
-    for departament in all_departaments:
-        departament_manager_name= get_department_manager_name(departament.departament_manager_id, db)
-        response.append(DepartmentResponse(department_id=departament.id,  name=departament.name, departament_manager_name=departament_manager_name))
+    for departament in all_departments:
+        department_manager_name= get_department_manager_name(departament.department_manager_id, db)
+        response.append(DepartmentResponse(department_id=departament.id,  name=departament.name, department_manager_name=department_manager_name))
     return response
 
 @router.get('/department/my', response_model = MyDepartment)
@@ -81,11 +81,11 @@ async def get_departament(current_user: UserData= Depends(get_current_user), db:
     if not department:
         raise HTTPException(status_code=404, detail="Department not found")
 
-    db_department_users= db.query(User).filter(User.department_id == department.id).all()
+    db_department_users = db.query(User).filter(User.department_id == department.id).all()
     department_users = []
     for user in db_department_users:
-        user_roles = get_user_roles(user.id)
-        department_user = UserData(user_id=user.id, username=user.name, roles=user_roles)
+        user_roles = get_user_roles(user.id, db)
+        department_user = UserDataExtended(user_id=user.id, username=user.name, roles=user_roles)
         department_users.append(department_user)
     response = MyDepartment(department_id=department.id, department_name=department.name,  department_users=department_users)
     return response
@@ -113,7 +113,7 @@ async def assign_department(current_user: UserData = Depends(get_current_user), 
 
     user.department_id = department.id
     db.commit()
-    response = UserDataResponse(user_id=user.departament_id,  username=user.name)
+    response = UserDataResponse(user_id=user.department_id,  username=user.name)
     return response
 
 @router.get('/department/users/{department_id}', response_model = List[UserDataResponse])

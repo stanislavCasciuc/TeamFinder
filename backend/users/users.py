@@ -45,7 +45,7 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
     set_user_roles(user_roles.roles, db_user)
     db.commit()
 
-    response = UserData(id=db_user.id, name=db_user.name, email=db_user.email, organization_id=db_user.organization_id, department_id=db_user.departament_id, roles=user_roles.roles)
+    response = UserData(id=db_user.id, name=db_user.name, email=db_user.email, organization_id=db_user.organization_id, department_id=db_user.department_id, roles=user_roles.roles)
     return response
 
 
@@ -54,9 +54,9 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
 
 @router.get("/users/without/department", response_model = List[UserNames])
 async def get_users_without_departament(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    if Department_Manager not in current_user.roles:
+    if not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not department manager")
-    all_users = db.query(User).filter(and_(User.organization_id == current_user.organization_id, User.departament_id.is_(None))).all()
+    all_users = db.query(User).filter(and_(User.organization_id == current_user.organization_id, User.department_id.is_(None))).all()
     users_without_departament = [{"username": user.name, "user_id": user.id} for user in all_users]
 
     response = parse_obj_as(List[UserNames], users_without_departament)
