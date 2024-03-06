@@ -14,10 +14,7 @@ async def create_skill(current_user: UserData = Depends(get_current_user), skill
     if not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to create skill, you are not a department manager")
 
-    if skill.dapartment_id != current_user.departament_id:
-        raise HTTPException(status_code=403, detail="You are not allowed to create skill for other department")
-
-    db_skill = Skills(organization_id=current_user.organization_id, author=current_user.id, name=skill.skill_name, category=skill.skill_category, description=skill.skill_description)
+    db_skill = Skills(organization_id=current_user.organization_id, author_id=current_user.id, name=skill.skill_name, category=skill.skill_category, description=skill.skill_description)
     db.add(db_skill)
     db.commit()
     db.refresh(db_skill)

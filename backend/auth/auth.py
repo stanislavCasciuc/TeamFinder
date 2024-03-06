@@ -12,7 +12,7 @@ from functions.functions import get_user_roles
 from storage.model import get_db
 
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
 
 router = APIRouter()

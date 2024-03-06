@@ -34,3 +34,5 @@ class UserRoles(BaseModel):
 class UserNames(BaseModel):
     user_id: int
     username: str
+    department_id: Optional[int] = None
+    is_department_manager: Optional[bool] = False
