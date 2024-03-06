@@ -35,9 +35,7 @@ export default function RegisterPageEmployee() {
 
   const [errorMsg, setErrorMsg] = useState("");
 
-  const {auth} =useAuth();
-
-
+  const { auth } = useAuth();
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -73,10 +71,34 @@ export default function RegisterPageEmployee() {
       setErrorMsg("Passwords do not match");
       return;
     }
+    if (
+      email === "" ||
+      user === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      setErrorMsg("Please fill in all fields");
+      return;
+    }
+    if (!validEmail) {
+      setErrorMsg("Please fill the Email field correctly");
+      return;
+    }
+    if (!validName) {
+      setErrorMsg("Please fill the Username field correctly");
+      return;
+    }
+
     try {
       const result = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ name: user, email: email, password: password, organization_id:auth?.organization_id , role:"employee"}),
+        JSON.stringify({
+          name: user,
+          email: email,
+          password: password,
+          organization_id: auth?.organization_id,
+          role: "employee",
+        }),
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -84,7 +106,7 @@ export default function RegisterPageEmployee() {
       console.log("Registration successful:", result.data);
       navigate("/login");
     } catch (error) {
-      console.error("Registration error:", error);
+      setErrorMsg("Registration failed");
     }
   };
 
@@ -102,13 +124,13 @@ export default function RegisterPageEmployee() {
         w="100%"
       >
         <div className="md:border border-gray-200 md:px-12 rounded-xl mt-8">
-          <p
+          <span
             ref={errRef}
             className={errorMsg ? "errmsg" : "offscreen"}
             aria-live="assertive"
           >
             {errorMsg}
-          </p>
+          </span>
           <Flex className="p-2 mt-6" gap="sm">
             <img src={LogoSVG} alt="Team Finder Logo" className="w-8" />
 
@@ -210,22 +232,10 @@ export default function RegisterPageEmployee() {
             </p>
           </Flex>
           <Flex mt="30" align="center" gap="20">
-            {!validName ||
-            !validEmail ||
-            !validPassword ||
-            !validConfirmPassword ? (
               <ButtonComponent
                 buttonText="Register"
-                HandleButton={() =>
-                  setErrorMsg("Please fill in all fields correctly")
-                }
+                HandleButton={() => HandleButtonRegistered()}
               />
-            ) : (
-              <ButtonComponent
-                buttonText="Register"
-                HandleButton={() =>  HandleButtonRegistered()}
-              />
-            )}
           </Flex>
 
           <Flex m="10" gap="sm">

@@ -10,7 +10,7 @@ class RegisterUser(BaseModel):
     role: str
     organization_name: Optional[str] = None
     organization_address: Optional[str] = None
-    departament_id: Optional[int] = None
+    department_id: Optional[int] = None
 
 class Token(BaseModel):
     access_token: str

@@ -2,29 +2,34 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-class DepartamentData(BaseModel):
-    departament_name: str
-    departament_manager: int
+class DepartmentData(BaseModel):
+    department_name: str
+    department_manager: int
 
-class DepartamentResponse(BaseModel):
-    id: int
+class DepartmentResponse(BaseModel):
+    department_id: int
     name: str
-    departament_manager_name: str
+    department_manager_name: str
 
 class UserData(BaseModel):
     name: str
     id: int
+    is_department_manager: bool
+    department_id: Optional[int] = None
+
+class UserDataExtended(BaseModel):
+    username: str
+    user_id: int
     roles: list[str]
-    departament_id: Optional[int] = None
 
 class UserDataResponse(BaseModel):
     user_id: int
     username: str
 
-class MyDepartament(BaseModel):
+class MyDepartment(BaseModel):
     department_id: int
     department_name: str
-    department_users: list[UserData]
+    department_users: list[UserDataExtended]
 
 class AssignDepartment(BaseModel):
     user_id: int

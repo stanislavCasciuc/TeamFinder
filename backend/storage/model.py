@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY, Boolean
 
 from storage.config import Base, SessionLocal
 
@@ -11,27 +11,26 @@ class Organization(Base):
     address = Column(String)
 
 
-
-
-
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
-    departament_id = Column(Integer, ForeignKey('departaments.id'))
+    department_id = Column(Integer, ForeignKey('departments.id'))
     name = Column(String)
     email = Column(String, unique=True)
     hashed_password = Column(String)
-    roles = Column(ARRAY(String))
+    is_organization_admin = Column(Boolean, default=False)
+    is_department_manager = Column(Boolean, default=False)
+    is_project_manager = Column(Boolean, default=False)
 
-class Departament(Base):
-    __tablename__ = 'departaments'
+class Department(Base):
+    __tablename__ = 'departments'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
     name = Column(String)
-    departament_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
+    department_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
 
 class Role(Base):
     __tablename__ = 'roles'
@@ -52,7 +51,7 @@ class Project(Base):
     end_date = Column(DateTime)
     status = Column(String)
 
-class ProjectEmployee(Base):
+class ProjectEmployees(Base):
     __tablename__ = 'project_employees'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
@@ -87,11 +86,11 @@ class ProjectTechnologies(Base):
     project_id = Column(Integer, ForeignKey('projects.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
 
-class Departament_skills(Base):
-    __tablename__ = 'departament_skills'
+class Department_skills(Base):
+    __tablename__ = 'department_skills'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
-    departament_id = Column(Integer, ForeignKey('departaments.id'))
+    department_id = Column(Integer, ForeignKey('departments.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
 
 

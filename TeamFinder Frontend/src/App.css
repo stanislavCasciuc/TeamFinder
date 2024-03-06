@@ -2,11 +2,13 @@ html {
   font-family: "Roboto", sans-serif;
 }
 
-p.errormsg {
+span.errmsg {
   color: red;
+  background-color: #ff00002a;
+  border-radius: 8px;
   font-size: 12px;
-  margin: 0;
-  padding: 0;
+  margin-top: 4px;
+  padding: 6px;
 }
 p {
   background-color: #667eea1a;
