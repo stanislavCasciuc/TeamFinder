@@ -1,0 +1,28 @@
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+span.errmsg {
+  color: red;
+  background-color: #ff00002a;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 6px;
+}
+p {
+  background-color: #667eea1a;
+  border-radius: 2px;
+  padding: 3px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+p.offscreen {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
