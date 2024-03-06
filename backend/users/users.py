@@ -48,14 +48,7 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
     response = UserData(id=db_user.id, name=db_user.name, email=db_user.email, organization_id=db_user.organization_id, department_id=db_user.department_id, roles=user_roles.roles)
     return response
 
-@router.get("/users/department_managers", response_model = List[UserNames])
-async def get_department_managers(current_user: UserNames = Depends(get_current_user), db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin:
-        raise HTTPException(status_code=403, detail="You are not organization admin")
-    department_managers = db.query(User).filter(and_(User.organization_id == current_user.organization_id, User.is_department_manager == True, User.department_id == None)).all()
-    department_managers = [{"username": manager.name, "user_id": manager.id} for manager in department_managers]
-    response = parse_obj_as(List[UserNames], department_managers)
-    return response
+
 
 
 
