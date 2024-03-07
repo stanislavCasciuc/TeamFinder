@@ -4,11 +4,11 @@ from fastapi import Depends, HTTPException
 from pydantic import parse_obj_as
 from sqlalchemy.orm import Session
 
-from functions.functions import get_current_user, get_department_name_by_id, get_user_roles
-from storage.model import get_db, User, Organization
+from functions.functions import get_current_user, get_department_name_by_id, get_user_roles, get_skill_name_by_id
+from storage.model import get_db, User, Organization, UserSkills
 from storage.variables import ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER
 
-from users.shemas import AllUsers, ExtendedUserData
+from users.shemas import AllUsers, ExtendedUserData, Skill
 
 
 async def get_all_users(current_user, db: Session = Depends(get_db)):
@@ -20,12 +20,17 @@ async def get_all_users(current_user, db: Session = Depends(get_db)):
     return response_users
 
 
-async def get_my_user(current_user: ExtendedUserData = Depends(get_current_user), db: Session = Depends(get_db)):
+async def get_my_user(current_user, db: Session = Depends(get_db)):
     organization = db.query(Organization).filter(Organization.id == current_user.organization_id).first()
     current_user.organization_name = organization.name
     current_user.organization_address = organization.address
     current_user.department_name = get_department_name_by_id(current_user.department_id, db)
     current_user.roles = get_user_roles(current_user.id, db)
+    user_skills = db.query(UserSkills).filter(UserSkills.user_id == current_user.id).all()
+    current_user.skills=[]
+    for skill in user_skills:
+        skill_name = get_skill_name_by_id(skill.skill_id, db)
+        current_user.skills.append(Skill(id=skill.skill_id, name=skill_name, level=skill.level, experience=skill.experience))
     return current_user
 def set_user_roles(roles, db_user):
     if ORGANIZATION_ADMIN in roles:

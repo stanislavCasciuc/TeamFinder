@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from functions.functions import get_current_user, get_user_roles
 from storage.model import get_db, User
 from storage.variables import ROLES, EMPLOYEE, ORGANIZATION_ADMIN
-from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames
+from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames, Profil
 from users.utils import get_my_user, get_all_users, set_user_roles
 
 router = APIRouter()
@@ -19,9 +19,9 @@ async def read_users_all(current_user: UserData = Depends(get_current_user), db:
     return all_users
 
 
-@router.get("/users/me", response_model = ExtendedUserData)
-async def read_users_me(current_user: UserData = Depends(get_my_user)):
-    return current_user
+@router.get("/users/me", response_model=Profil)
+async def read_users_me(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    return await get_my_user(current_user, db)
 
 @router.put("/users/roles/update", response_model = UserData)
 async def update_roles(current_user: UserData = Depends(get_current_user),  user_roles: UserRoles = Depends(), db: Session = Depends(get_db)):

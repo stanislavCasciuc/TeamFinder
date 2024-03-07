@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from storage.variables import SECRET_KEY, ALGORITHM, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE
 from storage.model import get_db, User, Department
+from storage.model import Skills
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -46,3 +47,9 @@ def get_user_roles(user_id, db: Session=Depends(get_db)):
     if user.is_project_manager:
         user_roles.append(PROJECT_MANAGER)
     return user_roles
+
+def get_skill_name_by_id(skill_id, db: Session=Depends(get_db)):
+    skill = db.query(Skills).filter(Skills.id == skill_id).first()
+    if not skill:
+        return None
+    return skill.name

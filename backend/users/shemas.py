@@ -11,6 +11,22 @@ class UserData(BaseModel):
     department_id: Optional[int] = None
     roles: List[str]
 
+
+class Skill(BaseModel):
+    id: int
+    name: str | None
+    experience: int
+    level: int
+
+class Profil(BaseModel):
+    id: int
+    name: str
+    email: str
+    organization_id: int
+    department_id: Optional[int] = None
+    roles: List[str]
+    skills: List[Skill] | None
+
 class ExtendedUserData(BaseModel):
     id: int
     name: str

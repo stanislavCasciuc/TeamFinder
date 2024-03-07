@@ -15,3 +15,4 @@ class AssignData(BaseModel):
     level: int
     experience: int
     skill_name: Optional[str] = None
+

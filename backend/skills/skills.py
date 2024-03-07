@@ -31,8 +31,6 @@ async def create_skill(current_user: UserData = Depends(get_current_user), skill
 
 @router.get('/skills', response_model=List[SkillData])
 async def get_skills(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    if not (current_user.is_department_manager or current_user.is_organization_admin):
-        raise HTTPException(status_code=403, detail="You are not allowed to list all skills, you are not a department manager")
     all_skills = db.query(Skills).filter(Skills.organization_id == current_user.organization_id).all()
     response = []
     for skill in all_skills:
@@ -57,3 +55,11 @@ async def assign_skill(current_user: UserData = Depends(get_current_user), assig
     assign_data.skill_name = skill.name
     return assign_data
 
+@router.delete('/user/skill/{skill_id}')
+async def delete_user_skill(skill_id: int, current_user: UserData = Depends(get_current_user),  db: Session = Depends(get_db)):
+    user_skill = db.query(UserSkills).filter(UserSkills.user_id == current_user.id, UserSkills.skill_id == skill_id).first()
+    if not user_skill:
+        raise HTTPException(status_code=404, detail="Skill not found")
+    db.delete(user_skill)
+    db.commit()
+    return {"Status": "Skill deleted successfully"}
