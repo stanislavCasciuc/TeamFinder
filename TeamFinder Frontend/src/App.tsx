@@ -25,7 +25,6 @@ export default function App() {
             element={<RegisterEmployee />}
           />
           <Route path="/Login" element={<LoginPage />} />
-  <Route path="/Homepage/*" element={<HomePage />} />
           {/* Protected Routes */}
           <Route
             element={
@@ -38,7 +37,7 @@ export default function App() {
                 ]}
               />
             }
-          >
+          ><Route path="/Homepage/*" element={<HomePage />} />
           
           </Route>
 

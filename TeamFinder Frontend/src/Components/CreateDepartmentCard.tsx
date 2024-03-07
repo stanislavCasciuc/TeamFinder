@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, List, Button, TextInput,LoadingOverlay } from "@mantine/core";
+import { Modal, List, Button, TextInput, LoadingOverlay } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import useSWR from "swr";
 import axios from "../api/axios";
@@ -8,7 +8,6 @@ import { mutate } from "swr";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-
 
 interface UserData {
   name: string;
@@ -35,7 +34,7 @@ const CreateDepartmentCard = () => {
   } = useSWR(
     "/users/all",
     (url) => {
-      console.log("Fetching data from:", url);
+  
 
       return axios
         .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
@@ -50,11 +49,9 @@ const CreateDepartmentCard = () => {
   const data = responseData || [];
 
   if (isLoading) {
-    return  <LoadingOverlay visible={true} />;
+    return <LoadingOverlay visible={true} />;
   }
   if (error) {
-
- 
   }
 
   const filteredUsers: UserData[] = data.filter((user: UserData) =>
@@ -81,24 +78,24 @@ const CreateDepartmentCard = () => {
 
   return (
     <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Choose one Department Manager"
-        centered
-      >
+      <Modal opened={opened} onClose={close} title="Create Department" centered>
         <div className="flex flex-col gap-3">
           <TextInput
             label="Department Name"
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}
           />
-          <List className="p-2 border-2 rounded-xl">{DepartmentManagers}</List>
+          <List className="p-2 border-2 rounded-xl">
+            <span className="text-sm font-semibold ">
+              Choose Department Manager
+            </span>
+            {DepartmentManagers}
+          </List>
           <Button
             onClick={() => {
               axios
                 .post(
-                  `https://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/department/create/?departament_name=${value}&departament_manager=${selectedUserId}`,
+                  `https://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/department/create/?department_name=${value}&department_manager=${selectedUserId}`,
                   value,
                   {
                     headers: {
@@ -121,7 +118,7 @@ const CreateDepartmentCard = () => {
 
       <div
         onClick={open}
-        className="border rounded-xl drop-shadow-sm hover:bg-slate-100 flex align-center justify-center pt-14 cursor-pointer"
+        className="border rounded-md drop-shadow-sm hover:bg-slate-100 flex justify-center items-center cursor-pointer h-48"
       >
         <IconPlus size={32} />
       </div>
