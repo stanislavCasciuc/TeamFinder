@@ -12,7 +12,7 @@ from users.shemas import AllUsers, ExtendedUserData
 
 
 async def get_all_users(current_user, db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin:
+    if not (current_user.is_organization_admin or current_user.is_department_manager):
         raise HTTPException(status_code=401, detail="Unauthorized, you are not organization admin")
     all_users = db.query(User).filter(User.organization_id == current_user.organization_id).all()
     dict_users = [{"id": user.id, "name": user.name, "roles": get_user_roles(user.id, db), "department_name": get_department_name_by_id(user.department_id, db)} for user in all_users]
@@ -30,7 +30,13 @@ async def get_my_user(current_user: ExtendedUserData = Depends(get_current_user)
 def set_user_roles(roles, db_user):
     if ORGANIZATION_ADMIN in roles:
         setattr(db_user, 'is_organization_admin', True)
+    else:
+        setattr(db_user, 'is_organization_admin', False)
     if DEPARTMENT_MANAGER in roles:
         setattr(db_user, 'is_department_manager', True)
+    else:
+        setattr(db_user, 'is_department_manager', False)
     if PROJECT_MANAGER in roles:
         setattr(db_user, 'is_project_manager', True)
+    else:
+        setattr(db_user, 'is_project_manager', False)

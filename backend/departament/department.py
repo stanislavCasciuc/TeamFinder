@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from auth.utils import get_current_user
 from departament.schemas import DepartmentResponse, DepartmentData, UserData, MyDepartment, UserDataResponse, \
-    AssignDepartment, UserDataExtended
+    AssignDepartment, UserDataExtended, DepartmentUpdate
 
 from departament.utils import get_department_manager_name
 from functions.functions import get_user_roles
@@ -91,7 +91,7 @@ async def get_departament(current_user: UserData= Depends(get_current_user), db:
     return response
 
 
-@router.post('/department/assign/', response_model=UserDataResponse)
+@router.post('/department/assign', response_model=UserDataResponse)
 async def assign_department(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db), assign_user_id: AssignDepartment = Depends()):
     if not current_user.is_department_manager:
         raise HTTPException(status_code=401, detail="Unauthorized, you are not a department manager")
@@ -113,7 +113,7 @@ async def assign_department(current_user: UserData = Depends(get_current_user), 
 
     user.department_id = department.id
     db.commit()
-    response = UserDataResponse(user_id=user.department_id,  username=user.name)
+    response = UserDataResponse(user_id=user.id,  username=user.name)
     return response
 
 @router.get('/department/users/{department_id}', response_model = List[UserDataResponse])
@@ -125,4 +125,22 @@ async def get_departament_users(department_id: int,current_user: UserData = Depe
 
     user_dicts = [{"username": user.name, "user_id": user.id} for user in db_users]
     response = parse_obj_as(List[UserDataResponse], user_dicts)
+    return response
+
+@router.put('/department', response_model = DepartmentUpdate)
+async def update_department(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db), department_data: DepartmentUpdate = Depends()):
+    if not current_user.is_organization_admin:
+        raise HTTPException(status_code=403, detail="You are not organization admin")
+
+    department = db.query(Department).filter(Department.id == department_data.department_id).first()
+    if not department:
+        raise HTTPException(status_code=404, detail="Not found department")
+
+    if department.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=403, detail="Department is not part of the organization")
+
+    department.name = department_data.name
+    db.commit()
+    db.refresh(department)
+    response = DepartmentUpdate(department_id=department.id, name=department.name)
     return response

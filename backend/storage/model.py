@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY, Boolean
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Text, ARRAY, Boolean, UniqueConstraint
 
 from storage.config import Base, SessionLocal
 
@@ -72,7 +72,8 @@ class Skills(Base):
 
 class UserSkills(Base):
     __tablename__ = 'user_skills'
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = (UniqueConstraint('user_id', 'skill_id', name='uix_1'),
+        {'extend_existing': True, 'sqlite_autoincrement': True})
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
