@@ -9,6 +9,7 @@ import Users from "../Components/Users";
 import Departments from "../Components/Departments";
 import { Routes, Route } from "react-router-dom";
 
+import MyDepartment from "../Components/MyDepartment";
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
 
@@ -33,17 +34,19 @@ const HomePage = () => {
             </Title>
           </Flex>
         </header>
-        <div className="flex-1 bg-slate-50 lg:w-4/5 fixed right-0 w-full top-16 h-full overflow-auto">
-          <div className="overflow-auto p-4 mb-10">
+        <div className="flex-1 lg:w-4/5 fixed right-0 w-full top-16 h-full overflow-auto">
+          <div className=" overflow-auto mb-10">
             <Routes>
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Users" element={<Users />} />
               <Route path="/Departments/*" element={<Departments />} />
+              <Route path="/My-Department" element={<MyDepartment/>} />
             </Routes>
           </div>
         </div>
-        <div className="w-1/5 fixed left-0 top-16 h-full ">
+        <div className="md:w-1/5 fixed left-0 top-16 h-full ">
           {sidebar && <Sidebar setSidebar={setSidebar} />}
+
           <div className="hidden lg:block border-r py-2 pr-4 pl-0 text-left h-full">
             <HomePageButtons setSidebar={setSidebar} />
           </div>

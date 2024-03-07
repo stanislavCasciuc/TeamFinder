@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 
 interface UserData {
   name: string;
-  departament_name: string;
+  department_name: string;
   roles: string[];
   id: number;
 }
@@ -27,7 +27,6 @@ export default function AccordionComponent({
   const searchParams = new URLSearchParams(location.search);
   const user_id = searchParams.get("user_id");
   const selectedUserId = user_id ? parseInt(user_id) : 0;
-
   let allRoles: string[] = [];
 
   const {
@@ -86,7 +85,7 @@ export default function AccordionComponent({
 
         <Accordion.Panel className="border-t bg-white pt-2">
           <span className="font-semibold text-md">Department: </span>
-          {item.departament_name ? item.departament_name : "Not Assigned Yet"}
+          {item.department_name ? item.department_name : "Not Assigned Yet"}
         </Accordion.Panel>
 
         <Accordion.Panel className=" bg-white">
