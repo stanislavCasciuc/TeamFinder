@@ -31,7 +31,7 @@ async def create_user(user: RegisterUser, db: Session = Depends(get_db)):
                 raise HTTPException(status_code=400, detail="Invalid role")
         hashed_password = get_password_hash(user.password)
         db_user = User(name=user.name, email=user.email, hashed_password=hashed_password,
-                                    organization_id=user.organization_id, is_organization_admin=ORGANIZATION_ADMIN in user_roles, is_department_manager=False, is_project_manager=False, departament_id=user.department_id)
+                                    organization_id=user.organization_id, is_organization_admin=ORGANIZATION_ADMIN in user_roles)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
