@@ -72,8 +72,8 @@ const ProfilePage = () => {
                   <span className="font-semibold text-lg">
                     Current-Department:
                   </span>{" "}
-                  {data.departament_name
-                    ? data.departament_name
+                  {data.department_name
+                    ? data.department_name
                     : "Not Assigned Yet"}
                 </span>
               </Flex>

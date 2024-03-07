@@ -3,7 +3,11 @@ import useAuth from "../hooks/useAuth";
 import {
   IconUserCircle,
   IconUsersGroup,
-  IconBuildingWarehouse,
+  IconBuildingSkyscraper,
+  IconBuildingStore,
+  IconFolders,
+  IconFolder,
+  IconSwords,
 } from "@tabler/icons-react";
 import LinkComponent from "./LinkComponent";
 
@@ -13,7 +17,9 @@ interface HomePageButtonsProps {
 
 const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
   const { auth } = useAuth();
+
   const roles = auth?.roles;
+
   return (
     <Flex direction="column">
       <LinkComponent
@@ -23,20 +29,42 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
       />
       <br />
 
-      {/* {roles?.includes("Organization Admin") && (<> */}
+      {roles?.includes("Organization Admin") && (
+        <>
+          <LinkComponent
+            icon={<IconUsersGroup size={28} />}
+            value="Users"
+            setSidebar={setSidebar}
+          />
+
+          <LinkComponent
+            icon={<IconBuildingSkyscraper size={28} />}
+            value="Departments"
+            setSidebar={setSidebar}
+          />
+          <LinkComponent
+            icon={<IconFolders size={28} />}
+            value="Projects"
+            setSidebar={setSidebar}
+          />
+        </>
+      )}
+      <br />
       <LinkComponent
-        icon={<IconUsersGroup size={28} />}
-        value="Users"
+        icon={<IconBuildingStore size={28} />}
+        value="My-Department"
         setSidebar={setSidebar}
       />
-
       <LinkComponent
-        icon={<IconBuildingWarehouse size={28} />}
-        value="Departments"
+        icon={<IconFolder size={28} />}
+        value="My-Projects"
         setSidebar={setSidebar}
       />
-
-      {/* </>)} */}
+      <LinkComponent
+        icon={<IconSwords size={28} />}
+        value="My-Skills"
+        setSidebar={setSidebar}
+      />
     </Flex>
   );
 };

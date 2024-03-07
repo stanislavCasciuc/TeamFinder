@@ -1,23 +1,46 @@
-import { Flex, Title } from "@mantine/core";
-import { useParams } from "react-router-dom";
+import { Flex } from "@mantine/core";
+import { useState } from "react";
+import DepartmentPeople from "./DepartmentPeople";
 
 const SingleDepartmentPage = () => {
- 
-  const { department_name, department_id } = useParams();
+  const [page, setPage] = useState(1);
 
   return (
-    <Flex
-      direction="column"
-      className="w-full align-center md:px-24 md:py-12 px-12 py-6"
-    >
-      <Flex className="border-b-2 pb-6">
-        <Title order={1} className="text-3xl ">
-          {department_name}
-        </Title>
+    <>
+      <header className="flex bg-white p-4 ">
+        <Flex
+          className="border items-center py-3 px-7 rounded-xl shadow-sm text-slate-600"
+          gap="xl"
+        >
+          <div
+            onClick={() => setPage(1)}
+            className="hover:text-indigo-400 cursor-pointer"
+          >
+            Users
+          </div>
+          <div
+            onClick={() => setPage(2)}
+            className="hover:text-indigo-400  cursor-pointer"
+          >
+            Skills
+          </div>
+        </Flex>
+      </header>
+      <Flex className="justify-center ">
+        <Flex
+          direction="column"
+          className="md:w-3/5 w-full align-center justify-center"
+        >
+          {page === 1 && (
+            <DepartmentPeople
+              department_id=""
+              department_manager_name=""
+              department_name=""
+            />
+          )}
+        </Flex>
       </Flex>
-
-      
-    </Flex>
+    </>
   );
 };
 

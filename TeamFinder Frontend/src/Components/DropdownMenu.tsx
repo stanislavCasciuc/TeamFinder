@@ -16,7 +16,8 @@ const DropdownMenu = ({ selection, setSelection }: DropdownMenuProps) => {
   };
   return (
     <Dropdown>
-      <MenuButton className="w-fit cursor-pointer text-sm font-sans box-border rounded-lg font-semibold px-4 py-2 bg-white border border-solid border-slate-200  text-slate-900 hover:bg-slate-50  hover:border-slate-300  focus-visible:shadow-[0_0_0_4px_#ddd6fe]  focus-visible:outline-none shadow-sm active:shadow-none">
+      <div className="p-4">
+      <MenuButton className=" w-fit cursor-pointer text-sm font-sans box-border rounded-lg font-semibold px-4 py-2 bg-white border border-solid border-slate-200  text-slate-900 hover:bg-slate-50  hover:border-slate-300  focus-visible:shadow-[0_0_0_4px_#ddd6fe]  focus-visible:outline-none shadow-sm active:shadow-none">
         <span className="text-lg">{selection}</span>
       </MenuButton>
       <Menu className="text-sm box-border font-sans p-1.5 my-3 mx-0 rounded-xl overflow-auto outline-0 bg-white dark:bg-slate-900 border border-solid border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-300 min-w-listbox shadow-md dark:shadow-slate-900">
@@ -45,6 +46,7 @@ const DropdownMenu = ({ selection, setSelection }: DropdownMenuProps) => {
           Project Managers
         </MenuItem>
       </Menu>
+      </div>
     </Dropdown>
   );
 };
