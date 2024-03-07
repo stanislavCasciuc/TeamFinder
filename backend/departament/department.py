@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from auth.utils import get_current_user
 from departament.schemas import DepartmentResponse, DepartmentData, UserData, MyDepartment, UserDataResponse, \
-    AssignDepartment, UserDataExtended, DepartmentUpdate
+    AssignDepartment, UserDataExtended, DepartmentUpdate, ResponseDepartmentUpdate
 
 from departament.utils import get_department_manager_name
 from functions.functions import get_user_roles
@@ -127,7 +127,7 @@ async def get_departament_users(department_id: int,current_user: UserData = Depe
     response = parse_obj_as(List[UserDataResponse], user_dicts)
     return response
 
-@router.put('/department', response_model = DepartmentUpdate)
+@router.put('/department', response_model = ResponseDepartmentUpdate)
 async def update_department(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db), department_data: DepartmentUpdate = Depends()):
     if not current_user.is_organization_admin:
         raise HTTPException(status_code=403, detail="You are not organization admin")
@@ -136,11 +136,47 @@ async def update_department(current_user: UserData = Depends(get_current_user), 
     if not department:
         raise HTTPException(status_code=404, detail="Not found department")
 
-    if department.organization_id != current_user.organization_id:
-        raise HTTPException(status_code=403, detail="Department is not part of the organization")
+    previous_department_manager = db.query(User).filter(User.id == department.department_manager_id).first()
 
-    department.name = department_data.name
+    response = ResponseDepartmentUpdate(department_id=department.id)
+
+    if department_data.name:
+        response.name = department_data.name
+
+        if not department_data.department_manager:
+            response.department_manager_name = get_department_manager_name(department.department_manager_id, db)
+
+        department.name = department_data.name
+
+    if department_data.department_manager:
+        department_manager_user = db.query(User).filter(User.id == department_data.department_manager).first()
+        if not department_manager_user:
+            raise HTTPException(status_code=404, detail="Department manager not found")
+
+        if not department_manager_user.is_department_manager or department_manager_user.department_id:
+            raise HTTPException(status_code=403,
+                                detail="User is not a department manager, or is already part of a department")
+        previous_department_manager.department_id = None
+
+        department_manager_user.department_id = department.id
+
+        department.department_manager_id = department_data.department_manager
+        response.department_manager_name = department_manager_user.name
+        if not department_data.name:
+            response.name = department.name
     db.commit()
-    db.refresh(department)
-    response = DepartmentUpdate(department_id=department.id, name=department.name)
     return response
+
+
+@router.delete("/department/user/{user_id}")
+async def update_department_id(user_id: int ,current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.is_department_manager:
+        raise HTTPException(status_code=403, detail="You are not department manager")
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    db_user.department_id = None
+    db.commit()
+    return {"detail": "User removed successfully"}
+
+

@@ -19,11 +19,11 @@ class Skill(BaseModel):
     level: int
 
 class Profil(BaseModel):
-    id: int
     name: str
     email: str
-    organization_id: int
-    department_id: Optional[int] = None
+    organization_name: str
+    organization_address: str
+    department_name: Optional[str] = None
     roles: List[str]
     skills: List[Skill] | None
 

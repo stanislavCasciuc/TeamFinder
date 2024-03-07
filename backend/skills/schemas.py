@@ -16,3 +16,15 @@ class AssignData(BaseModel):
     experience: int
     skill_name: Optional[str] = None
 
+class UserSkillUpdate(BaseModel):
+    level: Optional[int] = None
+    experience: Optional[int] = None
+    skill_id: int
+
+class UserSkill(BaseModel):
+    id: int
+    skill_id: int
+    name: str
+    experience: int
+    level: int
+

@@ -69,6 +69,7 @@ class Skills(Base):
     category = Column(String)
     description = Column(Text)
     author_id = Column(Integer, ForeignKey('users.id'))
+    department_id = Column(Integer, ForeignKey('departments.id'))
 
 class UserSkills(Base):
     __tablename__ = 'user_skills'
