@@ -88,7 +88,7 @@ class ProjectTechnologies(Base):
     project_id = Column(Integer, ForeignKey('projects.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
 
-class Department_skills(Base):
+class DepartmentSkills(Base):
     __tablename__ = 'department_skills'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)

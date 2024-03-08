@@ -48,6 +48,12 @@ def get_user_roles(user_id, db: Session=Depends(get_db)):
         user_roles.append(PROJECT_MANAGER)
     return user_roles
 
+def get_user_by_id(user_id, db: Session=Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return None
+    return user
+
 def get_skill_name_by_id(skill_id, db: Session=Depends(get_db)):
     skill = db.query(Skills).filter(Skills.id == skill_id).first()
     if not skill:
