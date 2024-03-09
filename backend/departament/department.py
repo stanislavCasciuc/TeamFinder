@@ -12,8 +12,7 @@ from departament.schemas import DepartmentResponse, DepartmentData, UserData, My
 from departament.utils import get_department_manager_name
 from functions.functions import get_user_roles
 
-from storage.model import get_db, Department,  User
-
+from storage.model import get_db, Department, User, DepartmentSkills, Skills
 
 router = APIRouter()
 
@@ -179,4 +178,24 @@ async def update_department_id(user_id: int ,current_user: UserData = Depends(ge
     db.commit()
     return {"detail": "User removed successfully"}
 
-
+@router.delete("/department/{department_id}")
+async def delete_department(department_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.is_organization_admin:
+        raise HTTPException(status_code=403, detail="You are not organization admin")
+    department = db.query(Department).filter(Department.id == department_id).first()
+    if not department:
+        raise HTTPException(status_code=404, detail="Department not found")
+    if department.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=403, detail="You are not allowed to delete departments from other organizations")
+    db_users = db.query(User).filter(User.department_id == department_id).all()
+    for user in db_users:
+        user.department_id = None
+    db_department_skills = db.query(DepartmentSkills).filter(DepartmentSkills.department_id == department_id).all()
+    for department_skill in db_department_skills:
+        db.delete(department_skill)
+    db_skills = db.query(Skills).filter(Skills.department_id == department_id).all()
+    for skill in db_skills:
+        skill.department_id = None
+    db.delete(department)
+    db.commit()
+    return {"detail": "Department deleted successfully"}

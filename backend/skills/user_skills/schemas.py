@@ -1,18 +1,18 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserAssignData(BaseModel):
     user_id: Optional[int] = None
     skill_id: int
-    level: int
+    level: int = Field(gt=1, lt=5)
     experience: int
     skill_name: Optional[str] = None
 
 class UserSkillUpdate(BaseModel):
-    level: Optional[int] = None
-    experience: Optional[int] = None
+    level: int = Field(gt=0, lt=6)
+    experience: int
     skill_id: int
     name: Optional[str] = None
 

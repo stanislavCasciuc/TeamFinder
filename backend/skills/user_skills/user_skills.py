@@ -42,16 +42,13 @@ async def update_user_skill(skill_data: UserSkillUpdate = Depends(), current_use
     user_skill = db.query(UserSkills).filter(UserSkills.user_id == current_user.id, UserSkills.skill_id == skill_data.skill_id).first()
     if not user_skill:
         raise HTTPException(status_code=404, detail="Skill not found")
-    if skill_data.level:
-        user_skill.level = skill_data.level
-        if not skill_data.experience:
-            skill_data.experience = user_skill.experience
-    if skill_data.experience:
-        user_skill.experience = skill_data.experience
-        if not skill_data.level:
-            skill_data.level = user_skill.level
+
+    user_skill.level = skill_data.level
+    user_skill.experience = skill_data.experience
     db.commit()
-    skill_data.name = db.query(Skills).filter(Skills.id == skill_data.skill_id).first().name
+
+    skill_data= UserSkillUpdate(skill_id=user_skill.skill_id, level=user_skill.level, experience=user_skill.experience,)
+    skill_data.name = db.query(Skills).filter(Skills.id == user_skill.skill_id).first().name
     return skill_data
 
 @router.get('/user/skills', response_model=List[UserSkillExtended])

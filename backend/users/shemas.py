@@ -19,6 +19,7 @@ class Skill(BaseModel):
     level: int
 
 class Profil(BaseModel):
+    id: int
     name: str
     email: str
     organization_name: str

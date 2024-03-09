@@ -67,7 +67,19 @@ async def get_department_managers(current_user: UserNames = Depends(get_current_
     response = parse_obj_as(List[UserNames], department_managers)
     return response
 
-
+# @router.delete("/user/{user_id}")
+# async def delete_user(user_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+#     if not current_user.is_organization_admin:
+#         raise HTTPException(status_code=403, detail="You are not organization admin")
+#     user = db.query(User).filter(User.id == user_id).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#
+#
+#
+#     db.delete(user)
+#     db.commit()
+#     return {"detail": "User deleted"}
 
 
 
