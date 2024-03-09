@@ -1,5 +1,5 @@
 import { Flex } from "@mantine/core";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import {
   IconUserCircle,
   IconUsersGroup,
@@ -7,7 +7,7 @@ import {
   IconBuildingStore,
   IconFolders,
   IconFolder,
-  IconSwords,
+  IconSword,
 } from "@tabler/icons-react";
 import LinkComponent from "./LinkComponent";
 
@@ -61,8 +61,8 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
         setSidebar={setSidebar}
       />
       <LinkComponent
-        icon={<IconSwords size={28} />}
-        value="My-Skills"
+        icon={<IconSword size={28} />}
+        value="Skills"
         setSidebar={setSidebar}
       />
     </Flex>

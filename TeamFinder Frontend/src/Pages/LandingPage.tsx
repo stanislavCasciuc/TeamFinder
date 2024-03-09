@@ -1,6 +1,6 @@
 import { Flex, Title, Image} from "@mantine/core";
 import ButtonComponent from "../Components/ButtonComponent";
-import ResponsiveHeader from "../Components/ResponsiveHeader";
+import ResponsiveHeader from "../Components/HomepageFixed/ResponsiveHeader";
 import ButtonComponentWhite from "../Components/ButtonComponentWhite";
 import sourceImage from "../assets/source.png";
 import LogoSVG from "../assets/logo.svg";

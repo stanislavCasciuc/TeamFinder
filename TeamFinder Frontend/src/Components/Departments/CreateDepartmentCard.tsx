@@ -2,16 +2,17 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, List, Button, TextInput, LoadingOverlay } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import useSWR from "swr";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
+import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 import { mutate } from "swr";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import { GETALLDEPARTMENTS, GETALLUSERS, POSTDEPARTMENT } from "../EndPoints";
 
 interface UserData {
   name: string;
-  departament_name: string;
+  department_name: string;
   roles: string[];
   id: number;
 }
@@ -32,10 +33,8 @@ const CreateDepartmentCard = () => {
     error,
     isLoading,
   } = useSWR(
-    "/users/all",
+    GETALLUSERS,
     (url) => {
-  
-
       return axios
         .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
         .then((response) => response.data);
@@ -54,8 +53,9 @@ const CreateDepartmentCard = () => {
   if (error) {
   }
 
-  const filteredUsers: UserData[] = data.filter((user: UserData) =>
-    user.roles.includes("Department Manager")
+  const filteredUsers: UserData[] = data.filter(
+    (user: UserData) =>
+      user.roles.includes("Department Manager") && user.department_name === null
   );
 
   const DepartmentManagers = filteredUsers.map((user: UserData) => {
@@ -95,7 +95,7 @@ const CreateDepartmentCard = () => {
             onClick={() => {
               axios
                 .post(
-                  `https://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/department/create/?department_name=${value}&department_manager=${selectedUserId}`,
+                  POSTDEPARTMENT + `?department_name=${value}&department_manager=${selectedUserId}`,
                   value,
                   {
                     headers: {
@@ -106,7 +106,7 @@ const CreateDepartmentCard = () => {
                 )
                 .then(() => {
                   close();
-                  mutate("/department/all/");
+                  mutate(GETALLDEPARTMENTS);
                 });
             }}
             className="bg-indigo-500 hover:bg-indigo-600 rounded-xl w-40  "
@@ -118,7 +118,7 @@ const CreateDepartmentCard = () => {
 
       <div
         onClick={open}
-        className="border rounded-md drop-shadow-sm hover:bg-slate-100 flex justify-center items-center cursor-pointer h-48"
+        className="border rounded-3xl shadow-md hover:bg-slate-50 flex justify-center items-center cursor-pointer h-48"
       >
         <IconPlus size={32} />
       </div>

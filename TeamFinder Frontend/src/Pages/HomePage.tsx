@@ -1,15 +1,16 @@
 import LogoSVG from "../assets/logo.svg";
 import { IconMenu2 } from "@tabler/icons-react";
 import { Flex, Title } from "@mantine/core";
-import HomePageButtons from "../Components/HomePageButtons";
-import Sidebar from "../Components/SideBar";
+import HomePageButtons from "../Components/HomepageFixed/HomePageButtons";
+import Sidebar from "../Components/HomepageFixed/SideBar";
 import { useState } from "react";
-import Profile from "../Components/Profile";
-import Users from "../Components/Users";
-import Departments from "../Components/Departments";
+import Profile from "../Components/Profile/Profile";
+import Users from "../Components/Users/Users";
+import Departments from "../Components/Departments/Departments";
 import { Routes, Route } from "react-router-dom";
+import Skills from "../Components/Skills/Skills";
+import MyDepartment from "../Components/Departments/MyDepartment";
 
-import MyDepartment from "../Components/MyDepartment";
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
 
@@ -40,7 +41,8 @@ const HomePage = () => {
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Users" element={<Users />} />
               <Route path="/Departments/*" element={<Departments />} />
-              <Route path="/My-Department" element={<MyDepartment/>} />
+              <Route path="/My-Department" element={<MyDepartment />} />
+              <Route path="/Skills/*" element={<Skills />} />
             </Routes>
           </div>
         </div>
