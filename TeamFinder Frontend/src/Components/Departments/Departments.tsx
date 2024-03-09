@@ -8,7 +8,7 @@ const Department = () => {
       <Route path="" element={<DepartmentsList />} />
       <Route
         path=":department_name/:department_id/:department_manager_name"
-        element={<SingleDepartmentPage  />}
+        element={<SingleDepartmentPage />}
       />
     </Routes>
   );
