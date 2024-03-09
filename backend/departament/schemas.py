@@ -6,6 +6,11 @@ class DepartmentData(BaseModel):
     department_name: str
     department_manager: int
 
+class DepartmentUpdate(BaseModel):
+    name: str
+    department_id: int
+
+
 class DepartmentResponse(BaseModel):
     department_id: int
     name: str
