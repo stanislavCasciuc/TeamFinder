@@ -1,9 +1,10 @@
-import useSWR, { mutate } from "swr";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
+import useSWR from "swr";
+import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 import { LoadingOverlay } from "@mantine/core";
 import { List, Modal, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { GETALLUSERS, POSTNEWMEMBERS } from "../EndPoints";
 
 interface AddMembersProps {
   addMembers: boolean;
@@ -24,26 +25,19 @@ const AddMembers = ({ addMembers, setAddMembers }: AddMembersProps) => {
   const selectedUserId = user_id ? parseInt(user_id) : 0;
   const navigate = useNavigate();
 
-const close = () => {
+  const close = () => {
     setAddMembers(false);
-    }
+  };
 
   const {
     data: responseData,
     error,
     isLoading,
-  } = useSWR(
-    "/users/all",
-    (url) => {
-      return axios
-        .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
-        .then((response) => response.data);
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
+  } = useSWR(GETALLUSERS, (url) => {
+    return axios
+      .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
+      .then((response) => response.data);
+  });
 
   const data = responseData || [];
 
@@ -92,9 +86,8 @@ const close = () => {
           onClick={() => {
             axios
               .post(
-                `https://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/api/department/assign/?user_id=${selectedUserId}`,
-            
-
+                POSTNEWMEMBERS + `?user_id=${selectedUserId}`,
+                {},
                 {
                   headers: {
                     "Content-Type": "application/json",
@@ -105,7 +98,6 @@ const close = () => {
               .then(() => {
                 close();
                 setAddMembers(false);
-                mutate("/users/all");
               });
           }}
           className="bg-indigo-500 hover:bg-indigo-600 rounded-xl w-40  "

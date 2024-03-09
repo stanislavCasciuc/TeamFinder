@@ -1,10 +1,10 @@
 import { Flex, LoadingOverlay } from "@mantine/core";
 import { useState } from "react";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import useSWR from "swr";
-import axios from "../api/axios";
-
+import axios from "../../api/axios";
 import DepartmentPeople from "./DepartmentPeople";
+import { GETMYDEPARTMENT } from "../EndPoints";
 
 interface UserData {
   username: string;
@@ -22,7 +22,7 @@ const SingleDepartmentPage = () => {
     error,
     isLoading,
   } = useSWR(
-    "/department/my",
+    GETMYDEPARTMENT,
     (url) => {
       console.log("Fetching data from:", url);
 
@@ -52,7 +52,7 @@ const SingleDepartmentPage = () => {
 
   return (
     <>
-     <header className="flex bg-white p-4 ">
+      <header className="flex bg-white p-4 ">
         <Flex
           className="border items-center py-3 px-7 rounded-xl shadow-sm text-slate-600"
           gap="xl"
@@ -69,12 +69,18 @@ const SingleDepartmentPage = () => {
           >
             Skills
           </div>
+          <div
+            onClick={() => setPage(3)}
+            className="hover:text-indigo-400  cursor-pointer"
+          >
+            Projects
+          </div>
         </Flex>
       </header>
       <Flex className="justify-center  ">
         <Flex
           direction="column"
-          className="md:w-3/5 w-full align-center justify-center"
+          className="md:w-3/5 w-full align-center justify-center mb-20 mt-10"
         >
           {page === 1 && (
             <DepartmentPeople
@@ -83,6 +89,7 @@ const SingleDepartmentPage = () => {
               department_name={department_name}
             />
           )}
+   
         </Flex>
       </Flex>
     </>

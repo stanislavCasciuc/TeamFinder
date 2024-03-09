@@ -1,11 +1,13 @@
-import { Accordion, Flex, Button, LoadingOverlay } from "@mantine/core";
+import { Accordion, Flex, LoadingOverlay } from "@mantine/core";
 import FocusTrapComponent from "./FocusTrapComponent";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
+import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 import useSWR from "swr";
 import { mutate } from "swr";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { IconXboxX } from "@tabler/icons-react";
+import { GETALLUSERS } from "../EndPoints";
 
 interface UserData {
   name: string;
@@ -34,7 +36,7 @@ export default function AccordionComponent({
     error,
     isLoading,
   } = useSWR(
-    "/users/all",
+   GETALLUSERS,
     (url) => {
       console.log("Fetching data from:", url);
 
@@ -75,12 +77,19 @@ export default function AccordionComponent({
         value={`${item.name}-${index}`}
       >
         <Accordion.Control
-          className="hover:bg-slate-100"
+          className="p-2"
           onClick={() => {
             navigate(`/Homepage/Users?user_id=${item.id}`);
           }}
+          icon={
+            <Flex className="w-10 h-10 text-indigo-600 bg-indigo-50 items-center align-center justify-center rounded-full">
+              <span className="text-md font-bold">
+                {item.name.substring(0, 1).toUpperCase()}
+              </span>
+            </Flex>
+          }
         >
-          <span className="font-semibold ">{item.name.toUpperCase()}</span>
+          <span className="font-semibold text-slate-600">{item.name}</span>
         </Accordion.Control>
 
         <Accordion.Panel className="border-t bg-white pt-2">
@@ -89,17 +98,17 @@ export default function AccordionComponent({
         </Accordion.Panel>
 
         <Accordion.Panel className=" bg-white">
-          <Flex direction="column" className="mt-2 gap-4  flex-wrap">
-            <span className="font-semibold text-md ">Roles: </span>
+          <Flex direction="row" className="mt-2 gap-4  flex-wrap">
+            <span className="font-semibold text-md mt-2">Roles: </span>
             {item.roles.map((role: string) => (
               <>
                 <Flex
                   className=" flex border rounded-xl p-2 justify-between"
                   key={index}
                 >
-                  <span className="font-semibold text-md">{role}</span>
+                  <span className="font-base text-sm">{role}</span>
                   {role !== "Employee" && (
-                    <Button
+                    <IconXboxX
                       onClick={() => {
                         const updatedRoles = allRoles.filter(
                           (item) => item !== role
@@ -125,10 +134,9 @@ export default function AccordionComponent({
                             );
                           });
                       }}
-                      className="  bg-red-400 rounded-xl hover:bg-red-500  focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                    >
-                      Delete
-                    </Button>
+                      className="ml-2  cursor-pointer hover:bg-slate-200 rounded-full "
+                      size={20}
+                    />
                   )}
                 </Flex>
               </>
