@@ -35,7 +35,7 @@ async def get_skills(current_user: UserData = Depends(get_current_user), db: Ses
     response = []
     for skill in all_skills:
         author_name = db.query(User).filter(User.id == skill.author_id).first().name
-        skill_data = SkillData(id=skill.id, name=skill.name, category=skill.category, description=skill.description, author_name=author_name)
+        skill_data = SkillData(id=skill.id, name=skill.name, category=skill.category, description=skill.description, author_name=author_name, department_id=skill.department_id)
         response.append(skill_data)
     return response
 
