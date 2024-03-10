@@ -117,7 +117,9 @@ export default function AccordionComponent({
         </Accordion.Panel>
 
         <Accordion.Panel className=" bg-white">
-          <Flex direction="row" className="mt-2 gap-4  flex-wrap">
+          <Flex direction="row" className="mt-2 gap-4  flex-wrap"
+          key={item.id}
+          >
             <span className="font-semibold text-md mt-2">Roles: </span>
             {item.roles.map((role: string) => (
               <>
@@ -182,7 +184,7 @@ export default function AccordionComponent({
         value={currentPage}
         onChange={setCurrentPage}
       >
-
+        <Pagination.Control className="bg-indigo-400 hover:bg-indigo-500 text-black"  />
       </Pagination>
     </Accordion>
   );
