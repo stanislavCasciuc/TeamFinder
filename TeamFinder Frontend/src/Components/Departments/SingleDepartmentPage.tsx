@@ -40,18 +40,6 @@ const SingleDepartmentPage = () => {
             >
               Users
             </div>
-            <div
-              onClick={() => setPage(2)}
-              className="hover:text-indigo-400  cursor-pointer"
-            >
-              Skills
-            </div>
-            <div
-              onClick={() => setPage(3)}
-              className="hover:text-indigo-400  cursor-pointer"
-            >
-              Projects
-            </div>
           </Flex>
           <Button
             onClick={() => handleDeleteDepartment()}

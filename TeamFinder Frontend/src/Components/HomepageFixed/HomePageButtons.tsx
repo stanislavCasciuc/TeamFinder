@@ -9,6 +9,7 @@ import {
   IconFolder,
   IconSword,
   IconSwords,
+  IconPencil,
 } from "@tabler/icons-react";
 import LinkComponent from "./LinkComponent";
 
@@ -51,6 +52,11 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
           <LinkComponent
             icon={<IconSwords size={28} />}
             value="Skills"
+            setSidebar={setSidebar}
+          />
+          <LinkComponent
+            icon={<IconPencil size={28} />}
+            value="Custom-Roles"
             setSidebar={setSidebar}
           />
         </>

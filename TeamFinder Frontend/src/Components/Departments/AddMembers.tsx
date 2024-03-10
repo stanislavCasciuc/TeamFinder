@@ -12,6 +12,7 @@ interface AddMembersProps {
 }
 
 interface UserData {
+  roles: string[];
   name: string;
   id: number;
   department_name: string | null;
@@ -49,7 +50,7 @@ const AddMembers = ({ addMembers, setAddMembers }: AddMembersProps) => {
   }
 
   const unassignedUsers = data.filter(
-    (user: UserData) => user.department_name === null
+    (user: UserData) => user.department_name===null  && !user.roles.includes("Department Manager") 
   );
 
   const Users = unassignedUsers.map((user: UserData) => {

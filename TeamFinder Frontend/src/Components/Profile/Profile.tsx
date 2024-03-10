@@ -12,7 +12,6 @@ const ProfilePage = () => {
   const { auth } = useAuth();
   const accesToken = auth?.accessToken;
 
- 
   const headers = {
     Authorization: `Bearer ${accesToken}`,
     "Content-Type": "application/json",
@@ -29,7 +28,7 @@ const ProfilePage = () => {
   if (isLoading) return <LoadingOverlay visible={true} />;
   if (error) return <span className="errmsg">Error loading your data</span>;
 
-  const name: string = data.name ;
+  const name: string = data.name;
 
   const initials: string = name.substring(0, 1).toUpperCase();
   const skills = data.skills || { name: [] };
@@ -66,17 +65,14 @@ const ProfilePage = () => {
               {data.organization_address}
             </span>
 
-            <span className="text-md">
-              <span className="font-semibold  "> Roles: </span>{" "}
+            <div>
+              <span className="font-semibold text-md "> Roles: </span>{" "}
               {data.roles.map((role: string) => (
-                <>
-                  <Flex>
-                    <span key={role}>{role}</span>
-                  </Flex>
-                </>
+                <span className="flex flex-col" key={role}>
+                  {role}
+                </span>
               ))}
-            </span>
-
+            </div>
             <span className="text-md">
               <span className="font-semibold ">Email: </span>
               {data.email}{" "}
@@ -91,11 +87,9 @@ const ProfilePage = () => {
           <Flex className="border rounded-xl w-80 p-8 flex-wrap h-fit gap-x-4 gap-y-2">
             <span className="font-semibold p-2">Skills: </span>{" "}
             {skills.map((skill: SkillData) => (
-              <>
-                <span className="border rounded-lg p-2" key={skill.id}>
-                  {skill.name}
-                </span>
-              </>
+              <span className="border rounded-lg p-2" key={skill.id}>
+                {skill.name}
+              </span>
             ))}
           </Flex>
         </div>
