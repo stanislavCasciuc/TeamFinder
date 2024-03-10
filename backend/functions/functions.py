@@ -1,10 +1,14 @@
+from datetime import datetime
+
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from storage.variables import SECRET_KEY, ALGORITHM, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE
-from storage.model import get_db, User, Department
+
+from storage.variables import SECRET_KEY, ALGORITHM, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE, \
+    CLOSING, NOT_STARTED, STARTING, IN_PROGRESS, CLOSED
+from storage.model import get_db, User, Department, Project, Roles
 from storage.model import Skills
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -59,3 +63,32 @@ def get_skill_name_by_id(skill_id, db: Session=Depends(get_db)):
     if not skill:
         return None
     return skill.name
+
+def get_project_status_by_id(project_id, db: Session=Depends(get_db)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    current_date = datetime.now().date()
+
+    if not project.end_date:
+        if project.start_date.date() > current_date:
+            return NOT_STARTED
+        elif project.start_date.date() == current_date:
+            return STARTING
+        elif project.start_date.date() < current_date:
+            return IN_PROGRESS
+
+    if current_date > project.end_date.date():
+        return CLOSED
+    if project.end_date.date() > current_date and project.start_date.date() < current_date:
+        return IN_PROGRESS
+    if current_date == project.start_date.date():
+        return STARTING
+    if current_date < project.start_date.date():
+        return NOT_STARTED
+    if current_date == project.end_date.date():
+        return CLOSING
+
+def get_role_by_id(role_id, db: Session=Depends(get_db)):
+    role = db.query(Roles).filter(Roles.id == role_id).first()
+    if not role:
+        return None
+    return role

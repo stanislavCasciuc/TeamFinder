@@ -18,16 +18,38 @@ class ProjectData(BaseModel):
     end_date: Optional[date] = None
     description: str
     project_technologies: Optional[list[str]] = None
+    project_roles: Optional[list[int]] = None
 
 
 class ProjectTechnology(BaseModel):
     id: int
     name: str
 
+class ProjectEmployee(BaseModel):
+    id: int
+    role_id: int
+    role_name: Optional[str] = None
+    user_id: Optional[int] = None
+    user_name: Optional[str] = None
+    hours_per_day: Optional[int] = None
+    is_proposal: Optional[bool] = None
+    is_deallocated: Optional[bool] = None
+    comment: Optional[str] = None
+    deallocated_comment: Optional[str] = None
+
 class ResponseProjectData(ProjectData):
     id: int
     project_manager_name: str
     project_technologies: list[ProjectTechnology]
+    project_roles: list[ProjectEmployee]
+
+class GetProject(BaseModel):
+    id: int
+    name: str
+    period: str
+    start_date: date
+    end_date: Optional[date] = None
+    status: str
 
 
 

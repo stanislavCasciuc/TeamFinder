@@ -8,6 +8,7 @@ class SkillData(BaseModel):
     description: str
     category: str
     author_name: Optional[str] = None
+    department_id: Optional[int] = None
 
 
 class UserData(BaseModel):

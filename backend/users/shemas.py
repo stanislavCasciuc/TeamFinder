@@ -25,6 +25,7 @@ class Profil(BaseModel):
     organization_name: str
     organization_address: str
     department_name: Optional[str] = None
+    department_id: Optional[int] = None
     roles: List[str]
     skills: List[Skill] | None
 
