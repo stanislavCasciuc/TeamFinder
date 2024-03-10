@@ -1,4 +1,4 @@
-from storage.model import Department, User
+from storage.models import Department, User
 
 
 def get_departament_by_manager(db, manager_id):

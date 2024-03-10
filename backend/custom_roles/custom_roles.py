@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from custom_roles.schemas import Role
 from functions.functions import get_current_user
 from skills.skills.schemas import UserData
-from storage.model import get_db, Roles
+from storage.models import get_db, Roles
 
 router = APIRouter()
 
