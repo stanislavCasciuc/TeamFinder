@@ -10,9 +10,9 @@ interface SkillData {
 
 const ProfilePage = () => {
   const { auth } = useAuth();
-
   const accesToken = auth?.accessToken;
 
+ 
   const headers = {
     Authorization: `Bearer ${accesToken}`,
     "Content-Type": "application/json",
@@ -29,7 +29,8 @@ const ProfilePage = () => {
   if (isLoading) return <LoadingOverlay visible={true} />;
   if (error) return <span className="errmsg">Error loading your data</span>;
 
-  const name: string = data.name;
+  const name: string = data.name ;
+
   const initials: string = name.substring(0, 1).toUpperCase();
   const skills = data.skills || { name: [] };
 

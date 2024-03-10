@@ -3,9 +3,10 @@ import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import CreateDepartmentCard from "./CreateDepartmentCard";
 import { useNavigate } from "react-router-dom";
-import { LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay, Pagination } from "@mantine/core";
 import { Flex } from "@mantine/core";
 import { GETALLDEPARTMENTS } from "../EndPoints";
+import { useState } from "react";
 
 interface DepartmentData {
   department_id: number;
@@ -17,6 +18,8 @@ const DepartmentsComponent = () => {
   const { auth } = useAuth();
   const accessToken = auth?.accessToken;
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const elementsPerPage = 7;
 
   const {
     data: responseData,
@@ -43,7 +46,16 @@ const DepartmentsComponent = () => {
     return <span className="errmsg">Error getting the departments</span>;
   }
 
-  const departments = data.map((department: DepartmentData) => {
+  const indexOfLastSkill = currentPage * elementsPerPage;
+  const indexOfFirstSkill = indexOfLastSkill - elementsPerPage;
+  const dataPart = data.slice(indexOfFirstSkill, indexOfLastSkill);
+
+  let pageNumbers = 1;
+  for (let i = 0; i < Math.ceil(data.length / elementsPerPage); i++) {
+    pageNumbers = pageNumbers + i;
+  }
+
+  const departments = dataPart.map((department: DepartmentData) => {
     return (
       <div
         key={department.department_id}
@@ -72,7 +84,13 @@ const DepartmentsComponent = () => {
       <div className="grid gap-10 grid-cols-2 md:grid-cols-4 px-16 py-4 h-full text-slate-600">
         {departments}
         <CreateDepartmentCard />
-      </div>{" "}
+      </div>
+      <Pagination
+        className="mt-4 ml-20 mb-20 text-slate-500"
+        total={pageNumbers}
+        value={currentPage}
+        onChange={setCurrentPage}
+      />
     </>
   );
 };
