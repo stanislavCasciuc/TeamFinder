@@ -8,10 +8,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 interface Auth {
-    accessToken: string;
+    accessToken: string | undefined;
     roles: string[] | undefined;
     organization_id: number | undefined;
     id: number | undefined;
+    myName: string | undefined;
+    department_id: number | undefined;
   }
 
 interface AuthProviderProps {

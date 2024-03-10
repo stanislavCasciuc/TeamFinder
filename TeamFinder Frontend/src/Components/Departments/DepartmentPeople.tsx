@@ -63,8 +63,8 @@ const DepartmentPeople = ({
           },
         }
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
+        mutate(GETDEPARTMENTUSERS + `${department_id}`);
       })
       .catch((error) => {
         console.error("Error updating department:", error);
@@ -82,8 +82,8 @@ const DepartmentPeople = ({
           },
         }
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
+        mutate(GETDEPARTMENTUSERS + `${department_id}`);
       })
       .catch((error) => {
         console.error("Error deleting user:", error);

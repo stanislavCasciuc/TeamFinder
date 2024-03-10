@@ -5,6 +5,7 @@ import useSWR from "swr";
 import axios from "../../api/axios";
 import DepartmentPeople from "./DepartmentPeople";
 import { GETMYDEPARTMENT } from "../EndPoints";
+import DepartmentSkills from "./DepartmentSkills";
 
 interface UserData {
   username: string;
@@ -89,6 +90,7 @@ const SingleDepartmentPage = () => {
               department_name={department_name}
             />
           )}
+          {page === 2 && <DepartmentSkills/>}
    
         </Flex>
       </Flex>
