@@ -41,7 +41,6 @@ const DepartmentSkills = () => {
       .then((response) => response.data);
   });
 
-
   const handleAssignSkill = (selectedSkill: SkillData) => {
     axios
       .post(
@@ -63,7 +62,8 @@ const DepartmentSkills = () => {
       .then(() => {
         mutate(GETMYDEPARTMENTSKILLS);
         setSelectedSkill({} as SkillData);
-      }).catch(() => {
+      })
+      .catch(() => {
         alert("Please select a skill to delete");
       });
   };
@@ -75,7 +75,7 @@ const DepartmentSkills = () => {
         (deptSkill: SkillData) => deptSkill.id === skill.id
       )
   );
-  console.log(departmentSkills)
+  console.log(departmentSkills);
 
   const allSkills = filteredSkills.map((skill: SkillData) => (
     <span
@@ -125,7 +125,7 @@ const DepartmentSkills = () => {
               onClick={() => handleDeleteSkill(selectedSkill)}
               className="text-xs mt-5 font-bold bg-red-400 hover:bg-red-500"
             >
-                Delete Skill
+              Delete Skill
             </Button>
           </Flex>
         </Flex>
@@ -140,7 +140,7 @@ const DepartmentSkills = () => {
         padding="md"
       >
         <Flex direction="column" gap="xl">
-          <Flex direction="row" gap="xl">
+          <Flex direction="row" gap="xl" className="flex-wrap overflow-auto">
             {allSkills}
           </Flex>
           <Button
