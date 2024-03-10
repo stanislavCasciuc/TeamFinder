@@ -9,12 +9,12 @@ from departament import department
 from custom_roles import custom_roles
 from skills.skills import skills
 from skills.department_skills import department_skills
-from storage import model
+from storage import models
 from auth import auth
 from auth import register
 from storage.config import engine
 
-model.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 
 

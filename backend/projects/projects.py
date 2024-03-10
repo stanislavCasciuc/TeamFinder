@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from functions.functions import get_current_user, get_project_status_by_id, get_role_by_id
 from projects.schemas import ProjectData, ResponseProjectData, GetProject, ProjectEmployee
 from skills.skills.schemas import UserData
-from storage.model import get_db, Project, ProjectTechnologies, ProjectEmployees, User
+from storage.models import get_db, Project, ProjectTechnologies, ProjectEmployees, User
 from storage.variables import IN_PROGRESS, CLOSED, CLOSING
 
 router = APIRouter()

@@ -6,7 +6,7 @@ from departament.schemas import UserData
 from functions.functions import get_current_user
 
 from projects.technologies.schemas import TechnologyData, TechnologyDelete
-from storage.model import get_db, ProjectTechnologies, Project
+from storage.models import get_db, ProjectTechnologies, Project
 
 router = APIRouter()
 

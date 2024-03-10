@@ -8,8 +8,8 @@ from sqlalchemy.orm import Session
 
 from storage.variables import SECRET_KEY, ALGORITHM, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE, \
     CLOSING, NOT_STARTED, STARTING, IN_PROGRESS, CLOSED
-from storage.model import get_db, User, Department, Project, Roles
-from storage.model import Skills
+from storage.models import get_db, User, Department, Project, Roles
+from storage.models import Skills
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

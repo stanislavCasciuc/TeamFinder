@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from auth.schemas import RegisterUser
 from auth.utils import get_password_hash
-from storage.model import get_db, Organization, User
+from storage.models import get_db, Organization, User
 from storage.variables import ORGANIZATION_ADMIN, EMPLOYEE
 
 router = APIRouter()

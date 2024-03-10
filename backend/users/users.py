@@ -6,7 +6,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from functions.functions import get_current_user, get_user_roles
-from storage.model import get_db, User
+from storage.models import get_db, User
 from storage.variables import ROLES, EMPLOYEE, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER
 from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames, Profil
 from users.utils import get_my_user, get_all_users, set_user_roles
