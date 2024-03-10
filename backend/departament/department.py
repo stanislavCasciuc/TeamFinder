@@ -12,7 +12,7 @@ from departament.schemas import DepartmentResponse, DepartmentData, UserData, My
 from departament.utils import get_department_manager_name
 from functions.functions import get_user_roles
 
-from storage.model import get_db, Department, User, DepartmentSkills, Skills
+from storage.models import get_db, Department, User, DepartmentSkills, Skills
 
 router = APIRouter()
 

@@ -5,7 +5,7 @@ from pydantic import parse_obj_as
 from sqlalchemy.orm import Session
 
 from functions.functions import get_department_name_by_id, get_user_roles, get_skill_name_by_id
-from storage.model import get_db, User, Organization, UserSkills
+from storage.models import get_db, User, Organization, UserSkills
 from storage.variables import ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER
 
 from users.shemas import AllUsers, Skill

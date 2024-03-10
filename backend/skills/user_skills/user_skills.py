@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -6,7 +7,8 @@ from sqlalchemy.orm import Session
 from functions.functions import get_current_user, get_user_by_id
 from skills.skills.skills import UserData
 from skills.user_skills.schemas import UserAssignData, UserSkillUpdate, UserSkill, UserSkillExtended
-from storage.model import Skills, get_db, UserSkills
+from skills.user_skills.utils import subtract_months_from_date, months_until_current_date
+from storage.models import Skills, get_db, UserSkills
 
 router = APIRouter()
 
@@ -21,7 +23,10 @@ async def assign_skill(current_user: UserData = Depends(get_current_user), assig
     if exist_user_skill:
         raise HTTPException(status_code=400, detail="Skill already assigned to user")
 
-    user_skill = UserSkills(user_id=current_user.id, skill_id=assign_data.skill_id, level=assign_data.level, experience=assign_data.experience)
+    current_date = datetime.now().date()
+    experience = subtract_months_from_date(current_date, assign_data.experience)
+
+    user_skill = UserSkills(user_id=current_user.id, skill_id=assign_data.skill_id, level=assign_data.level, experience=experience)
     db.add(user_skill)
     db.commit()
     assign_data.skill_name = skill.name
@@ -44,7 +49,6 @@ async def update_user_skill(skill_data: UserSkillUpdate = Depends(), current_use
         raise HTTPException(status_code=404, detail="Skill not found")
 
     user_skill.level = skill_data.level
-    user_skill.experience = skill_data.experience
     db.commit()
 
     skill_data= UserSkillUpdate(skill_id=user_skill.skill_id, level=user_skill.level, experience=user_skill.experience,)
@@ -57,6 +61,7 @@ async def get_user_skills(current_user: UserData = Depends(get_current_user), db
     response = []
     for skill in user_skills:
         skill_data = db.query(Skills).filter(Skills.id == skill.skill_id).first()
-        user_skill = UserSkillExtended(skill_id=skill.skill_id, name=skill_data.name, level=skill.level, experience=skill.experience, author_name=get_user_by_id(skill_data.author_id, db).name, description=skill_data.description, category=skill_data.category)
+        experience = months_until_current_date(skill.experience)
+        user_skill = UserSkillExtended(skill_id=skill.skill_id, name=skill_data.name, level=skill.level, experience=experience, author_name=get_user_by_id(skill_data.author_id, db).name, description=skill_data.description, category=skill_data.category)
         response.append(user_skill)
     return response

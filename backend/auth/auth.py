@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from auth.schemas import Token
 from auth.utils import authenticate_user, create_access_token
 from functions.functions import get_user_roles
-from storage.model import get_db
+from storage.models import get_db
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
