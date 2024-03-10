@@ -58,6 +58,10 @@ class ProjectEmployees(Base):
     role_id = Column(Integer, ForeignKey('roles.id'))
     user_id = Column(Integer, ForeignKey('users.id'))
     hours_per_day = Column(Integer)
+    is_proposal = Column(Boolean, default=False)
+    is_deallocated = Column(Boolean, default=False)
+    comment = Column(Text)
+    deallocate_comment = Column(Text)
 
 class Skills(Base):
     __tablename__ = 'skills'
