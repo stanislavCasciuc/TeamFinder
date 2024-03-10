@@ -1,9 +1,10 @@
 import {Modal} from "@mantine/core";
-import {GETDEPARTMENTMANAGERS } from "../EndPoints";
+import {GETDEPARTMENTMANAGERS} from "../EndPoints";
 import axios from "../../api/axios";
 import useSWR from "swr";
 import useAuth from "../../hooks/useAuth";
 import { Button } from "@mantine/core";
+
 
 
 
@@ -31,7 +32,7 @@ const EditDepartmentManager = ({
 }: EditDepartmentManagerProps) => {
     const { auth } = useAuth();
     const accessToken = auth?.accessToken;
-   
+
 
 
     const { data: ManagersData } = useSWR(GETDEPARTMENTMANAGERS, (url) => {

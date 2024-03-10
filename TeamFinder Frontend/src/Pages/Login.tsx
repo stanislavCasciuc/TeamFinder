@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 import { jwtDecode } from "jwt-decode";
+import axios from "../api/axios";
+import { GETME } from "../Components/EndPoints";
 
 const icon = (
   <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
@@ -33,6 +35,28 @@ export default function LoginPage() {
     setErrorMsg("");
   }, [user, password]);
 
+  const SetData = async (accessToken: string) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await axios.get(GETME, { headers });
+      const userData = response.data;
+
+      const name: string = userData.name;
+      const department_id: number = userData.department_id;
+  
+      return {
+        name,
+        department_id,
+      };
+    } catch (error) {
+      return "";
+    }
+  };
+
   const HandleButtonLogged = async () => {
     try {
       const response = await fetch(
@@ -54,6 +78,18 @@ export default function LoginPage() {
       if (response.ok) {
         const data = await response.json();
         const accessToken = data.access_token;
+        const myData = await SetData(accessToken);
+        let myName: string;
+        let myDepartmentId: number;
+        
+        if (myData) {
+          const { name, department_id } = myData;
+          myName = name;
+          myDepartmentId = department_id;
+        } else {
+          myName = "";
+          myDepartmentId = 0;
+        }
 
         const decoded = jwtDecode(accessToken) as {
           roles: string[];
@@ -64,9 +100,15 @@ export default function LoginPage() {
         const organization_id: number = decoded.organization_id;
         const id: number = decoded.id;
 
-        setAuth({ accessToken, roles, organization_id, id });
+        setAuth({
+          accessToken,
+          roles,
+          organization_id,
+          id,
+          myName :myName,
+          department_id: myDepartmentId,
+        });
         navigate("/HomePage/Profile");
-
         setUser("");
         setPassword("");
       } else {

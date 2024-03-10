@@ -14,14 +14,16 @@ const DropdownMenu = ({
   setSelection,
   Categories,
 }: DropdownMenuProps) => {
-  const Category = Categories.map((category) => (
-    <MenuItem
-      onClick={() => setSelection(category)}
-      className="cursor-pointer list-none p-2 rounded-lg  select-none last-of-type:border-b-0 focus:shadow-outline-purple focus:outline-0 focus:bg-slate-100 0 focus:text-slate-900 focus:dark:text-slate-300 disabled:text-slate-400 disabled:hover:text-slate-400"
-    >
-      {category}
-    </MenuItem>
-  ));
+    const Category = [...new Set(Categories)].map((category) => (
+        <MenuItem
+            key={category}  
+            onClick={() => setSelection(category)}
+            className="cursor-pointer list-none p-2 rounded-lg select-none last-of-type:border-b-0 focus:shadow-outline-purple focus:outline-0 focus:bg-slate-100 0 focus:text-slate-900 focus:dark:text-slate-300 disabled:text-slate-400 disabled:hover:text-slate-400"
+        >
+            {category}
+        </MenuItem>
+    ));
+      
 
   return (
     <Dropdown>

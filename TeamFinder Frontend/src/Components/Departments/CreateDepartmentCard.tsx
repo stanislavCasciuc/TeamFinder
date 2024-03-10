@@ -81,6 +81,7 @@ const CreateDepartmentCard = () => {
       <Modal opened={opened} onClose={close} title="Create Department" centered>
         <div className="flex flex-col gap-3">
           <TextInput
+          required
             label="Department Name"
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}

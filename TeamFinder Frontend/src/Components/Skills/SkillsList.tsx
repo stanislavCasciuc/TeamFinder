@@ -16,18 +16,20 @@ import AddSkillModal from "./AddSkillModal";
 import SkillsDropdown from "./SkillsDropdown";
 import { useNavigate } from "react-router-dom";
 
-
 interface SkillData {
   id: number;
   name: string;
   description: string;
-  author_name: number;
+  author_name: string;
   category: string;
+  department_id: number;
 }
 
 const SkillsList = () => {
   const { auth } = useAuth();
   const accessToken = auth?.accessToken;
+  const myDepartmentId = auth?.department_id;
+
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newCategory, setNewCategory] = useState("");
@@ -60,26 +62,6 @@ const SkillsList = () => {
       .delete(POSTNEWSKILLS + `/${id}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
-      .then(() => {
-        mutate(GETSKILLS);
-      });
-  };
-
-  const handleUpdateSkill = ({
-    id,
-    name,
-    description,
-    category,
-    author_name,
-  }: SkillData) => {
-    axios
-      .put(
-        POSTNEWSKILLS +
-          `?id=${id}&name=${name}&description=${description}&category=${category}&author_name=${author_name}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      )
       .then(() => {
         mutate(GETSKILLS);
       });
@@ -129,20 +111,23 @@ const SkillsList = () => {
             onClick={() => {
               navigate(`${skill.id}`);
             }}
+            key={`view-${skill.id}`}
             className="text-xs pt-3 font-base text-slate-300 hover:text-indigo-500 cursor-pointer"
           >
-            Update
+            View skill
           </span>
-
-          <span
-            onClick={() => {
-              mutate(GETSKILLS);
-              handleDeleteSkill(skill.id);
-            }}
-            className="text-xs pt-3 font-base text-slate-300 hover:text-red-500 cursor-pointer"
-          >
-            Delete
-          </span>
+          {myDepartmentId === skill.department_id && (
+            <span
+              onClick={() => {
+                mutate(GETSKILLS);
+                handleDeleteSkill(skill.id);
+              }}
+              key={`delete-${skill.id}`}
+              className="text-xs pt-3 font-base text-slate-300 hover:text-red-500 cursor-pointer"
+            >
+              Delete
+            </span>
+          )}
 
           <HoverCard width={280} shadow="md">
             <HoverCard.Target>
@@ -196,6 +181,7 @@ const SkillsList = () => {
         </Flex>
       </div>
       <AddSkillModal
+        placeholder=""
         opened={opened}
         close={close}
         newName={newName}
@@ -205,6 +191,7 @@ const SkillsList = () => {
         newCategory={newCategory}
         setNewCategory={setNewCategory}
         handleCreateSkill={handleCreateSkill}
+        value="Create Skill"
       />
     </>
   );

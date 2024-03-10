@@ -1,4 +1,4 @@
-import { Accordion, Flex, LoadingOverlay } from "@mantine/core";
+import { Accordion, Flex, LoadingOverlay, Pagination } from "@mantine/core";
 import FocusTrapComponent from "./FocusTrapComponent";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { IconXboxX } from "@tabler/icons-react";
 import { GETALLUSERS } from "../EndPoints";
+import { useState } from "react";
 
 interface UserData {
   name: string;
@@ -30,13 +31,15 @@ export default function AccordionComponent({
   const user_id = searchParams.get("user_id");
   const selectedUserId = user_id ? parseInt(user_id) : 0;
   let allRoles: string[] = [];
+  const [currentPage, setCurrentPage] = useState(1);
+  const elementsPerPage = 7;
 
   const {
     data: responseData,
     error,
     isLoading,
   } = useSWR(
-   GETALLUSERS,
+    GETALLUSERS,
     (url) => {
       console.log("Fetching data from:", url);
 
@@ -68,7 +71,23 @@ export default function AccordionComponent({
       ? data.map((item: UserData) => item)
       : data.filter((item: UserData) => item.roles.includes(menuSelection));
 
-  const users = filteredUsersAccordion
+  const indexOfLastSkill = currentPage * elementsPerPage;
+  const indexOfFirstSkill = indexOfLastSkill - elementsPerPage;
+  const currentUsers = filteredUsersAccordion.slice(
+    indexOfFirstSkill,
+    indexOfLastSkill
+  );
+
+  let pageNumbers = 1;
+  for (
+    let i = 0;
+    i < Math.ceil(filteredUsersAccordion.length / elementsPerPage);
+    i++
+  ) {
+    pageNumbers = pageNumbers + i;
+  }
+
+  const users = currentUsers
     .sort((a: UserData, b: UserData) => a.name.localeCompare(b.name))
     .map((item: UserData, index: number) => (
       <Accordion.Item
@@ -109,6 +128,7 @@ export default function AccordionComponent({
                   <span className="font-base text-sm">{role}</span>
                   {role !== "Employee" && (
                     <IconXboxX
+                      key={`delete-${role}`}
                       onClick={() => {
                         const updatedRoles = allRoles.filter(
                           (item) => item !== role
@@ -126,7 +146,7 @@ export default function AccordionComponent({
                             }
                           )
                           .then(() => {
-                            mutate("/users/all");
+                            mutate(GETALLUSERS);
                           })
                           .catch(() => {
                             alert(
@@ -155,7 +175,15 @@ export default function AccordionComponent({
 
   return (
     <Accordion className=" rounded-xl" defaultValue={"0"}>
-      {users}
+      {users}{" "}
+      <Pagination
+        className="mt-4 text-slate-500"
+        total={pageNumbers}
+        value={currentPage}
+        onChange={setCurrentPage}
+      >
+
+      </Pagination>
     </Accordion>
   );
 }
