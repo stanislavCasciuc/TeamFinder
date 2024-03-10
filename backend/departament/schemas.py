@@ -7,8 +7,15 @@ class DepartmentData(BaseModel):
     department_manager: int
 
 class DepartmentUpdate(BaseModel):
-    name: str
+    name: Optional[str] = None
     department_id: int
+    department_manager: Optional[int] = None
+
+
+class ResponseDepartmentUpdate(BaseModel):
+    name: Optional[str] = None
+    department_id: int
+    department_manager_name: Optional[str] = None
 
 
 class DepartmentResponse(BaseModel):

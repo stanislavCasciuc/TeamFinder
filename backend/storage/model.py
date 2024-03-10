@@ -32,7 +32,7 @@ class Department(Base):
     name = Column(String)
     department_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
 
-class Role(Base):
+class Roles(Base):
     __tablename__ = 'roles'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
@@ -44,12 +44,11 @@ class Project(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
-    project_manager_id = Column(Integer, ForeignKey('users.id'), unique=True)
+    project_manager_id = Column(Integer, ForeignKey('users.id'))
     name = Column(String)
     description = Column(Text)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
-    status = Column(String)
 
 class ProjectEmployees(Base):
     __tablename__ = 'project_employees'
@@ -69,6 +68,7 @@ class Skills(Base):
     category = Column(String)
     description = Column(Text)
     author_id = Column(Integer, ForeignKey('users.id'))
+    department_id = Column(Integer, ForeignKey('departments.id'))
 
 class UserSkills(Base):
     __tablename__ = 'user_skills'
@@ -85,9 +85,9 @@ class ProjectTechnologies(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, ForeignKey('projects.id'))
-    skill_id = Column(Integer, ForeignKey('skills.id'))
+    name = Column(String, unique=True)
 
-class Department_skills(Base):
+class DepartmentSkills(Base):
     __tablename__ = 'department_skills'
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)

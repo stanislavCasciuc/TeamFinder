@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from functions.functions import get_current_user, get_user_roles
 from storage.model import get_db, User
-from storage.variables import ROLES, EMPLOYEE, ORGANIZATION_ADMIN
-from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames
+from storage.variables import ROLES, EMPLOYEE, ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER
+from users.shemas import UserData, AllUsers, ExtendedUserData, UserRoles, UserNames, Profil
 from users.utils import get_my_user, get_all_users, set_user_roles
 
 router = APIRouter()
@@ -19,9 +19,9 @@ async def read_users_all(current_user: UserData = Depends(get_current_user), db:
     return all_users
 
 
-@router.get("/users/me", response_model = ExtendedUserData)
-async def read_users_me(current_user: UserData = Depends(get_my_user)):
-    return current_user
+@router.get("/users/me", response_model=Profil)
+async def read_users_me(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    return await get_my_user(current_user, db)
 
 @router.put("/users/roles/update", response_model = UserData)
 async def update_roles(current_user: UserData = Depends(get_current_user),  user_roles: UserRoles = Depends(), db: Session = Depends(get_db)):
@@ -34,12 +34,22 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
         if role not in ROLES:
             raise HTTPException(status_code=400, detail="Invalid roles")
 
+
+
     if EMPLOYEE not in user_roles.roles:
         raise HTTPException(status_code=400, detail="User must have at least the employee role")
 
     db_user = db.query(User).filter(User.id == user_roles.user_id).first()
     if db_user.is_organization_admin and ORGANIZATION_ADMIN not in user_roles.roles:
         raise HTTPException(status_code=400, detail="You can't remove the organization admin role")
+
+    if db_user.is_department_manager and DEPARTMENT_MANAGER not in user_roles.roles and db_user.department_id:
+        raise HTTPException(status_code=400, detail="User is department manager, you can't remove the department manager role")
+
+
+    # if db_user.is_project_manager and PROJECT_MANAGER not in user_roles.roles and db_user.department_id:
+    #      raise HTTPException(status_code=400, detail="User is department manager, you can't remove the department manager role")
+
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
     set_user_roles(user_roles.roles, db_user)
@@ -57,9 +67,21 @@ async def get_department_managers(current_user: UserNames = Depends(get_current_
     response = parse_obj_as(List[UserNames], department_managers)
     return response
 
+# @router.delete("/user/{user_id}")
+# async def delete_user(user_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+#     if not current_user.is_organization_admin:
+#         raise HTTPException(status_code=403, detail="You are not organization admin")
+#     user = db.query(User).filter(User.id == user_id).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#
+#
+#
+#     db.delete(user)
+#     db.commit()
+#     return {"detail": "User deleted"}
 
 
-# @router.delete("/users/delete", response_model = List[UserNames])
 
 
 
