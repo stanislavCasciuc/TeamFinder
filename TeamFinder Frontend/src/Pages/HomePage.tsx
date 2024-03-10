@@ -10,6 +10,8 @@ import Departments from "../Components/Departments/Departments";
 import { Routes, Route } from "react-router-dom";
 import Skills from "../Components/Skills/Skills";
 import MyDepartment from "../Components/Departments/MyDepartment";
+import MySkills from "../Components/Skills/MySkills";
+import CustomRoles from "../Components/TeamRoles/CustomRoles";
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -43,6 +45,8 @@ const HomePage = () => {
               <Route path="/Departments/*" element={<Departments />} />
               <Route path="/My-Department" element={<MyDepartment />} />
               <Route path="/Skills/*" element={<Skills />} />
+              <Route path="/My-Skills" element={<MySkills />} />
+              <Route path="/Custom-Roles" element={<CustomRoles/>}/>
             </Routes>
           </div>
         </div>

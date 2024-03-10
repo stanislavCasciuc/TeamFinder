@@ -102,7 +102,11 @@ const SkillsList = () => {
 
   const skills = currentSkills.map((skill: SkillData) => (
     <>
-      <Flex className="border rounded-lg justify-between ">
+      <Flex className="border rounded-lg justify-between "
+      key={
+        skill.id
+      }
+      >
         <span className=" p-2" key={skill.id}>
           {skill.name}
         </span>

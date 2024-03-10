@@ -41,6 +41,7 @@ const DepartmentSkills = () => {
       .then((response) => response.data);
   });
 
+
   const handleAssignSkill = (selectedSkill: SkillData) => {
     axios
       .post(
@@ -74,6 +75,7 @@ const DepartmentSkills = () => {
         (deptSkill: SkillData) => deptSkill.id === skill.id
       )
   );
+  console.log(departmentSkills)
 
   const allSkills = filteredSkills.map((skill: SkillData) => (
     <span
@@ -97,7 +99,7 @@ const DepartmentSkills = () => {
           className="border p-4 shadow-md rounded-xl flex-wrap"
         >
           <div className="flex flex-wrap gap-4">
-            {data.map((skill: SkillData) => (
+            {departmentSkills.map((skill: SkillData) => (
               <div
                 key={skill.id}
                 onClick={() => setSelectedSkill(skill)}

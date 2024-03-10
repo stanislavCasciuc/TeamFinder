@@ -81,39 +81,49 @@ const CreateDepartmentCard = () => {
       <Modal opened={opened} onClose={close} title="Create Department" centered>
         <div className="flex flex-col gap-3">
           <TextInput
-          required
+            required
             label="Department Name"
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}
           />
-          <List className="p-2 border-2 rounded-xl">
+          <List className="p-2 border-2 rounded-xl h-80 overflow-auto">
             <span className="text-sm font-semibold ">
               Choose Department Manager
             </span>
             {DepartmentManagers}
           </List>
-          <Button
-            onClick={() => {
-              axios
-                .post(
-                  POSTDEPARTMENT + `?department_name=${value}&department_manager=${selectedUserId}`,
-                  value,
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${accessToken}`,
-                    },
-                  }
-                )
-                .then(() => {
-                  close();
-                  mutate(GETALLDEPARTMENTS);
-                });
-            }}
-            className="bg-indigo-500 hover:bg-indigo-600 rounded-xl w-40  "
-          >
-            Confirm
-          </Button>
+          {value !== "" && selectedUserId !== 0 ? (
+            <Button
+              onClick={() => {
+                axios
+                  .post(
+                    POSTDEPARTMENT +
+                      `?department_name=${value}&department_manager=${selectedUserId}`,
+                    value,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                      },
+                    }
+                  )
+                  .then(() => {
+                    close();
+                    mutate(GETALLDEPARTMENTS);
+                  });
+              }}
+              className="bg-indigo-500 hover:bg-indigo-600 rounded-xl w-40  "
+            >
+              Confirm
+            </Button>
+          ) : (
+            <Button
+              disabled
+              className="bg-indigo-500 hover:bg-indigo-600 rounded-xl w-40  "
+            >
+              Confirm
+            </Button>
+          )}
         </div>
       </Modal>
 
