@@ -1,19 +1,26 @@
-import spacy
+from datetime import datetime
 
-# Load the spaCy English model
-nlp = spacy.load("en_core_web_sm")
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from functions.functions import get_project_status_by_id
+from storage.models import get_db
+
 
 def is_matching_technology(skill_name, skill_description, technology_name):
-    # Tokenize the skill name and description
-    skill_tokens = nlp(skill_name + " " + skill_description)
+    skill_name_lower = str(skill_name).lower()
+    skill_description_lower = str(skill_description).lower()
+    technology_name_lower = str(technology_name).lower()
 
-    # Tokenize the technology name
-    technology_tokens = nlp(technology_name)
+    return technology_name_lower in skill_name_lower or technology_name_lower in skill_description_lower
 
-    # Calculate similarity between skill and technology
-    similarity = skill_tokens.similarity(technology_tokens)
+def get_days_remaining(project_end_date):
+    current_date = datetime.now().date()
+    return (project_end_date - current_date).days
 
-    # You can adjust the similarity threshold based on your needs
-    similarity_threshold = 0.7
-
-    return similarity > similarity_threshold
+def user_is_active(user_project, db: Session=Depends(get_db)):
+    if not user_project.is_proposal and not user_project.is_deallocated:
+        project_status = get_project_status_by_id(user_project.id, db)
+        if project_status == "In Progress" or project_status == "Closing" or project_status == "Starting":
+            return True
+    return False

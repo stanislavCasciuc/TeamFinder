@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from skills.user_skills import user_skills
 from users import users
+from team_finder import team_finder
 from projects.technologies import technologies
 from projects import projects
 from departament import department
@@ -39,6 +40,7 @@ app.include_router(user_skills.router, tags=["user_skills"], prefix="/api")
 app.include_router(custom_roles.router, tags=["roles"], prefix="/api")
 app.include_router(projects.router, tags=["projects"], prefix="/api")
 app.include_router(technologies.router, tags=["project_technologies"], prefix="/api")
+app.include_router(team_finder.router, tags=["team_finder"], prefix="/api")
 
 if __name__ == '__main__':
     import uvicorn
