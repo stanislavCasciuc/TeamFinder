@@ -64,9 +64,16 @@ const DepartmentsComponent = () => {
             `${department.name}/${department.department_id}/${department.department_manager_name}`
           );
         }}
-        className="border  rounded-3xl shadow-md hover:bg-slate-50 flex justify-center items-center cursor-pointer h-48"
+        className="flex-col p-4 rounded-3xl shadow-md text-slate-600 hover:bg-slate-50 flex  justify-between  cursor-pointer h-60 w-60"
       >
-        <span className="text-xl">{department.name}</span>
+        <span className="text-xl font-bold">{department.name}</span>
+
+        <div>
+          <span className="text-sm font-semibold">Manager:</span>
+          <div className="text-xs gap-2 flex ">
+            <span>{department.department_manager_name}</span>
+          </div>
+        </div>
       </div>
     );
   });
@@ -81,10 +88,10 @@ const DepartmentsComponent = () => {
           <div>All Departments</div>
         </Flex>
       </header>
-      <div className="grid gap-10 grid-cols-2 md:grid-cols-4 px-16 py-4 h-full text-slate-600">
+      <Flex className="p-4 flex-wrap gap-5">
         {departments}
         <CreateDepartmentCard />
-      </div>
+      </Flex>
       <Pagination
         className="mt-4 ml-20 mb-20 text-slate-500"
         total={pageNumbers}

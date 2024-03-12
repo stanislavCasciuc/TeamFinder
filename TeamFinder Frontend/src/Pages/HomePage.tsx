@@ -12,6 +12,7 @@ import Skills from "../Components/Skills/Skills";
 import MyDepartment from "../Components/Departments/MyDepartment";
 import MySkills from "../Components/Skills/MySkills";
 import CustomRoles from "../Components/TeamRoles/CustomRoles";
+import Projects from "../Components/Projects/Projects";
 
 const HomePage = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -46,7 +47,8 @@ const HomePage = () => {
               <Route path="/My-Department" element={<MyDepartment />} />
               <Route path="/Skills/*" element={<Skills />} />
               <Route path="/My-Skills" element={<MySkills />} />
-              <Route path="/Custom-Roles" element={<CustomRoles/>}/>
+              <Route path="/Custom-Roles" element={<CustomRoles />} />
+              <Route path="/Projects/*" element={<Projects />} />
             </Routes>
           </div>
         </div>

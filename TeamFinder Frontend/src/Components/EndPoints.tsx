@@ -9,14 +9,17 @@ export const GETSKILLS = "/skills";
 export const GETMYDEPARTMENTSKILLS = "api/department/skills";
 export const GETMYSKILLS = "api/user/skills";
 export const GETCUSTOMROLES = "api/roles";
-
+export const GETALLPROJECTS = "api/projects";
+export const GETPROJECT = "api/project/";
+export const TEAMFIND = "api/team_finder/";
 //for Post Request
 export const POSTDEPARTMENT = "api/department/create/";
 export const POSTNEWMEMBERS = "api/department/assign/";
 export const POSTNEWSKILLS = "/skill";
 export const ASSIGNSKILLTODEPARTMENT = "api/department/skill/assign/";
 export const ASSIGNSKILLTOUSER = "api/user/skill/assign?";
-export const POSTNEWROLE = "/api/role/";
+export const POSTNEWROLE = "/api/role";
+export const POSTNEWPROJECT = "api/project";
 //for Put Request
 export const PUTUSERROLES = "api/users/roles/update";
 export const PUTEDITDEPARTMENT = "api/department";

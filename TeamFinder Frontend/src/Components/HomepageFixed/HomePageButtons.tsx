@@ -44,11 +44,7 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
             value="Departments"
             setSidebar={setSidebar}
           />
-          <LinkComponent
-            icon={<IconFolders size={28} />}
-            value="Projects"
-            setSidebar={setSidebar}
-          />
+
           <LinkComponent
             icon={<IconSwords size={28} />}
             value="Skills"
@@ -60,6 +56,13 @@ const HomePageButtons = ({ setSidebar }: HomePageButtonsProps) => {
             setSidebar={setSidebar}
           />
         </>
+      )}
+      {roles?.includes("Project Manager") && (
+        <LinkComponent
+          icon={<IconFolders size={28} />}
+          value="Projects"
+          setSidebar={setSidebar}
+        />
       )}
       <br />
       <LinkComponent
