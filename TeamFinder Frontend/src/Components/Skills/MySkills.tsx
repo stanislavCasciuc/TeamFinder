@@ -14,7 +14,7 @@ import { IconStarFilled } from "@tabler/icons-react";
 import { useState } from "react";
 import { Pagination } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal } from "@mantine/core";
+import { Modal, Autocomplete, Slider } from "@mantine/core";
 
 interface SkillData {
   id: number;
@@ -39,9 +39,8 @@ const MySkills = () => {
     {} as SkillData
   );
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editedLevel, setEditedLevel] = useState("");
-  const [editedExperience, setEditedExperience] = useState("");
-
+  const [editedLevel, setEditedLevel] = useState(1);
+ 
   const [level, setLevel] = useState(1);
   const [experience, setExperience] = useState(1);
 
@@ -75,7 +74,7 @@ const MySkills = () => {
     axios
       .put(
         PUTEDITUSERSKILL +
-          `?level=${editedLevel}&experience=${editedExperience}&skill_id=${selectedSkill.skill_id}`,
+          `?level=${editedLevel}&experience=${selectedSkill.experience}&skill_id=${selectedSkill.skill_id}`,
         {},
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )
@@ -87,13 +86,14 @@ const MySkills = () => {
 
   const handleDeleteSkill = (selectedSkill: SkillData) => {
     axios
-      .delete(DELETEUSERSKILL+ `/${selectedSkill.skill_id}`, {
+      .delete(DELETEUSERSKILL + `/${selectedSkill.skill_id}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then(() => {
         mutate(GETMYSKILLS);
         setSelectedSkill({} as SkillData);
-      }).catch(() => {
+      })
+      .catch(() => {
         alert("Please select a skill to delete");
       });
   };
@@ -128,19 +128,7 @@ const MySkills = () => {
   });
 
   const filteredSkills = allSkills
-    ?.map((skill: SkillData) => (
-      <span
-        className={`border rounded-lg hover:bg-slate-100 p-2 cursor-pointer ${
-          selectedSkill?.id === skill.id
-            ? "bg-slate-100 hover:outline-indigo-200 mt-2 outline-indigo-400 outline"
-            : ""
-        }`}
-        key={skill.id}
-        onClick={() => setSelectedSkill(skill)}
-      >
-        {skill.name}
-      </span>
-    ))
+    ?.map((skill: SkillData) => skill.name)
     .filter((skill: SkillData) => {
       return !skillsData?.some(
         (deptSkill: SkillData) => deptSkill.id === skill.id
@@ -150,6 +138,22 @@ const MySkills = () => {
   const indexOfLastSkill = currentPage * elementsPerPage;
   const indexOfFirstSkill = indexOfLastSkill - elementsPerPage;
   const currentSkills = Skills?.slice(indexOfFirstSkill, indexOfLastSkill);
+
+  const levelMarks = [
+    { value: 1, label: "Learns" },
+    { value: 2, label: "Knows" },
+    { value: 3, label: "Does" },
+    { value: 4, label: "Helps" },
+    { value: 5, label: "Teaches" },
+  ];
+  const experienceMarks = [
+    { value: 0, label: "0-6 Mts" },
+    { value: 6, label: "6-12 Mts" },
+    { value: 12, label: "1-2 Yrs" },
+    { value: 18, label: "2-4 Yrs" },
+    { value: 24, label: "4-7 Yrs" },
+    { value: 30, label: ">7 Yrs" },
+  ];
 
   let pageNumbers = 1;
   for (let i = 0; i < Math.ceil(skillsData?.length / elementsPerPage); i++) {
@@ -196,7 +200,7 @@ const MySkills = () => {
         ) : null}
       </Flex>
       <div className="flex justify w-full h-full justify-center  mb-20">
-        <Flex className="flex-col border rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
+        <Flex className="flex-col  rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
           <Flex className="justify-between border-b p-2">
             <div className="font-semibold text-lg">Skill</div>
             <div className="font-semibold text-lg">Experience</div>
@@ -222,32 +226,50 @@ const MySkills = () => {
         padding="md"
       >
         <Flex direction="column" gap="xl">
-          <Flex
-            direction="row"
-            gap="sm"
-            className="flex-wrap overflow-auto h-30 p-2"
-          >
-            {filteredSkills}
-          </Flex>
-          <Flex direction="column" gap="xl">
+          <Autocomplete
+            data={filteredSkills}
+            label="All Skills"
+            placeholder="Choose one skill"
+            onChange={(value) =>
+              setSelectedSkill({
+                ...selectedSkill,
+                name: value,
+                description: allSkills?.find(
+                  (skill: SkillData) => skill.name === value
+                )?.description,
+                author_name: allSkills?.find(
+                  (skill: SkillData) => skill.name === value
+                )?.author_name,
+                category: allSkills?.find(
+                  (skill: SkillData) => skill.name === value
+                )?.category,
+                department_id: allSkills?.find(
+                  (skill: SkillData) => skill.name === value
+                )?.department_id,
+                skill_id: allSkills?.find(
+                  (skill: SkillData) => skill.name === value
+                )?.id,
+              })
+            }
+          />
+          <Flex direction="column" gap="xl" className="p-10">
             <label htmlFor="level">Level</label>
-            <input
-              type="number"
-              id="level"
-              name="level"
-              min="1"
-              max="5"
-              value={level}
-              onChange={(e) => setLevel(parseInt(e.target.value))}
+            <Slider
+              label={null}
+              onChange={setLevel}
+              marks={levelMarks}
+              step={1}
+              min={1}
+              max={5}
             />
             <label htmlFor="experience">Experience</label>
-            <input
-              type="number"
-              id="experience"
-              name="experience"
-              min="1"
-              value={experience}
-              onChange={(e) => setExperience(parseInt(e.target.value))}
+            <Slider
+              label={null}
+              onChange={setExperience}
+              marks={experienceMarks}
+              step={6}
+              min={0}
+              max={30}
             />
           </Flex>
           <Button
@@ -265,31 +287,22 @@ const MySkills = () => {
       <Modal
         opened={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        title="Edit Skill"
+        title="Edit your skill"
         size="md"
         shadow="lg"
         padding="md"
       >
-        <Flex direction="column" gap="xl">
+        <Flex direction="column" gap="xl" className="px-10">
           <label htmlFor="level">Level</label>
-          <input
-            type="number"
-            id="level"
-            name="level"
-            min="1"
-            max="5"
-            value={editedLevel}
-            onChange={(e) => setEditedLevel(e.target.value)}
+          <Slider
+            label={null}
+            onChange={setEditedLevel}
+            marks={levelMarks}
+            step={1}
+            min={1}
+            max={5}
           />
-          <label htmlFor="experience">Experience</label>
-          <input
-            type="number"
-            id="experience"
-            name="experience"
-            min="1"
-            value={editedExperience}
-            onChange={(e) => setEditedExperience(e.target.value)}
-          />
+
           <Button
             onClick={() => {
               handleEditSkill(selectedSkill);

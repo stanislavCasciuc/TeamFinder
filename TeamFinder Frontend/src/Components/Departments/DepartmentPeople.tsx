@@ -105,10 +105,6 @@ const DepartmentPeople = ({
         })
         .then((response) => response.data);
     },
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
   );
 
   const data = responseData || [];

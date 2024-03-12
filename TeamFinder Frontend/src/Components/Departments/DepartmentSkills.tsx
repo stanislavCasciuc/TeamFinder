@@ -41,7 +41,6 @@ const DepartmentSkills = () => {
       .then((response) => response.data);
   });
 
-
   const handleAssignSkill = (selectedSkill: SkillData) => {
     axios
       .post(
@@ -63,21 +62,21 @@ const DepartmentSkills = () => {
       .then(() => {
         mutate(GETMYDEPARTMENTSKILLS);
         setSelectedSkill({} as SkillData);
-      }).catch(() => {
+      })
+      .catch(() => {
         alert("Please select a skill to delete");
       });
   };
 
   const departmentSkills = data || [];
-  const filteredSkills = skillsData.filter(
+  const filteredSkills = skillsData?.filter(
     (skill: SkillData) =>
       !departmentSkills.some(
         (deptSkill: SkillData) => deptSkill.id === skill.id
       )
   );
-  console.log(departmentSkills)
 
-  const allSkills = filteredSkills.map((skill: SkillData) => (
+  const allSkills = filteredSkills?.map((skill: SkillData) => (
     <span
       className={`border rounded-lg hover:bg-slate-100 p-2 cursor-pointer ${
         selectedSkill?.id === skill.id
@@ -96,7 +95,7 @@ const DepartmentSkills = () => {
         <Flex
           direction="column"
           gap="md"
-          className="border p-4 shadow-md rounded-xl flex-wrap"
+          className=" p-4 shadow-md rounded-xl flex-wrap"
         >
           <div className="flex flex-wrap gap-4">
             {departmentSkills.map((skill: SkillData) => (
@@ -125,7 +124,7 @@ const DepartmentSkills = () => {
               onClick={() => handleDeleteSkill(selectedSkill)}
               className="text-xs mt-5 font-bold bg-red-400 hover:bg-red-500"
             >
-                Delete Skill
+              Delete Skill
             </Button>
           </Flex>
         </Flex>
@@ -140,7 +139,7 @@ const DepartmentSkills = () => {
         padding="md"
       >
         <Flex direction="column" gap="xl">
-          <Flex direction="row" gap="xl">
+          <Flex direction="row" gap="xl" className="flex-wrap overflow-auto">
             {allSkills}
           </Flex>
           <Button

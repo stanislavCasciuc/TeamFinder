@@ -129,7 +129,7 @@ const CreateDepartmentCard = () => {
 
       <div
         onClick={open}
-        className="border rounded-3xl shadow-md hover:bg-slate-50 flex justify-center items-center cursor-pointer h-48"
+        className="rounded-3xl shadow-md hover:bg-slate-50 flex justify-center items-center cursor-pointer h-20 w-20"
       >
         <IconPlus size={32} />
       </div>
