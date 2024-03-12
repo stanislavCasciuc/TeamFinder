@@ -13,3 +13,6 @@ IN_PROGRESS = "In Progress"
 NOT_STARTED = "Not Started"
 STARTING = "Starting"
 CLOSING = "Closing"
+
+
+FRONTEND_URL = "http://localhost:5713"

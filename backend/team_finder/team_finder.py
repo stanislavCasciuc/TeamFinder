@@ -41,7 +41,7 @@ async def get_team(project_id: int, current_user: UserData = Depends(get_current
         for user_project in user_projects:
             if user_is_active(user_project, db):
                 project = db.query(Project).filter(Project.id == user_project.project_id).first()
-                employee_project = EmployeesProject(hours_per_day=user_project.hours_per_day)
+                employee_project = EmployeesProject(hours_per_day=user_project.hours_per_day, project_name=project.name)
                 if project.end_date:
                     employee_project.remaining_days = get_days_remaining(project.end_date)
                 if employee.projects is None:
