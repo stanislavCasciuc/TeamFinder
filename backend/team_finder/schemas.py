@@ -12,11 +12,11 @@ class Technology(BaseModel):
     name: str
 
 class EmployeesProject(BaseModel):
-    remaining_days: int
-    hours_per_day: Optional[int] = None
+    remaining_days: Optional[int] = None
+    hours_per_day: int
 
 class Employee(BaseModel):
     id: int
     name: str
-    skills: list[str]
+    skills: Optional[List[str]] = None
     projects: Optional[List[EmployeesProject]] = None
