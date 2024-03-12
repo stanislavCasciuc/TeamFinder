@@ -102,11 +102,7 @@ const SkillsList = () => {
 
   const skills = currentSkills.map((skill: SkillData) => (
     <>
-      <Flex className="border rounded-lg justify-between "
-      key={
-        skill.id
-      }
-      >
+      <Flex className="border rounded-lg justify-between " key={skill.id}>
         <span className=" p-2" key={skill.id}>
           {skill.name}
         </span>
@@ -120,6 +116,7 @@ const SkillsList = () => {
           >
             View skill
           </span>
+
           {myDepartmentId === skill.department_id && (
             <span
               onClick={() => {
@@ -173,7 +170,7 @@ const SkillsList = () => {
         </Button>
       </Flex>
       <div className="flex justify w-full h-full justify-center  mb-20">
-        <Flex className="flex-col border rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
+        <Flex className="flex-col  rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
           {skills.length === 0 ? "No skills" : skills}
 
           <Pagination

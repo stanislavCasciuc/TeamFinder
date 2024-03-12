@@ -69,15 +69,14 @@ const DepartmentSkills = () => {
   };
 
   const departmentSkills = data || [];
-  const filteredSkills = skillsData.filter(
+  const filteredSkills = skillsData?.filter(
     (skill: SkillData) =>
       !departmentSkills.some(
         (deptSkill: SkillData) => deptSkill.id === skill.id
       )
   );
-  console.log(departmentSkills);
 
-  const allSkills = filteredSkills.map((skill: SkillData) => (
+  const allSkills = filteredSkills?.map((skill: SkillData) => (
     <span
       className={`border rounded-lg hover:bg-slate-100 p-2 cursor-pointer ${
         selectedSkill?.id === skill.id
@@ -96,7 +95,7 @@ const DepartmentSkills = () => {
         <Flex
           direction="column"
           gap="md"
-          className="border p-4 shadow-md rounded-xl flex-wrap"
+          className=" p-4 shadow-md rounded-xl flex-wrap"
         >
           <div className="flex flex-wrap gap-4">
             {departmentSkills.map((skill: SkillData) => (

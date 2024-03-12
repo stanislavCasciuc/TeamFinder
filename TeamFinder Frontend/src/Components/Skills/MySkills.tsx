@@ -40,8 +40,7 @@ const MySkills = () => {
   );
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editedLevel, setEditedLevel] = useState(1);
-  const [editedExperience, setEditedExperience] = useState(1);
-
+ 
   const [level, setLevel] = useState(1);
   const [experience, setExperience] = useState(1);
 
@@ -75,7 +74,7 @@ const MySkills = () => {
     axios
       .put(
         PUTEDITUSERSKILL +
-          `?level=${editedLevel}&experience=${editedExperience}&skill_id=${selectedSkill.skill_id}`,
+          `?level=${editedLevel}&experience=${selectedSkill.experience}&skill_id=${selectedSkill.skill_id}`,
         {},
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )
@@ -201,7 +200,7 @@ const MySkills = () => {
         ) : null}
       </Flex>
       <div className="flex justify w-full h-full justify-center  mb-20">
-        <Flex className="flex-col border rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
+        <Flex className="flex-col  rounded-xl w-3/5 p-8 flex-wrap h-fit gap-x-4 gap-y-2 text-slate-600 shadow-md">
           <Flex className="justify-between border-b p-2">
             <div className="font-semibold text-lg">Skill</div>
             <div className="font-semibold text-lg">Experience</div>
@@ -303,15 +302,7 @@ const MySkills = () => {
             min={1}
             max={5}
           />
-          <label htmlFor="experience">Experience</label>
-          <Slider
-            label={null}
-            onChange={setEditedExperience}
-            marks={experienceMarks}
-            step={6}
-            min={0}
-            max={30}
-          />
+
           <Button
             onClick={() => {
               handleEditSkill(selectedSkill);

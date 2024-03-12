@@ -29,7 +29,7 @@ const EditDepartmentManager = ({
   const { auth } = useAuth();
   const accessToken = auth?.accessToken;
   const [selected, setSelected] = useState(0);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { data: ManagersData } = useSWR(GETDEPARTMENTMANAGERS, (url) => {
     return axios
@@ -62,6 +62,7 @@ const EditDepartmentManager = ({
       </div>
     );
   });
+
 
   return (
     <Modal
