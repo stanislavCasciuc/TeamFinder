@@ -15,3 +15,10 @@ class DeallocateData(BaseModel):
     comment: str
     id: int
 
+class EmployeeProject(BaseModel):
+    project_id: int
+    project_name: str
+    technologies: list[str]
+    roles: list[str]
+    is_active: bool = False
+

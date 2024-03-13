@@ -1,11 +1,14 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 
 from functions.functions import get_current_user
-from projects.project_employee.schemas import ProposalData, DeallocateData
+from projects.project_employee.schemas import ProposalData, DeallocateData, EmployeeProject
+from projects.schemas import GetProject
 from skills.skills.schemas import UserData
-from storage.models import get_db, Project, ProjectEmployees
+from storage.models import get_db, Project, ProjectEmployees, ProjectTechnologies, Roles
 from team_finder.utils import user_is_active
 
 router = APIRouter()
@@ -26,8 +29,6 @@ async def propose_employee(current_user: UserData = Depends(get_current_user), p
     user_projects = db.query(ProjectEmployees).filter(ProjectEmployees.user_id == proposal_data.user_id).all()
     user_hours_per_day = 0
     for user_project in user_projects:
-        if user_project.project_id == project_employee.project_id:
-            raise HTTPException(status_code=400, detail="User is already proposed to the project")
         if user_is_active(user_project, db):
             user_hours_per_day += user_project.hours_per_day
     if user_hours_per_day + proposal_data.hours_per_day > 8:
@@ -65,4 +66,25 @@ async def deallocate_employee(current_user: UserData = Depends(get_current_user)
 
     return deallocate_data
 
-# @router.put('/project/employee', response_model=ProposalData)
+@router.get('/projects/employee', response_model=List[EmployeeProject])
+async def get_project_employees(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    project_employees = db.query(
+        ProjectEmployees.project_id,
+        ProjectEmployees.id,
+        Project.name.label("project_name"),
+        ProjectEmployees.is_proposal,
+        ProjectEmployees.is_deallocated
+    ).join(Project, ProjectEmployees.project_id == Project.id).filter(
+        ProjectEmployees.user_id == current_user.id
+    ).all()
+
+    response = []
+    for project_employee in project_employees:
+        project_technologies = db.query(ProjectTechnologies.name).filter(ProjectTechnologies.project_id == project_employee.project_id).all()
+        project_roles = db.query(Roles).join(ProjectEmployees, Roles.id == ProjectEmployees.role_id).filter(ProjectEmployees.project_id == project_employee.project_id).all()
+        project = EmployeeProject(project_id=project_employee.project_id ,project_name=project_employee.project_name,technologies= [project_technology.name for project_technology in project_technologies], roles=[project_role.name for project_role in project_roles])
+        if user_is_active(project_employee, db):
+            project.is_active = True
+        response.append(project)
+
+    return response
