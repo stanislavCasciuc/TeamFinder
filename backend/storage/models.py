@@ -98,6 +98,14 @@ class DepartmentSkills(Base):
     department_id = Column(Integer, ForeignKey('departments.id'))
     skill_id = Column(Integer, ForeignKey('skills.id'))
 
+class Invite(Base):
+    __tablename__ = 'invites'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    organization_id = Column(Integer, ForeignKey('organizations.id'))
+    public_id = Column(String, unique=True)
+    expires_date = Column(DateTime)
+
 
 def get_db():
     db = SessionLocal()

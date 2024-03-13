@@ -46,17 +46,18 @@ async def get_users_organization(token: str = Depends(oauth2_scheme), db: Sessio
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={"WWW-Authenticate": "0"},
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print("hello")
         user_id: str = payload.get("sub")
         organization_id: str = payload.get("organization_id")
         if user_id is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    organization_data = db.query(User.organization_id.label("id"), User.id).filter(and_(User.id == user_id, User.organization_id == organization_id)).first()
+    organization_data = db.query(User.organization_id.label("id"), User.id.labe("user_id")).filter(and_(User.id == user_id, User.organization_id == organization_id)).first()
     if organization_data is None:
         raise credentials_exception
     return organization_data

@@ -13,6 +13,7 @@ class RegisterUser(BaseModel):
     department_id: Optional[int] = None
 
 class RegisterEmployee(BaseModel):
+    public_id: str
     email: str
     password: str
     name: str

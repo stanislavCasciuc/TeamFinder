@@ -1,6 +1,9 @@
-from datetime import timedelta
+import uuid
+from datetime import timedelta, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
+from jose import JWTError, jwt
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 
@@ -8,8 +11,8 @@ from auth.schemas import RegisterUser, RegisterEmployee, OrganizationData
 from auth.utils import get_password_hash, create_access_token, get_users_organization
 from departament.schemas import UserData
 from functions.functions import get_current_user
-from storage.models import get_db, Organization, User
-from storage.variables import ORGANIZATION_ADMIN, EMPLOYEE
+from storage.models import get_db, Organization, User, Invite
+from storage.variables import ORGANIZATION_ADMIN, EMPLOYEE, SECRET_KEY, ALGORITHM
 
 router = APIRouter()
 
@@ -41,19 +44,27 @@ async def create_user(user: RegisterUser, db: Session = Depends(get_db)):
 async def invite_user(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if not current_user.is_organization_admin:
         raise HTTPException(status_code=400, detail="User is not an organization admin")
-    access_token_expires = timedelta(minutes=60*24)
-    access_token = create_access_token(
-        data={"sub": current_user.id, "organization_id": current_user.id,}, expires_delta=access_token_expires
-    )
-    return {"token": access_token}
+    public_id = str(uuid.uuid4())
+    expires_date = datetime.utcnow() + timedelta(days=1)
+    db_invite = Invite(organization_id=current_user.organization_id, public_id=public_id, expires_date=expires_date)
+    db.add(db_invite)
+    db.commit()
+    if not db_invite.id:
+        return HTTPException(status_code=500, detail="Error creating invite")
+    return {"public_id": public_id}
 
 @router.post('/user/register/employee')
-async def create_user(user: RegisterEmployee, organization_data: OrganizationData = Depends(get_users_organization) , db: Session = Depends(get_db)):
-        hashed_password = get_password_hash(user.password)
-        db_user = User(name=user.name, email=user.email, hashed_password=hashed_password,organization_id=organization_data.id)
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
-        if not db_user.id:
-            return HTTPException(status_code=500, detail="Error creating user")
-        return
+async def create_user(user: RegisterEmployee, db: Session = Depends(get_db)):
+    invite_data = db.query(Invite).filter(Invite.public_id == user.public_id).first()
+    if not invite_data:
+        return HTTPException(status_code=404, detail="Invite not found")
+    if invite_data.expires_date < datetime.utcnow():
+        return HTTPException(status_code=400, detail="Invite expired")
+    hashed_password = get_password_hash(user.password)
+    db_user = User(name=user.name, email=user.email, hashed_password=hashed_password,organization_id=invite_data.organization_id)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    if not db_user.id:
+        return HTTPException(status_code=500, detail="Error creating user")
+    return

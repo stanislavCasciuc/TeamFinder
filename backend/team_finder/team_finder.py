@@ -40,6 +40,8 @@ async def get_team(project_id: int, current_user: UserData = Depends(get_current
         user_projects = db.query(ProjectEmployees).filter(ProjectEmployees.user_id == user_id).all()
         for user_project in user_projects:
             if user_is_active(user_project, db):
+                if user_project.project_id == project_id:
+                    continue
                 project = db.query(Project).filter(Project.id == user_project.project_id).first()
                 employee_project = EmployeesProject(hours_per_day=user_project.hours_per_day, project_name=project.name)
                 if project.end_date:
