@@ -42,7 +42,7 @@ jobs:
       - task: AzureWebApp@1
         displayName: 'Deploy Azure Web App'
         inputs:
-          azureSubscription: 'the-qunatumtrio-service-connection'
+          azureSubscription: 'the-quantumtrio-service-connection'
           appType: 'webAppLinux'
           appName: "atc-2024-quantumtrio-fe-linux-web-app"
           package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
