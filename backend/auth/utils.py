@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 
-
-
-from jose import jwt
+from fastapi import Depends, HTTPException
+from jose import jwt, JWTError
 from passlib.context import CryptContext
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 
-from functions.functions import get_user, get_current_user
+from functions.functions import get_user, get_current_user, oauth2_scheme
+from storage.models import get_db, User
 
 from storage.variables import SECRET_KEY, ALGORITHM
 
@@ -41,7 +42,25 @@ def create_access_token(data: dict, expires_delta: timedelta or None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-
+async def get_users_organization(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "0"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print("hello")
+        user_id: str = payload.get("sub")
+        organization_id: str = payload.get("organization_id")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    organization_data = db.query(User.organization_id.label("id"), User.id.labe("user_id")).filter(and_(User.id == user_id, User.organization_id == organization_id)).first()
+    if organization_data is None:
+        raise credentials_exception
+    return organization_data
 
 
 
