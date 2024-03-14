@@ -11,6 +11,7 @@ import { Flex, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface SkillData {
   id: number;
@@ -28,7 +29,7 @@ const DepartmentSkills = () => {
   const [selectedSkill, setSelectedSkill] = useState<SkillData>(
     {} as SkillData
   );
-
+  const navigate = useNavigate();
   const { data } = useSWR(GETMYDEPARTMENTSKILLS, (url) => {
     return axios
       .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
@@ -91,65 +92,78 @@ const DepartmentSkills = () => {
   ));
   return (
     <>
-      <Flex direction="column" gap="xl" className="text-slate-600">
+      <header className="flex bg-white p-4 justify-between">
         <Flex
-          direction="column"
-          gap="md"
-          className=" p-4 shadow-md rounded-xl flex-wrap"
+          className="border items-center py-3 px-7 rounded-xl shadow-sm text-slate-600 cursor-pointer hover:text-indigo-500"
+          gap="xl"
+          onClick={() => navigate(-1)}
         >
-          <div className="flex flex-wrap gap-4">
-            {departmentSkills.map((skill: SkillData) => (
-              <div
-                key={skill.id}
-                onClick={() => setSelectedSkill(skill)}
-                className={`border rounded-lg hover:bg-slate-100 p-2 cursor-pointer  ${
-                  selectedSkill?.id === skill.id
-                    ? "bg-slate-100 hover:outline-indigo-200 outline-indigo-400 outline"
-                    : ""
-                }`}
-              >
-                <h2 className="text-xl font-bold ">{skill.name}</h2>
-                <p className="text-slate-600 bg-slate-100">{skill.category}</p>
-              </div>
-            ))}
-          </div>
-          <Flex gap="md">
-            <Button
-              onClick={() => open()}
-              className="text-xs mt-5 font-bold bg-indigo-400 "
-            >
-              Assign Skill
-            </Button>
-            <Button
-              onClick={() => handleDeleteSkill(selectedSkill)}
-              className="text-xs mt-5 font-bold bg-red-400 hover:bg-red-500"
-            >
-              Delete Skill
-            </Button>
-          </Flex>
+          <div className="hover:text-indigo-400 cursor-pointer">Back</div>
         </Flex>
-      </Flex>
-
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Choose one skill to assign to your department"
-        size="md"
-        shadow="lg"
-        padding="md"
-      >
-        <Flex direction="column" gap="xl">
-          <Flex direction="row" gap="xl" className="flex-wrap overflow-auto">
-            {allSkills}
-          </Flex>
-          <Button
-            onClick={() => handleAssignSkill(selectedSkill)}
-            className="text-xs font-bold bg-indigo-400"
+      </header>
+      <div className="w-full flex justify-center align-center mb-20">
+        <Flex direction="column" gap="xl" className="text-slate-600 w-3/5">
+          <Flex
+            direction="column"
+            gap="md"
+            className=" p-4 shadow-md rounded-xl flex-wrap"
           >
-            Assign
-          </Button>
+            <div className="flex flex-wrap gap-4">
+              {departmentSkills.map((skill: SkillData) => (
+                <div
+                  key={skill.id}
+                  onClick={() => setSelectedSkill(skill)}
+                  className={`border rounded-lg hover:bg-slate-100 p-2 cursor-pointer  ${
+                    selectedSkill?.id === skill.id
+                      ? "bg-slate-100 hover:outline-indigo-200 outline-indigo-400 outline"
+                      : ""
+                  }`}
+                >
+                  <h2 className="text-xl font-bold ">{skill.name}</h2>
+                  <p className="text-slate-600 bg-slate-100">
+                    {skill.category}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <Flex gap="md">
+              <Button
+                onClick={() => open()}
+                className="text-xs mt-5 font-bold bg-indigo-400 "
+              >
+                Assign Skill
+              </Button>
+              <Button
+                onClick={() => handleDeleteSkill(selectedSkill)}
+                className="text-xs mt-5 font-bold bg-red-400 hover:bg-red-500"
+              >
+                Delete Skill
+              </Button>
+            </Flex>
+          </Flex>
         </Flex>
-      </Modal>
+
+        <Modal
+          opened={opened}
+          onClose={close}
+          title="Choose one skill to assign to your department"
+          size="md"
+          shadow="lg"
+          padding="md"
+        >
+          <Flex direction="column" gap="xl">
+            <Flex direction="row" gap="xl" className="flex-wrap overflow-auto">
+              {allSkills}
+            </Flex>
+            <Button
+              onClick={() => handleAssignSkill(selectedSkill)}
+              className="text-xs font-bold bg-indigo-400"
+            >
+              Assign
+            </Button>
+          </Flex>
+        </Modal>
+      </div>
     </>
   );
 };

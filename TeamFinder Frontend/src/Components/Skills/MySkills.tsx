@@ -40,7 +40,7 @@ const MySkills = () => {
   );
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editedLevel, setEditedLevel] = useState(1);
- 
+
   const [level, setLevel] = useState(1);
   const [experience, setExperience] = useState(1);
 
@@ -207,7 +207,13 @@ const MySkills = () => {
             <div className="font-semibold text-lg">Level</div>
           </Flex>
 
-          {currentSkills?.length === 0 ? <span>No Skills</span> : currentSkills}
+          <div className="mt-10 flex gap-2 flex-col">
+            {currentSkills?.length === 0 ? (
+              <span>No Skills</span>
+            ) : (
+              currentSkills
+            )}
+          </div>
 
           <Pagination
             className="mt-4 text-slate-500"

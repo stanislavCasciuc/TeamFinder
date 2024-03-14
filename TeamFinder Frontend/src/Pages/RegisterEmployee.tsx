@@ -6,14 +6,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "../api/axios";
 import { useRef, useEffect } from "react";
-import useAuth from "../hooks/useAuth";
+import { useParams } from "react-router-dom";
 
 const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const REGISTER_URL = "/users/register/";
+
+const REGISTER_URL = "api/user/register/employee";
 
 export default function RegisterPageEmployee() {
+  const { accessToken } = useParams();
+  console.log(accessToken);
+
   const usernameRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLInputElement>(null);
 
@@ -34,8 +38,6 @@ export default function RegisterPageEmployee() {
   const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
-
-  const { auth } = useAuth();
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -96,8 +98,7 @@ export default function RegisterPageEmployee() {
           name: user,
           email: email,
           password: password,
-          organization_id: auth?.organization_id,
-          role: "employee",
+          public_id: accessToken,
         }),
         {
           headers: { "Content-Type": "application/json" },
@@ -232,10 +233,10 @@ export default function RegisterPageEmployee() {
             </p>
           </Flex>
           <Flex mt="30" align="center" gap="20">
-              <ButtonComponent
-                buttonText="Register"
-                HandleButton={() => HandleButtonRegistered()}
-              />
+            <ButtonComponent
+              buttonText="Register"
+              HandleButton={() => HandleButtonRegistered()}
+            />
           </Flex>
 
           <Flex m="10" gap="sm">

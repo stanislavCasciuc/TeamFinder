@@ -2,7 +2,9 @@ import { Title, Flex, LoadingOverlay } from "@mantine/core";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import useSWR from "swr";
-import { GETME } from "../EndPoints";
+import { GETUSER } from "../EndPoints";
+import { useNavigate } from "react-router-dom";
+
 interface SkillData {
   name: string;
   id: number;
@@ -11,6 +13,11 @@ interface SkillData {
 const ProfilePage = () => {
   const { auth } = useAuth();
   const accesToken = auth?.accessToken;
+  const myId = auth?.id;
+  const searchParams = new URLSearchParams(location.search);
+  const user_id = searchParams.get("user_id");
+  const userId = user_id ? parseInt(user_id) : 0;
+  const navigate = useNavigate();
 
   const headers = {
     Authorization: `Bearer ${accesToken}`,
@@ -20,7 +27,7 @@ const ProfilePage = () => {
     data: userData,
     error,
     isLoading,
-  } = useSWR(GETME, (url) =>
+  } = useSWR(GETUSER + `${userId ? userId : myId}`, (url) =>
     axios.get(url, { headers }).then((response) => response.data)
   );
 
@@ -40,7 +47,17 @@ const ProfilePage = () => {
           className="border items-center py-3 px-7 rounded-xl shadow-sm text-slate-600"
           gap="xl"
         >
-          <div className="hover:text-indigo-400 cursor-pointer">Profile</div>
+          {!userId ? (
+            <div className="text-indigo-400 ">Profile</div>
+          ) : (
+            <div className="hover:text-indigo-400 cursor-pointer 
+            "
+            onClick={() => {
+                navigate(-1)
+
+            }}
+            >Back</div>
+          )}
         </Flex>
       </header>
       <div className="  text-slate-600 px-16 ">

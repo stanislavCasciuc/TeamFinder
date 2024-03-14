@@ -41,11 +41,11 @@ const CustomRoles = () => {
       });
   };
 
-  // const handleRemoveRole = (role: string) => {
-  //     axios.delete(POSTNEWROLE + `/${role}`, {
-  //     headers: { Authorization: `Bearer ${accessToken}` },
-  //     });
-  // };
+  const handleRemoveRole = (roleId: number) => {
+    axios.delete(POSTNEWROLE + `/${roleId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+  };
 
   const handleEditRole = (selectedRole: Role) => {
     axios
@@ -82,7 +82,17 @@ const CustomRoles = () => {
             </Button>
           ) : null}
           {selected ? (
-            <Button className="bg-red-400 hover:bg-red-500 ">
+            <Button
+              onClick={() => {
+                if (selectedRole?.id) {
+                  handleRemoveRole(selectedRole.id);
+                  setSelectedRole(undefined);
+                  setSelected(false);
+                  mutate(GETCUSTOMROLES);
+                }
+              }}
+              className="bg-red-400 hover:bg-red-500 "
+            >
               Delete Role
             </Button>
           ) : null}

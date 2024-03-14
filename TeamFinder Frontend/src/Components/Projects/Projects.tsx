@@ -11,8 +11,8 @@ const Projects = () => {
       <Route path="" element={<ProjectsList />} />
       <Route path="CreateProject" element={<CreateProjectPage />} />
       <Route path=":project_id" element={<SingleProjectPage />} />
-      <Route path=":project_id/TeamFinder" element={<TeamFinder/>}/>
-      <Route path=":project_id/TeamMembers" element={<ProjectTeamMembers/>}/>
+      <Route path=":project_id/TeamFinder" element={<TeamFinder />} />
+      <Route path=":project_id/TeamMembers" element={<ProjectTeamMembers />} />
     </Routes>
   );
 };

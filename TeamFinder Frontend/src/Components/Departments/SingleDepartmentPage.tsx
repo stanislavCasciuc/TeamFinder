@@ -12,8 +12,10 @@ const SingleDepartmentPage = () => {
   const [page, setPage] = useState(1);
   const { auth } = useAuth();
   const accessToken = auth?.accessToken;
-  const { department_id } = useParams();
+
   const navigate = useNavigate();
+
+  let {  department_id } = useParams();
 
   const handleDeleteDepartment = () => {
     axios
@@ -25,6 +27,7 @@ const SingleDepartmentPage = () => {
         navigate(-1);
       });
   };
+
 
   return (
     <>
@@ -56,9 +59,7 @@ const SingleDepartmentPage = () => {
           >
             {page === 1 && (
               <DepartmentPeople
-                department_id=""
-                department_manager_name=""
-                department_name=""
+             
               />
             )}
           </Flex>

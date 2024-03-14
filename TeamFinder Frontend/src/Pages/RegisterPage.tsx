@@ -12,8 +12,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
 
-
-const REGISTER_URL = "/users/register/";
+const REGISTER_URL = "api/user/register/admin";
 
 export default function RegisterPage() {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -73,10 +72,10 @@ export default function RegisterPage() {
     setValidAddress(result);
   }, [address]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const result = usernameRegex.test(Organization_name);
     setValidOrganization_name(result);
-  })
+  });
 
   useEffect(() => {
     setErrorMsg("");
@@ -106,28 +105,32 @@ export default function RegisterPage() {
       setErrorMsg("Please fill the Username field correctly");
       return;
     }
-    if(!validAddress){
+    if (!validAddress) {
       setErrorMsg("Please fill the Address field correctly");
       return;
     }
-    if(!validOrganization_name){
+    if (!validOrganization_name) {
       setErrorMsg("Please fill the Organization Name field correctly");
       return;
     }
     try {
       const result = await axios.post(
-           REGISTER_URL,
-        JSON.stringify({ name: user, email: email, password: password , organization_address: address , organization_name: Organization_name, role:"organization_admin"}),
+        REGISTER_URL,
+        JSON.stringify({
+          name: user,
+          email: email,
+          password: password,
+          organization_address: address,
+          organization_name: Organization_name,
+          role: "organization_admin",
+        }),
         {
           headers: { "Content-Type": "application/json" },
-         
         }
       );
       console.log("Registration successful:", result.data);
       navigate("/login");
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const icon = (
@@ -223,7 +226,6 @@ export default function RegisterPage() {
           </Flex>
 
           <Flex miw="300" direction="column">
-            
             <TextInput
               size="md"
               label="Organization Name"
@@ -238,7 +240,11 @@ export default function RegisterPage() {
             ></TextInput>
             <p
               id="orgnote"
-              className={Organization_nameFocus && !validOrganization_name ? "errmsg" : "offscreen"}
+              className={
+                Organization_nameFocus && !validOrganization_name
+                  ? "errmsg"
+                  : "offscreen"
+              }
             >
               Must be a valid organization name.
             </p>
@@ -290,12 +296,10 @@ export default function RegisterPage() {
             </p>
           </Flex>
           <Flex mt="30" align="center" gap="20">
-          
-              <ButtonComponent
-                buttonText="Register"
-                HandleButton={() =>  HandleButtonRegistered()}
-              />
-        
+            <ButtonComponent
+              buttonText="Register"
+              HandleButton={() => HandleButtonRegistered()}
+            />
           </Flex>
 
           <Flex m="16" gap="sm">

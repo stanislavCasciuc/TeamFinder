@@ -32,6 +32,7 @@ const CreateProjectPage = () => {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+
   const { data } = useSWR(GETCUSTOMROLES, (url) => {
     return axios
       .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
@@ -47,7 +48,7 @@ const CreateProjectPage = () => {
           description: description,
           project_status: status,
           start_date: value?.toISOString().split("T")[0] || "",
-          end_date: endValue?.toISOString().split("T")[0] || "",
+          end_date: endValue?.toISOString().split("T")[0] || null,
           project_technologies: technologies,
           project_roles: customRoles.map((role) => role.id),
         },

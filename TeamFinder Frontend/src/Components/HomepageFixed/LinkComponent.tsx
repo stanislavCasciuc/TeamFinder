@@ -28,9 +28,9 @@ const LinkComponent = ({ icon, value, setSidebar }: LinkComponentProps) => {
         setSidebar(false);
       }}
     >
-      <Flex direction="row" className="gap-4 align-center px-6">
+      <Flex direction="row" className="gap-4 align-center px-6 text-indigo-300">
         {icon && icon}
-        <span>{value}</span>
+        <span className="text-slate-600">{value}</span>
       </Flex>
     </Link>
   );

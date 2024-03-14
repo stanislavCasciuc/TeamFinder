@@ -12,6 +12,10 @@ export const GETCUSTOMROLES = "api/roles";
 export const GETALLPROJECTS = "api/projects";
 export const GETPROJECT = "api/project/";
 export const TEAMFIND = "api/team_finder/";
+export const GETPROPOSALS = "api/department/requests/proposals";
+export const GETURL = "api/register/invite";
+export const GETDEALLOCATIONS = "api/department/requests/deallocations";
+export const GETUSER = "api/users/";
 //for Post Request
 export const POSTDEPARTMENT = "api/department/create/";
 export const POSTNEWMEMBERS = "api/department/assign/";
@@ -20,6 +24,12 @@ export const ASSIGNSKILLTODEPARTMENT = "api/department/skill/assign/";
 export const ASSIGNSKILLTOUSER = "api/user/skill/assign?";
 export const POSTNEWROLE = "/api/role";
 export const POSTNEWPROJECT = "api/project";
+export const POSTASSIGNUSER = "api/project/employee/propose";
+export const ACCEPTPROPOSAL = "api/department/requests/propose/accept/";
+export const ACCEPTDEALLOCATE = "api/department/requests/deallocate/accept/";
+export const REJECTPROPOSAL = "api/department/requests/propose/reject/";
+export const REJECTDEALLOCATE = "api/department/requests/deallocate/reject/";
+export const DEALLOCATEUSER = "api/project/employee/deallocate";
 //for Put Request
 export const PUTUSERROLES = "api/users/roles/update";
 export const PUTEDITDEPARTMENT = "api/department";

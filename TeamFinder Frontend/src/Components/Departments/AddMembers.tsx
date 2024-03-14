@@ -63,7 +63,7 @@ const AddMembers = ({ addMembers, setAddMembers }: AddMembersProps) => {
         }
         key={user.id}
         onClick={() => {
-          navigate(`/Homepage/My-Department?user_id=${user.id}`);
+          navigate(`?user_id=${user.id}`);
         }}
       >
         {user.name}

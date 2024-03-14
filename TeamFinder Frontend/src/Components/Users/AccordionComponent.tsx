@@ -111,15 +111,26 @@ export default function AccordionComponent({
           <span className="font-semibold text-slate-600">{item.name}</span>
         </Accordion.Control>
 
-        <Accordion.Panel className="border-t bg-white pt-2">
-          <span className="font-semibold text-md">Department: </span>
-          {item.department_name ? item.department_name : "Not Assigned Yet"}
+        <Accordion.Panel>
+          <span
+            onClick={() => {
+              navigate(`/Homepage/Profile?user_id=${item.id}`);
+            }}
+            className="text-indigo-300 text-sm hover:text-indigo-400 cursor-pointer"
+          >
+            View Profile
+          </span>
+        </Accordion.Panel>
+
+        <Accordion.Panel className="border-t bg-white pt-2 ">
+          <div>
+            <span className="font-semibold text-md">Department: </span>
+            {item.department_name ? item.department_name : "Not Assigned Yet"}
+          </div>
         </Accordion.Panel>
 
         <Accordion.Panel className=" bg-white">
-          <Flex direction="row" className="mt-2 gap-4  flex-wrap"
-          key={item.id}
-          >
+          <Flex direction="row" className="mt-2 gap-4  flex-wrap" key={item.id}>
             <span className="font-semibold text-md mt-2">Roles: </span>
             {item.roles.map((role: string) => (
               <>
@@ -170,6 +181,12 @@ export default function AccordionComponent({
                 selectedUserId={selectedUserId}
               />
             )}
+
+            {selectedUserId !== 0 && allRoles.length === 4 && (
+              <span className="text-red-300 text-xs mt-3">
+                You can't add more than 4 roles to a user
+              </span>
+            )}
           </Flex>
         </Accordion.Panel>
       </Accordion.Item>
@@ -183,9 +200,7 @@ export default function AccordionComponent({
         total={pageNumbers}
         value={currentPage}
         onChange={setCurrentPage}
-      >
-        <Pagination.Control className="bg-indigo-400 hover:bg-indigo-500 text-black"  />
-      </Pagination>
+      />
     </Accordion>
   );
 }
