@@ -46,7 +46,7 @@ async def create_project(project_data: ProjectData, current_user: UserData = Dep
 
 @router.get('/projects', response_model=List[GetProject])
 async def get_projects(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    if current_user.is_project_manager:
+    if not current_user.is_project_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to get projects")
 
     manager_projects = db.query(Project).filter(Project.project_manager_id == current_user.id).all()

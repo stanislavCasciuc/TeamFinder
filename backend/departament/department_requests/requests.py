@@ -94,7 +94,7 @@ async def accept_proposals(id: int, current_user: UserData = Depends(get_current
     db.commit()
     return {"detail": "Proposal accepted"}
 
-@router.post('/department/requests/deallocate/accept/{id}')
+@router.post('/department/requests/deallocate/reject/{id}')
 async def accept_deallocations(id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if not current_user.is_department_manager:
         raise HTTPException(status_code=400, detail="User is not a department manager")
@@ -106,7 +106,7 @@ async def accept_deallocations(id: int, current_user: UserData = Depends(get_cur
     deallocation_user.is_deallocated = False
     deallocation_user.is_proposal = False
     db.commit()
-    return {"detail": "Deallocation accepted"}
+    return {"detail": "Deallocation rejected"}
 
 @router.post('/department/requests/propose/reject/{id}')
 async def reject_proposals(id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -124,7 +124,7 @@ async def reject_proposals(id: int, current_user: UserData = Depends(get_current
     db.commit()
     return {"detail": "Proposal rejected"}
 
-@router.post('/department/requests/deallocate/reject/{id}')
+@router.post('/department/requests/deallocate/accept/{id}')
 async def reject_deallocations(id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if not current_user.is_department_manager:
         raise HTTPException(status_code=400, detail="User is not a department manager")
@@ -136,6 +136,6 @@ async def reject_deallocations(id: int, current_user: UserData = Depends(get_cur
     deallocation_user.is_deallocated = True
     deallocation_user.is_proposal = False
     db.commit()
-    return {"detail": "Deallocation rejected"}
+    return {"detail": "Deallocation accepted"}
 
 
