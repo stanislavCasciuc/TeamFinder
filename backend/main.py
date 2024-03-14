@@ -11,6 +11,7 @@ from custom_roles import custom_roles
 from skills.skills import skills
 from skills.department_skills import department_skills
 from storage import models
+from departament.department_requests import requests
 from auth import auth
 from auth import register
 from projects.project_employee import project_employee
@@ -43,6 +44,7 @@ app.include_router(projects.router, tags=["projects"], prefix="/api")
 app.include_router(technologies.router, tags=["project_technologies"], prefix="/api")
 app.include_router(team_finder.router, tags=["team_finder"], prefix="/api")
 app.include_router(project_employee.router, tags=["project_employee"], prefix="/api")
+app.include_router(requests.router, tags=["department_requests"], prefix="/api")
 
 if __name__ == '__main__':
     import uvicorn

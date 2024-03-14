@@ -12,6 +12,7 @@ class Technology(BaseModel):
     name: str
 
 class EmployeesProject(BaseModel):
+    project_name: str
     remaining_days: Optional[int] = None
     hours_per_day: int
 

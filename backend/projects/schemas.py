@@ -35,7 +35,7 @@ class ProjectEmployee(BaseModel):
     is_proposal: Optional[bool] = None
     is_deallocated: Optional[bool] = None
     comment: Optional[str] = None
-    deallocated_comment: Optional[str] = None
+    deallocate_comment: Optional[str] = None
 
 class ResponseProjectData(ProjectData):
     id: int
