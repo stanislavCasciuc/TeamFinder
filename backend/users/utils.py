@@ -5,6 +5,7 @@ from pydantic import parse_obj_as
 from sqlalchemy.orm import Session
 
 from functions.functions import get_department_name_by_id, get_user_roles, get_skill_name_by_id
+from skills.user_skills.utils import months_until_current_date
 from storage.models import get_db, User, Organization, UserSkills
 from storage.variables import ORGANIZATION_ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER
 
@@ -30,7 +31,8 @@ async def get_my_user(current_user, db: Session = Depends(get_db)):
     current_user.skills=[]
     for skill in user_skills:
         skill_name = get_skill_name_by_id(skill.skill_id, db)
-        current_user.skills.append(Skill(id=skill.skill_id, name=skill_name, level=skill.level, experience=skill.experience))
+        experience = months_until_current_date(skill.experience)
+        current_user.skills.append(Skill(id=skill.skill_id, name=skill_name, level=skill.level, experience=experience))
     return current_user
 def set_user_roles(roles, db_user):
     if ORGANIZATION_ADMIN in roles:

@@ -18,5 +18,6 @@ class UserData(BaseModel):
     organization_id: int
     department_id: Optional[int] = None
     roles: list[str]
+    is_project_manager: bool
 
 

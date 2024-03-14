@@ -44,4 +44,19 @@ async def update_role(role: Role = Depends(), current_user: UserData = Depends(g
     db.commit()
     return Role(id=role.id, name=role.name)
 
+@router.delete('/role/{role_id}')
+async def delete_role(role_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.is_organization_admin:
+        raise HTTPException(status_code=403, detail="You are not allowed to delete roles")
+    db_role = db.query(Roles).filter(Roles.id == role_id).first()
+    if not db_role:
+        raise HTTPException(status_code=404, detail="Role not found")
+
+    if current_user.organization_id != db_role.organization_id:
+        raise HTTPException(status_code=403, detail="You are not allowed to delete roles from other organizations")
+
+    db_role.organization_id = None
+    db.commit()
+    return {"message": "Role deleted"}
+
 
