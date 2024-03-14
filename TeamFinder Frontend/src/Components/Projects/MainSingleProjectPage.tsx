@@ -7,8 +7,8 @@ import useAuth from "../../hooks/useAuth";
 import { modals } from "@mantine/modals";
 import { useNavigate } from "react-router-dom";
 import ProjectHeaders from "./ProjectHeaders";
-import { useDisclosure } from "@mantine/hooks";
-import AddProjectTechnologies from "./AddProjectTechonolgies";
+// import { useDisclosure } from "@mantine/hooks";
+// import AddProjectTechnologies from "./AddProjectTechonolgies";
 
 interface TechData {
   name: string;
@@ -20,7 +20,7 @@ const MainSingleProjectPage = () => {
   const { auth } = useAuth();
   const accessToken = auth?.accessToken;
   const Navigate = useNavigate();
-  const [opened, { open, close }] = useDisclosure(false);
+  // const [opened, { open, close }] = useDisclosure(false);
 
   const { data } = useSWR(GETPROJECT + `/${project_id}`, (url) => {
     return axios
@@ -117,9 +117,9 @@ const MainSingleProjectPage = () => {
           <span className="px-5 py-5 text-slate-500">{data?.description}</span>
         </Flex>
       </div>
-      {opened && <AddProjectTechnologies
+      {/* {opened && <AddProjectTechnologies
       close={close}
-      />}
+      />} */}
     </>
   );
 };
