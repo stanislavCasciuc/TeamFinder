@@ -30,6 +30,7 @@ export const ACCEPTDEALLOCATE = "api/department/requests/deallocate/accept/";
 export const REJECTPROPOSAL = "api/department/requests/propose/reject/";
 export const REJECTDEALLOCATE = "api/department/requests/deallocate/reject/";
 export const DEALLOCATEUSER = "api/project/employee/deallocate";
+export const POSTPROJECTTECHNOLOIES ="api/technology";
 //for Put Request
 export const PUTUSERROLES = "api/users/roles/update";
 export const PUTEDITDEPARTMENT = "api/department";

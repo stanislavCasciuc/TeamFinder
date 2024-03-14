@@ -152,7 +152,7 @@ const DepartmentRequestsSidebar = () => {
       <Card.Section className="p-4 font-bold text-slate-600 text-lg flex justify-between">
         <span>{proposal.project_name}</span>
         <Badge className="mt-2" color="red">
-          Assign
+          Deallocate
         </Badge>
       </Card.Section>
 

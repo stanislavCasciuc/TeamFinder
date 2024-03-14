@@ -47,10 +47,12 @@ export default function LoginPage() {
 
       const name: string = userData.name;
       const department_id: number = userData.department_id;
-  
+      const organization_name: string = userData.organization_name;
+
       return {
         name,
         department_id,
+        organization_name,
       };
     } catch (error) {
       return "";
@@ -60,7 +62,7 @@ export default function LoginPage() {
   const HandleButtonLogged = async () => {
     try {
       const response = await fetch(
-        "http://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/token",
+        "https://atc-2024-quantumtrio-be-linux-web-app.azurewebsites.net/token",
         {
           method: "POST",
           headers: {
@@ -81,14 +83,17 @@ export default function LoginPage() {
         const myData = await SetData(accessToken);
         let myName: string;
         let myDepartmentId: number;
-        
+        let myOrganizationName: string;
+
         if (myData) {
-          const { name, department_id } = myData;
+          const { name, department_id, organization_name } = myData;
           myName = name;
           myDepartmentId = department_id;
+          myOrganizationName = organization_name;
         } else {
           myName = "";
           myDepartmentId = 0;
+          myOrganizationName = "";
         }
 
         const decoded = jwtDecode(accessToken) as {
@@ -105,8 +110,9 @@ export default function LoginPage() {
           roles,
           organization_id,
           id,
-          myName :myName,
+          myName: myName,
           department_id: myDepartmentId,
+          organization_name: myOrganizationName,
         });
         navigate("/HomePage/Profile");
         setUser("");

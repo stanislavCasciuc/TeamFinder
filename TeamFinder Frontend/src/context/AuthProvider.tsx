@@ -14,6 +14,7 @@ interface Auth {
     id: number | undefined;
     myName: string | undefined;
     department_id: number | undefined;
+    organization_name: string | undefined;
   }
 
 interface AuthProviderProps {

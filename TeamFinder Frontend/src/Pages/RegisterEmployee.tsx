@@ -16,7 +16,8 @@ const REGISTER_URL = "api/user/register/employee";
 
 export default function RegisterPageEmployee() {
   const { accessToken } = useParams();
-  console.log(accessToken);
+  const searchParams = new URLSearchParams(location.search);
+  const organization_name = searchParams.get("organization_name");
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLInputElement>(null);
@@ -132,11 +133,11 @@ export default function RegisterPageEmployee() {
           >
             {errorMsg}
           </span>
-          <Flex className="p-2 mt-6" gap="sm">
+          <Flex className="p-2 mt-6 flex-col" gap="sm">
             <img src={LogoSVG} alt="Team Finder Logo" className="w-8" />
 
-            <Title order={1} className="font-normal text-3xl">
-              TeamFinder
+            <Title order={1} className="font-base text-3xl mb-2 ">
+              Welcome to {organization_name}!
             </Title>
           </Flex>
 

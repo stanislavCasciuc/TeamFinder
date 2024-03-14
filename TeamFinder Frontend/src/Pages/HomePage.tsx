@@ -30,6 +30,7 @@ const HomePage = () => {
     "Press generate URL to get the URL"
   );
   const myRoles = auth?.roles;
+  const myOrganization = auth?.organization_name;
 
   const { data: responseData } = useSWR(
     GETURL,
@@ -139,7 +140,7 @@ const HomePage = () => {
                 setInviteURL(
                   "localhost:5173/Register/" +
                     `${responseData.public_id}` +
-                    "/Employee"
+                    `/Employee?organization_name=${myOrganization}`
                 );
               }}
             >

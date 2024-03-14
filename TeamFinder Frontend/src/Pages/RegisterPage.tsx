@@ -127,8 +127,12 @@ export default function RegisterPage() {
         {
           headers: { "Content-Type": "application/json" },
         }
-      );
-      console.log("Registration successful:", result.data);
+      ).catch((error) => {
+        if (error) {
+          setErrorMsg("The email already exists");
+        }
+      });
+      if (result)
       navigate("/login");
     } catch (error) {}
   };

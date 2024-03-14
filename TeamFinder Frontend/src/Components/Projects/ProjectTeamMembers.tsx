@@ -1,4 +1,4 @@
-import { Flex,  Badge } from "@mantine/core";
+import { Flex, Badge } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import axios from "../../api/axios";
@@ -67,12 +67,12 @@ const ProjectTeamMembers = () => {
 
   const members = filteredUsers?.map((member: ProjectRole) => {
     return (
-      <div className="p-4 grid gap-4 grid-cols-4 ">
-        <div className="font-semibold border-r">{member.role_name}</div>
-        <div className="border-r">
+      <div className="p-4 md:grid gap-4 md:grid-cols-4 grid-cols-1 ">
+        <div className="font-semibold md:border-r ">{member.role_name}</div>
+        <div className="md:border-r">
           {member.user_name ? member.user_name : "No user assigned"}
         </div>
-        <div className="border-r">
+        <div className="md:border-r">
           <Badge
             className={`
       
