@@ -1,5 +1,3 @@
-# Python package
-
 pool: 'default'
 
 variables:
@@ -18,7 +16,7 @@ steps:
       pip3.12 install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
     workingDirectory: $(projectRoot)
     displayName: "Install requirements"
-  
+
   - task: ArchiveFiles@2
     displayName: 'Archive files'
     inputs:
@@ -27,7 +25,7 @@ steps:
       archiveType: zip
       archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       replaceExistingArchive: true
-  
+
   - task: AzureWebApp@1
     displayName: 'Deploy Azure Web App'
     inputs:
