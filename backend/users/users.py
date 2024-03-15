@@ -25,9 +25,9 @@ async def read_users_me(current_user: UserData = Depends(get_current_user), db: 
 
 @router.get("/users/{user_id}", response_model = Profil)
 async def read_user(user_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin:
-        raise HTTPException(status_code=401, detail="Unauthorized, you are not organization admin")
     user = db.query(User).filter(User.id == user_id).first()
+    if not current_user.organization_id == user.organization_id:
+        raise HTTPException(status_code=401, detail="Unauthorized, you are not organization admin")
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     user = await get_my_user(user, db)

@@ -88,3 +88,23 @@ async def get_project_employees(current_user: UserData = Depends(get_current_use
         response.append(project)
 
     return response
+
+@router.delete('/projects/employee/proposal/{employee_id}')
+async def delete_project_employee(employee_id, current_user: UserData = Depends(get_current_user),db: Session = Depends(get_db)):
+    if not current_user.is_project_manager:
+        raise HTTPException(status_code=400, detail="User is not a project manager")
+
+    employee = db.query(ProjectEmployees).filter(ProjectEmployees.id == employee_id).first()
+
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    if not employee.is_proposal or employee.is_deallocated:
+        raise HTTPException(status_code=400, detail="Employee is not proposed or deallocated")
+
+    employee.is_proposal = False
+    employee.hours_per_day = None
+    employee.user_id = None
+    employee.comment = None
+    db.commit()
+    return {"detail": "Employee proposal deleted"}
+

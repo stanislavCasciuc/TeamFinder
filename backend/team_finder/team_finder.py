@@ -32,8 +32,8 @@ async def get_team(project_id: int, current_user: UserData = Depends(get_current
     for user_id in unique_user_ids_list:
         user = db.query(User).filter(User.id == user_id).first()
         if not user.department_id:
-            raise HTTPException(status_code=404, detail="User department not found")
-        user_skills_names = db.query(Skills.name).join(UserSkills, Skills.id == UserSkills.skill_id).filter(UserSkills.skill_id.in_(available_skills_ids)).all()
+            continue
+        user_skills_names = db.query(Skills.name).join(UserSkills, Skills.id == UserSkills.skill_id).filter(and_(UserSkills.user_id == user.id,UserSkills.skill_id.in_(available_skills_ids))).all()
         user_skills_names_list = [name for (name,) in user_skills_names]
 
         employee = Employee(id=user.id, name=user.name, skills=user_skills_names_list)

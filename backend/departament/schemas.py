@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -45,6 +46,15 @@ class MyDepartment(BaseModel):
 
 class AssignDepartment(BaseModel):
     user_id: int
+
+class DepartmentProject(BaseModel):
+    project_id: int
+    project_name: str
+    members: list[str]
+    end_date: datetime
+    technologies: list[str]
+    project_status: str
+
 
 
 

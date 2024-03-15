@@ -1,18 +1,21 @@
+from itertools import chain
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import parse_obj_as
-from sqlalchemy.orm import Session
-
+from sqlalchemy import select, func
+from sqlalchemy.orm import Session, Bundle
 
 from auth.utils import get_current_user
 from departament.schemas import DepartmentResponse, DepartmentData, UserData, MyDepartment, UserDataResponse, \
-    AssignDepartment, UserDataExtended, DepartmentUpdate, ResponseDepartmentUpdate
+    AssignDepartment, UserDataExtended, DepartmentUpdate, ResponseDepartmentUpdate, DepartmentProject
 
 from departament.utils import get_department_manager_name
-from functions.functions import get_user_roles
+from functions.functions import get_user_roles, get_project_status_by_id
+from projects.project_employee.schemas import EmployeeProject
 
-from storage.models import get_db, Department, User, DepartmentSkills, Skills
+from storage.models import get_db, Department, User, DepartmentSkills, Skills, Project, ProjectEmployees, \
+    ProjectTechnologies
 
 router = APIRouter()
 
@@ -199,3 +202,38 @@ async def delete_department(department_id: int, current_user: UserData = Depends
     db.delete(department)
     db.commit()
     return {"detail": "Department deleted successfully"}
+
+
+
+
+
+@router.get('/department/projects', response_model = List[DepartmentProject])
+async def get_department_projects(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user.is_department_manager:
+        raise HTTPException(status_code=403, detail="You are not department manager")
+
+
+    projects = db.query(
+        ProjectEmployees.project_id.label("project_id"),
+        Project.name.label("project_name"),
+        Project.end_date.label("end_date"),
+
+    ).join(User, ProjectEmployees.user_id == User.id).join(Project, ProjectEmployees.project_id == Project.id).filter(
+        User.department_id == current_user.department_id).group_by(ProjectEmployees.project_id, Project.name,
+                                                                   Project.end_date).all()
+
+    response = []
+    for project in projects:
+        technologies = db.query(ProjectTechnologies.name).filter(ProjectTechnologies.project_id == project.project_id).all()
+        technologies = list(chain(*technologies))
+
+        members = db.query(User.name).join(ProjectEmployees, User.id == ProjectEmployees.user_id).filter(ProjectEmployees.project_id == project.project_id).all()
+        members = list(chain(*members))
+
+        response.append(DepartmentProject(project_id=project.project_id, project_name=project.project_name, end_date=project.end_date, technologies=technologies, members=members, project_status= get_project_status_by_id(project.project_id, db)))
+
+
+    return response
+
+
+
