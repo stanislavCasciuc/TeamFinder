@@ -22,7 +22,7 @@ def get_days_remaining(project_end_date):
     return (project_end_date.date() - current_date).days
 
 def user_is_active(user_project, db: Session=Depends(get_db)):
-    if not user_project.is_proposal and not user_project.is_deallocated:
+    if not (user_project.is_proposal is True and  user_project.is_deallocated is False):
         project_status = get_project_status_by_id(user_project.project_id, db)
         if project_status == "In Progress" or project_status == "Closing" or project_status == "Starting":
             return True

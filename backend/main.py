@@ -6,6 +6,7 @@ from users import users
 from team_finder import team_finder
 from projects.technologies import technologies
 from projects import projects
+from skills.project_skills import project_skills
 from departament import department
 from custom_roles import custom_roles
 from skills.skills import skills
@@ -46,8 +47,9 @@ app.include_router(technologies.router, tags=["project_technologies"], prefix="/
 app.include_router(team_finder.router, tags=["team_finder"], prefix="/api")
 app.include_router(project_employee.router, tags=["project_employee"], prefix="/api")
 app.include_router(requests.router, tags=["department_requests"], prefix="/api")
-app.include_router(chat_gpt.router, tags=["adfasdfasdfasdfsa"], prefix="/api")
-
+app.include_router(chat_gpt.router, tags=["chat_gpt"], prefix="/api")
+app.include_router(project_skills.router, tags=["project_skills"], prefix="/api")
+#
 # if __name__ == '__main__':
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000)

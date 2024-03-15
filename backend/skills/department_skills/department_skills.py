@@ -3,8 +3,9 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from functions.functions import get_current_user, get_user_by_id
+from skills.department_skills.schemas import DepartmentSkill
 from skills.skills.skills import SkillData, UserData
-from storage.models import get_db, Skills, DepartmentSkills
+from storage.models import get_db, Skills, DepartmentSkills, User, UserSkills
 
 router = APIRouter()
 
@@ -51,3 +52,36 @@ async def delete_department_skill(skill_id: int, current_user: UserData = Depend
     db.delete(department_skill)
     db.commit()
     return {"detail": "Skill successfully deleted from department"}
+
+@router.get('/department/skill/{skill_id}', response_model=DepartmentSkill)
+async def get_department_skill(skill_id: int, current_user: UserData = Depends(get_current_user),  db: Session = Depends(get_db)):
+    if not current_user.is_organization_admin or not current_user.is_department_manager:
+        raise HTTPException(status_code=403, detail="You are not allowed to get skill from department")
+    skill = db.query(Skills).filter(Skills.id == skill_id).first()
+    if not skill:
+        raise HTTPException(status_code=404, detail="Skill not found in department")
+
+    count_department_users = db.query(User).filter(User.department_id == current_user.department_id).count()
+
+    department_skill_levels = db.query(UserSkills.level).join(User, User.id == UserSkills.user_id).filter(and_(User.department_id == current_user.department_id, UserSkills.skill_id == skill_id)).all()
+    skill_levels = [level for (level,) in department_skill_levels]
+    count_of_users_with_skill = len(skill_levels)
+    count_levels = {
+        "level_1": skill_levels.count(1),
+        "level_2": skill_levels.count(2),
+        "level_3": skill_levels.count(3),
+        "level_4": skill_levels.count(4),
+        "level_5": skill_levels.count(5)
+    }
+
+    response = {
+        "id": skill.id,
+        "name": skill.name,
+        "category": skill.category,
+        "description": skill.description,
+        "author_name": get_user_by_id(skill.author_id, db).name,
+        "count_of_users_with_skill": count_of_users_with_skill,
+        "count_levels": count_levels,
+        "count_department_users": count_department_users,
+    }
+    return response

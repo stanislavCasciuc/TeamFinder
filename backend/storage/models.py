@@ -106,6 +106,14 @@ class Invite(Base):
     public_id = Column(String, unique=True)
     expires_date = Column(DateTime)
 
+class ProjectSkill(Base):
+    __tablename__ = 'project_skills'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey('projects.id'))
+    skill_id = Column(Integer, ForeignKey('skills.id'))
+    min_level = Column(Integer)
+
 
 def get_db():
     db = SessionLocal()
