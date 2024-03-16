@@ -8,9 +8,9 @@ from sqlalchemy.orm import Session
 from functions.functions import get_current_user, get_user_by_id
 from skills.skills.skills import UserData
 from skills.user_skills.schemas import UserAssignData, UserSkillUpdate, UserSkill, UserSkillExtended, \
-    UserSkillEndorsement
+    UserSkillEndorsement, ResponseSkillEndorsement, UpdateSkillEndorsement
 from skills.user_skills.utils import subtract_months_from_date, months_until_current_date
-from storage.models import Skills, get_db, UserSkills, ProjectEmployees, SkillEndorsement
+from storage.models import Skills, get_db, UserSkills, ProjectEmployees, SkillEndorsement, User
 from storage.variables import PROJECT, CERTIFICATION, COURSE, TRAINING
 
 router = APIRouter()
@@ -76,10 +76,6 @@ async def endorse_skill(endorsement_data: UserSkillEndorsement, current_user: Us
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
 
-    exist_endorsement = db.query(SkillEndorsement).filter(and_(SkillEndorsement.user_id == current_user.id, SkillEndorsement.skill_id == endorsement_data.skill_id, SkillEndorsement.project_id == endorsement_data.project_id)).first()
-    if exist_endorsement:
-        raise HTTPException(status_code=400, detail="Skill already endorsed")
-
     user_skill = db.query(UserSkills).filter(UserSkills.user_id == current_user.id, UserSkills.skill_id == endorsement_data.skill_id).first()
     if not user_skill:
         raise HTTPException(status_code=404, detail="Skill not found")
@@ -101,11 +97,59 @@ async def endorse_skill(endorsement_data: UserSkillEndorsement, current_user: Us
     db.commit()
     return {"Status": "Skill endorsed successfully"}
 
-@router.get('/user/skills/endorsement/{user_id}/{skill_id}', response_model=UserSkillEndorsement)
+@router.get('/user/skills/endorsement/{user_id}/{skill_id}', response_model=List[ResponseSkillEndorsement])
 async def get_user_endorsements(user_id: int, skill_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
 
-    endorsement = db.query(SkillEndorsement).filter(and_(SkillEndorsement.user_id == user_id, SkillEndorsement.skill_id == skill_id)).first()
-    if not endorsement:
+    user = db.query(User).filter(User.id == user_id).first()
+    if user.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=403, detail="You are not part of the same organization as the user")
+
+    endorsements = db.query(SkillEndorsement).filter(and_(SkillEndorsement.user_id == user_id, SkillEndorsement.skill_id == skill_id)).all()
+    if not endorsements:
         raise HTTPException(status_code=404, detail="Endorsements not found")
 
+    return [{**endorsement.__dict__}  for endorsement in endorsements]
+
+@router.delete('/user/skills/endorsement/{endorse_id}')
+async def delete_endorsement(endorse_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    endorsement = db.query(SkillEndorsement).filter(SkillEndorsement.id == endorse_id).first()
+    if not endorsement:
+        raise HTTPException(status_code=404, detail="Endorsement not found")
+    if endorsement.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="It is not your endorsement")
+
+    db.delete(endorsement)
+    db.commit()
+    return {"Status": "Endorsement deleted successfully"}
+
+@router.put('/user/skills/endorsement/{endorse_id}', response_model=ResponseSkillEndorsement)
+async def update_endorsement_data(endorse_id: int, endorsement_data: UpdateSkillEndorsement, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    endorsement = db.query(SkillEndorsement).filter(SkillEndorsement.id == endorse_id).first()
+    if not endorsement:
+        raise HTTPException(status_code=404, detail="Endorsement not found")
+    if endorsement.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="It is not your endorsement")
+
+    if endorsement_data.type == PROJECT:
+        is_project_member = db.query(ProjectEmployees).filter(
+            and_(ProjectEmployees.project_id == endorsement_data.project_id,
+                 ProjectEmployees.user_id == current_user.id,
+                 not_(and_(ProjectEmployees.is_deallocated == False, ProjectEmployees.is_proposal == True)))).first()
+        if not is_project_member:
+            raise HTTPException(status_code=403, detail="You are not allowed to endorse this skill")
+        endorsement.project_id = endorsement_data.project_id
+        endorsement.title = None
+        endorsement.description = None
+    elif endorsement_data.type in [CERTIFICATION, COURSE, TRAINING]:
+        endorsement.project_id = None
+        endorsement.title = endorsement_data.title
+        endorsement.description = endorsement_data.description
+    else:
+        raise HTTPException(status_code=400, detail="Invalid type")
+    endorsement.type = endorsement_data.type
+
+    db.commit()
+    db.refresh(endorsement)
     return {**endorsement.__dict__}

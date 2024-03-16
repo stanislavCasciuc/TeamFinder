@@ -35,3 +35,10 @@ class UserSkillEndorsement(BaseModel):
     project_id: Optional[int] = None
     type: str
 
+class ResponseSkillEndorsement(UserSkillEndorsement):
+    id: int
+
+class UpdateSkillEndorsement(UserSkillEndorsement):
+    skill_id: Optional[int] = None
+
+
