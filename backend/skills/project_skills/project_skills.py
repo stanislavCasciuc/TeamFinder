@@ -34,3 +34,10 @@ async def create_project_skill(skill_data: SkillData = Depends(), current_user: 
     response=ResponseSkillData(**skill_data.dict(), name=skill.name, category=skill.category, description=skill.description, author_name=skill.author_name)
 
     return response
+
+@router.get('/project/skills/{project_id}', response_model=list[ResponseSkillData])
+async def get_project_skills(project_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    skills = db.query(Skills.name, Skills.description, Skills.category, User.name.label("author_name"), ProjectSkill.min_level, ProjectSkill.skill_id).join(User, User.id == Skills.author_id).join(ProjectSkill, Skills.id == ProjectSkill.skill_id).filter(ProjectSkill.project_id == project_id).all()
+    response = [ResponseSkillData(skill_id=skill.skill_id, minimum_level=skill.min_level, project_id=project_id, name=skill.name, category=skill.category, description=skill.description, author_name=skill.author_name) for skill in skills]
+    return response

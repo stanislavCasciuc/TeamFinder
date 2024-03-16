@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 
 
 from functions.functions import get_project_status_by_id
-from storage.models import get_db, ProjectTechnologies, Skills, UserSkills, User, ProjectEmployees, Project
+from storage.models import get_db, ProjectTechnologies, Skills, UserSkills, User, ProjectEmployees, Project, \
+    ProjectSkill
 from team_finder.schemas import Skill, Employee, EmployeesProject
 
 
@@ -29,8 +30,9 @@ def user_is_active(user_project, db: Session=Depends(get_db)):
     return False
 
 def get_team_fider(current_user, project_id ,db:Session):
-    available_skills = []
-    available_skills_ids = []
+    project_skills = db.query(Skills.name, Skills.id, ProjectSkill.min_level).join(ProjectSkill, Skills.id == ProjectSkill.skill_id).filter(ProjectSkill.project_id == project_id).all()
+    available_skills = [Skill(id=skill.id, name=skill.name) for skill in project_skills]
+    available_skills_ids = [skill.id for skill in project_skills]
     technologies = db.query(ProjectTechnologies).filter(ProjectTechnologies.project_id == project_id).all()
     for technology in technologies:
         skills = db.query(Skills).filter(Skills.organization_id == current_user.organization_id).all()
@@ -47,11 +49,11 @@ def get_team_fider(current_user, project_id ,db:Session):
         user = db.query(User).filter(User.id == user_id).first()
         if not user.department_id:
             continue
-        user_skills_names = db.query(Skills.name).join(UserSkills, Skills.id == UserSkills.skill_id).filter(
+        user_skills = db.query(Skills.name, UserSkills.level).join(UserSkills, Skills.id == UserSkills.skill_id).filter(
             and_(UserSkills.user_id == user.id, UserSkills.skill_id.in_(available_skills_ids))).all()
-        user_skills_names_list = [name for (name,) in user_skills_names]
+        user_skills_dict = [{"name": skill.name, "level": skill.level} for skill in user_skills]
 
-        employee = Employee(id=user.id, name=user.name, skills=user_skills_names_list)
+        employee = {"id": user.id, "name": user.name, "skills": user_skills_dict}
         user_projects = db.query(ProjectEmployees).filter(ProjectEmployees.user_id == user_id).all()
         for user_project in user_projects:
             if user_is_active(user_project, db):
@@ -63,8 +65,8 @@ def get_team_fider(current_user, project_id ,db:Session):
                 }
                 # if project.end_date:
                 #     employee_project["remaining_days"] = get_days_remaining(project.end_date)
-                if employee.projects is None:
-                    employee.projects = []
-                employee.projects.append(employee_project)
+                if 'projects' not in employee:
+                    employee["projects"] = []
+                employee["projects"].append(employee_project)
         employees.append(employee)
     return employees

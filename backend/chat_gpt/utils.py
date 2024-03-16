@@ -12,10 +12,10 @@ async def get_chat_gpt_response(content: str, message: str):
     response = client.chat.completions.create(
         model="atc-2024-gpt-35-turbo",
         messages=[
-            {"role": "user",
-             "content": "Create a team with following data.Your response will be a list of users. User will be a dictionary with name, skills, role,and hours_per_day. Create a team with following information. Ensure that the team has the right skills and roles, that hours_per_day are not exceeded and start date of the project."},
-            {"role": "user", "content": content},
-            {"role": "user", "content": message}
+            {
+                "role": "user",
+                "content": f"Please create a team using the provided data. Your response should include a list of users. Each user should be represented as a dictionary with the following fields: name, skills, role, and hours_per_day. Ensure that the team composition aligns with the specified skills and roles, and that daily work hours do not exceed 8 hours. Additionally, please include the project start date. The length of the members of team should match the number of roles provided. If you are unable to fill all roles, create the team with the available users. Provided data: \n\n {content}  \n\nMessage:   message  \n\nMark message could be empty"
+            }
         ]
     )
 
