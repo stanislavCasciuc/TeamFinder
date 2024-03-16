@@ -3,10 +3,15 @@ import os
 
 
 async def get_chat_gpt_response(content: str, message: str):
+    # client = AzureOpenAI(
+    #     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+    #     api_version="2023-05-15",
+    #     azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+    # )
     client = AzureOpenAI(
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        api_key="4de2c734d831446898e94312cd463c80",
         api_version="2023-05-15",
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+        azure_endpoint="https://atc-2024-openai.openai.azure.com/"
     )
 
     response = client.chat.completions.create(
