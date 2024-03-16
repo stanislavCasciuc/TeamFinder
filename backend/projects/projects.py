@@ -71,9 +71,8 @@ async def get_project(project_id: int, current_user: UserData = Depends(get_curr
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    is_member = db.query(ProjectEmployees).filter(ProjectEmployees.project_id == project.id, ProjectEmployees.user_id == current_user.id).first()
-    if not is_member:
-        raise HTTPException(status_code=403, detail="You are not allowed to get this project")
+    if project.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=403, detail="Project not part of your organization")
 
     project_technologies = db.query(ProjectTechnologies).filter(ProjectTechnologies.project_id == project.id).all()
     db_project_employees = db.query(ProjectEmployees).filter(ProjectEmployees.project_id == project.id).all()

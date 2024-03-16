@@ -27,3 +27,11 @@ class UserSkillExtended(UserSkill):
     category: str
     author_name: str
     description: str
+
+class UserSkillEndorsement(BaseModel):
+    skill_id: int
+    title: Optional[str] = None
+    description: Optional[str] = None
+    project_id: Optional[int] = None
+    type: str
+

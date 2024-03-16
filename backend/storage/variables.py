@@ -16,3 +16,8 @@ CLOSING = "Closing"
 
 
 FRONTEND_URL = "http://localhost:5713"
+
+PROJECT = "Project"
+COURSE = "Course"
+TRAINING = "Training"
+CERTIFICATION = "Certification"

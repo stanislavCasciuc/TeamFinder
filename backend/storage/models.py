@@ -114,6 +114,17 @@ class ProjectSkill(Base):
     skill_id = Column(Integer, ForeignKey('skills.id'))
     min_level = Column(Integer)
 
+class SkillEndorsement(Base):
+    __tablename__ = 'skill_endorsement'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    skill_id = Column(Integer, ForeignKey('skills.id'))
+    title = Column(String)
+    description = Column(Text)
+    project_id = Column(Integer, ForeignKey('projects.id'))
+    type = Column(String)
+
 
 def get_db():
     db = SessionLocal()
