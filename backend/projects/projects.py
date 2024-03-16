@@ -71,7 +71,8 @@ async def get_project(project_id: int, current_user: UserData = Depends(get_curr
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    if project.project_manager_id != current_user.id:
+    is_member = db.query(ProjectEmployees).filter(ProjectEmployees.project_id == project.id, ProjectEmployees.user_id == current_user.id).first()
+    if not is_member:
         raise HTTPException(status_code=403, detail="You are not allowed to get this project")
 
     project_technologies = db.query(ProjectTechnologies).filter(ProjectTechnologies.project_id == project.id).all()
