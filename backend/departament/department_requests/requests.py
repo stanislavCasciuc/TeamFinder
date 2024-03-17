@@ -5,7 +5,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from departament.department_requests.schemas import Request
-from departament.schemas import UserData
+from departament.department.schemas import UserData
 from functions.functions import get_current_user
 from storage.models import get_db, ProjectEmployees, User, Project
 from team_finder.utils import user_is_active

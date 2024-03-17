@@ -13,7 +13,7 @@ from users.utils import get_my_user, get_all_users, set_user_roles
 
 router = APIRouter()
 
-@router.get("/users/all", response_model = List[AllUsers] )
+@router.get("/users", response_model = List[AllUsers] )
 async def read_users_all(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     all_users = await get_all_users(current_user, db)
     return all_users
@@ -33,7 +33,7 @@ async def read_user(user_id: int, current_user: UserData = Depends(get_current_u
     user = await get_my_user(user, db)
     return user
 
-@router.put("/users/roles/update", response_model = UserData)
+@router.put("/users/roles", response_model = UserData)
 async def update_roles(current_user: UserData = Depends(get_current_user),  user_roles: UserRoles = Depends(), db: Session = Depends(get_db)):
     if not current_user.is_organization_admin:
         raise HTTPException(status_code=403, detail="Unauthorized, you are not organization admin")
@@ -44,8 +44,6 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
         if role not in ROLES:
             raise HTTPException(status_code=400, detail="Invalid roles")
 
-
-
     if EMPLOYEE not in user_roles.roles:
         raise HTTPException(status_code=400, detail="User must have at least the employee role")
 
@@ -55,10 +53,6 @@ async def update_roles(current_user: UserData = Depends(get_current_user),  user
 
     if db_user.is_department_manager and DEPARTMENT_MANAGER not in user_roles.roles and db_user.department_id:
         raise HTTPException(status_code=400, detail="User is department manager, you can't remove the department manager role")
-
-
-    # if db_user.is_project_manager and PROJECT_MANAGER not in user_roles.roles and db_user.department_id:
-    #      raise HTTPException(status_code=400, detail="User is department manager, you can't remove the department manager role")
 
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -73,7 +67,6 @@ async def get_department_managers(current_user: User = Depends(get_current_user)
     if not current_user.is_organization_admin:
         raise HTTPException(status_code=403, detail="You are not organization admin")
 
-
     db_department_managers = db.query(User).filter(
         and_(
             User.organization_id == current_user.organization_id,
@@ -86,19 +79,6 @@ async def get_department_managers(current_user: User = Depends(get_current_user)
     response = parse_obj_as(List[UserNames], managers)
     return response
 
-# @router.delete("/user/{user_id}")
-# async def delete_user(user_id: int, current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-#     if not current_user.is_organization_admin:
-#         raise HTTPException(status_code=403, detail="You are not organization admin")
-#     user = db.query(User).filter(User.id == user_id).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#
-#
-#
-#     db.delete(user)
-#     db.commit()
-#     return {"detail": "User deleted"}
 
 
 

@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from departament.schemas import UserData
+from departament.department.schemas import UserData
 from functions.functions import get_current_user, get_user_by_id
 from skills.skills.schemas import SkillData
 from storage.models import get_db, Skills, User, DepartmentSkills, UserSkills
