@@ -105,8 +105,6 @@ async def get_user_endorsements(user_id: int, skill_id: int, current_user: UserD
         raise HTTPException(status_code=403, detail="You are not part of the same organization as the user")
 
     endorsements = db.query(SkillEndorsement).filter(and_(SkillEndorsement.user_id == user_id, SkillEndorsement.skill_id == skill_id)).all()
-    if not endorsements:
-        raise HTTPException(status_code=404, detail="Endorsements not found")
 
     return [{**endorsement.__dict__}  for endorsement in endorsements]
 

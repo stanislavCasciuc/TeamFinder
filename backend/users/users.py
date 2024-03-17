@@ -18,7 +18,6 @@ async def read_users_all(current_user: UserData = Depends(get_current_user), db:
     all_users = await get_all_users(current_user, db)
     return all_users
 
-
 @router.get("/users/me", response_model=Profil)
 async def read_users_me(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     return await get_my_user(current_user, db)
