@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from departament.department.schemas import UserData
 from functions.functions import get_current_user, get_user_by_id
 from skills.skills.schemas import SkillData
-from storage.models import get_db, Skills, User, DepartmentSkills, UserSkills
+from storage.models import get_db, Skills, User, DepartmentSkills, UserSkills, SkillEndorsement
 
 router = APIRouter()
 
@@ -56,10 +56,15 @@ async def delete_skill(skill_id: int, current_user: UserData = Depends(get_curre
     for department_skill in departments_skills:
         db.delete(department_skill)
 
+    skill_endorsements = db.query(SkillEndorsement).filter(SkillEndorsement.skill_id == skill_id).all()
+    for skill_endorsement in skill_endorsements:
+        db.delete(skill_endorsement)
+
     users_skills = db.query(UserSkills).filter(UserSkills.skill_id == skill_id).all()
     for user_skill in users_skills:
         db.delete(user_skill)
 
+    db.commit()
     db.delete(skill)
     db.commit()
     return {"detail": "Skill successfully deleted"}

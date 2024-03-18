@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post('/department/skill/assign/{skill_id}', response_model = SkillData)
 async def assign_skill_to_department(skill_id: int,current_user: UserData = Depends(get_current_user),  db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin or not current_user.is_department_manager:
+    if not current_user.is_organization_admin and not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to assign skill to department")
 
 
@@ -42,7 +42,7 @@ async def get_department_skills(current_user: UserData = Depends(get_current_use
 
 @router.delete('/department/skill/{skill_id}')
 async def delete_department_skill(skill_id: int, current_user: UserData = Depends(get_current_user),  db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin or not current_user.is_department_manager:
+    if not current_user.is_organization_admin and not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to delete skill from department")
 
     department_skill = db.query(DepartmentSkills).filter(and_(DepartmentSkills.department_id == current_user.department_id, DepartmentSkills.skill_id == skill_id)).first()
@@ -55,7 +55,7 @@ async def delete_department_skill(skill_id: int, current_user: UserData = Depend
 
 @router.get('/department/skill/{skill_id}', response_model=DepartmentSkill)
 async def get_department_skill(skill_id: int, current_user: UserData = Depends(get_current_user),  db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin or not current_user.is_department_manager:
+    if not current_user.is_organization_admin and not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to get skill from department")
     skill = db.query(Skills).filter(Skills.id == skill_id).first()
     if not skill:
