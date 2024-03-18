@@ -21,7 +21,7 @@ router = APIRouter()
 
 
 
-@router.post("/depatment", response_model = DepartmentResponse)
+@router.post("/department", response_model = DepartmentResponse)
 async def create_departament(department_data: DepartmentData = Depends(), current_user: UserData = Depends(get_current_user)  , db: Session = Depends(get_db)):
 
     if not current_user.is_organization_admin:
