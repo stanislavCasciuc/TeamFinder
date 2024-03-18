@@ -37,7 +37,7 @@ async def assign_department(current_user: UserData = Depends(get_current_user), 
 
 @router.get('/department/users/{department_id}', response_model = List[UserDataResponse])
 async def get_departament_users(department_id: int,current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
-    if not current_user.is_organization_admin:
+    if not current_user.is_organization_admin and not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not a organization admin")
 
     db_users = db.query(User).filter(User.department_id == department_id).all()

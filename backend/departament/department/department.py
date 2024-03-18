@@ -24,7 +24,7 @@ router = APIRouter()
 @router.post("/department", response_model = DepartmentResponse)
 async def create_departament(department_data: DepartmentData = Depends(), current_user: UserData = Depends(get_current_user)  , db: Session = Depends(get_db)):
 
-    if not current_user.is_organization_admin:
+    if not current_user.is_organization_admin and not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not allowed to create department, only organization admin can create departments")
 
     department_manager_user = db.query(User).filter(User.id == department_data.department_manager).first()
