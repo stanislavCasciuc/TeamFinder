@@ -18,7 +18,7 @@ async def create_project_skill(skill_data: SkillData = Depends(), current_user: 
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
 
-    if not is_member and not current_user.is_proejct_manager:
+    if not is_member and not current_user.is_project_manager:
         raise HTTPException(status_code=403, detail="You are not member of this project")
 
     is_project_skill= db.query(ProjectSkill).filter(and_(ProjectSkill.project_id == skill_data.project_id, ProjectSkill.skill_id == skill_data.skill_id)).first()
