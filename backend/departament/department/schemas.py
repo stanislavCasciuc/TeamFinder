@@ -51,9 +51,10 @@ class DepartmentProject(BaseModel):
     project_id: int
     project_name: str
     members: list[str]
-    end_date: datetime
+    end_date: Optional[datetime] = None
     technologies: list[str]
     project_status: str
+
 
 
 

@@ -77,7 +77,7 @@ async def get_project_employees(current_user: UserData = Depends(get_current_use
         ProjectEmployees.is_deallocated
     ).join(Project, ProjectEmployees.project_id == Project.id).filter(
         ProjectEmployees.user_id == current_user.id
-    ).filter(not_(and_(ProjectEmployees.is_proposal == True, ProjectEmployees.is_deallocated == False))).all()
+    ).filter(not_(and_(ProjectEmployees.is_proposal == True, ProjectEmployees.is_deallocated == False))).distinct(ProjectEmployees.project_id).all()
 
     response = []
     for project_employee in project_employees:
@@ -108,4 +108,5 @@ async def delete_project_employee(employee_id, current_user: UserData = Depends(
     employee.comment = None
     db.commit()
     return {"detail": "Employee proposal deleted"}
+
 

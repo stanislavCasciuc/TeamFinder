@@ -153,7 +153,7 @@ async def delete_department(department_id: int, current_user: UserData = Depends
     return {"detail": "Department deleted successfully"}
 
 
-@router.get('/department/projects', response_model = List[DepartmentProject])
+@router.get('/department/projects', response_model = list[DepartmentProject])
 async def get_department_projects(current_user: UserData = Depends(get_current_user), db: Session = Depends(get_db)):
     if not current_user.is_department_manager:
         raise HTTPException(status_code=403, detail="You are not department manager")
@@ -172,11 +172,11 @@ async def get_department_projects(current_user: UserData = Depends(get_current_u
         technologies = db.query(ProjectTechnologies.name).filter(ProjectTechnologies.project_id == project.project_id).all()
         technologies = list(chain(*technologies))
 
-        members = db.query(User.name).join(ProjectEmployees, User.id == ProjectEmployees.user_id).filter(ProjectEmployees.project_id == project.project_id).all()
+        members = db.query(User.name).join(ProjectEmployees, User.id == ProjectEmployees.user_id).filter(ProjectEmployees.project_id == project.project_id).distinct(User.id).all()
         members = list(chain(*members))
-
-        response.append(DepartmentProject(project_id=project.project_id, project_name=project.project_name, end_date=project.end_date, technologies=technologies, members=members, project_status= get_project_status_by_id(project.project_id, db)))
-
+        project_status = get_project_status_by_id(project.project_id, db)
+        department_project= {"project_id": project.project_id, "project_name": project.project_name, "end_date": project.end_date, "technologies": technologies, "members": members, "project_status": project_status}
+        response.append(department_project)
 
     return response
 
