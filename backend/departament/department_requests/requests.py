@@ -141,6 +141,9 @@ async def reject_deallocations(id: int, current_user: UserData = Depends(get_cur
     deallocation_user.is_proposal = False
     deallocation_user.notification_status = False
     db.commit()
+    new_employee = ProjectEmployees(project_id=deallocation_user.project_id, role_id=deallocation_user.role_id)
+    db.add(new_employee)
+    db.commit()
     return {"detail": "Deallocation accepted"}
 
 
