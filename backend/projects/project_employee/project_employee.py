@@ -40,6 +40,7 @@ async def propose_employee(current_user: UserData = Depends(get_current_user), p
     project_employee.hours_per_day = proposal_data.hours_per_day
     project_employee.user_id = proposal_data.user_id
     project_employee.comment = proposal_data.comment
+    project_employee.notification_status = True
     db.commit()
 
     return proposal_data
@@ -63,6 +64,7 @@ async def deallocate_employee(current_user: UserData = Depends(get_current_user)
     project_employee.is_deallocated = True
     project_employee.deallocate_comment = deallocate_data.comment
     project_employee.is_proposal = True
+    project_employee.notification_status = True
     db.commit()
 
     return deallocate_data
@@ -106,6 +108,7 @@ async def delete_project_employee(employee_id, current_user: UserData = Depends(
     employee.hours_per_day = None
     employee.user_id = None
     employee.comment = None
+    employee.notification_status = False
     db.commit()
     return {"detail": "Employee proposal deleted"}
 

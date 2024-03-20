@@ -62,6 +62,7 @@ class ProjectEmployees(Base):
     is_deallocated = Column(Boolean, default=False)
     comment = Column(Text)
     deallocate_comment = Column(Text)
+    notification_status = Column(Boolean, default=False)
 
 class Skills(Base):
     __tablename__ = 'skills'

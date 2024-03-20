@@ -10,7 +10,7 @@ from skills.skills.skills import UserData
 from skills.user_skills.schemas import UserAssignData, UserSkillUpdate, UserSkill, UserSkillExtended, \
     UserSkillEndorsement, ResponseSkillEndorsement, UpdateSkillEndorsement
 from skills.user_skills.utils import subtract_months_from_date, months_until_current_date
-from storage.models import Skills, get_db, UserSkills, ProjectEmployees, SkillEndorsement, User
+from storage.models import Skills, get_db, UserSkills, ProjectEmployees, SkillEndorsement, User, Project
 from storage.variables import PROJECT, CERTIFICATION, COURSE, TRAINING
 
 router = APIRouter()

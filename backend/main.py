@@ -19,6 +19,7 @@ from auth_register import auth
 from auth_register import register
 from projects.project_employee import project_employee
 from storage.config import engine
+from notification import notification
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -56,6 +57,8 @@ app.include_router(project_skills.router, tags=["project_skills"], prefix="/api"
 app.include_router(technologies.router, tags=["project_technologies"], prefix="/api")
 app.include_router(team_finder.router, tags=["team_finder"], prefix="/api")
 app.include_router(chat_gpt.router, tags=["chat_gpt"], prefix="/api")
+
+app.include_router(notification.router, tags=["notification"], prefix="/api")
 
 
 #

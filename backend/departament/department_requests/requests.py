@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -90,7 +91,9 @@ async def accept_proposals(id: int, current_user: UserData = Depends(get_current
             user_hours_per_day += user_project.hours_per_day
     if user_hours_per_day + proposal.hours_per_day > 8:
         raise HTTPException(status_code=400, detail="User is fully")
+    proposal.start_date = datetime.utcnow()
     proposal.is_proposal = False
+    proposal.notification_status = False
     db.commit()
     return {"detail": "Proposal accepted"}
 
@@ -133,8 +136,10 @@ async def reject_deallocations(id: int, current_user: UserData = Depends(get_cur
         raise HTTPException(status_code=400, detail="Deallocation already rejected")
     if not deallocation_user:
         raise HTTPException(status_code=404, detail="Deallocation not found")
+    deallocation_user.end_date = datetime.utcnow()
     deallocation_user.is_deallocated = True
     deallocation_user.is_proposal = False
+    deallocation_user.notification_status = False
     db.commit()
     return {"detail": "Deallocation accepted"}
 
